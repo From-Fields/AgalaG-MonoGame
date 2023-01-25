@@ -3,72 +3,58 @@ using agalag.engine.utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace agalag.game
+namespace agalag.game.input
 {
-    public struct BasicInput 
+    internal interface iInputHandler
     {
-        public Keys up, down, left, right, shoot, pause;
+        public Vector2 GetMovement();
+        public bool GetPause();
+        public bool GetShoot();
+        public void Update();
+    }
 
-        public BasicInput() 
-        {
-            up = Keys.W;
-            down = Keys.S;
-            left = Keys.A;
-            right = Keys.D;
-            shoot = Keys.J;
-            pause = Keys.Escape;
-        }
+    public enum InputMethods 
+    {
+        Keyboard,
+        Gamepad
     }
 
     public class InputHandler: Singleton<InputHandler>
     {
-        public BasicInput inputScheme { get; private set; } = new BasicInput();
         public bool usingGamepad = false;
-
-        private KeyboardState? _oldState = null;
-        private KeyboardState? _currentState = null;
+        private iInputHandler _inputMethod = new KeyboardHandler();
 
         public bool HasMovement => (GetMovement() != Vector2.Zero);
-        public Vector2 GetMovement() 
+        public Vector2 GetMovement() => _inputMethod.GetMovement();
+
+        public bool GetPause() => _inputMethod.GetPause();
+        public bool GetShoot() => _inputMethod.GetShoot();
+
+        public bool SwitchInputMethod(InputMethods method)
         {
-            if(_currentState != null)
+            iInputHandler handler = GetInputMethod(method);
+
+            if(handler == null)
+                return false;
+            
+            _inputMethod = handler;
+            return true;
+        }
+
+        private iInputHandler GetInputMethod(InputMethods method)
+        {
+            switch(method)
             {
-                int x = KeyToInt(inputScheme.right) - KeyToInt(inputScheme.left);
-                int y = KeyToInt(inputScheme.down) - KeyToInt(inputScheme.up);
-                
-                return new Vector2(x, y);
+                case (InputMethods.Keyboard):
+                    return KeyboardHandler.Instance;
             }
 
-            return Vector2.Zero;
-        }
-
-        public bool GetPause() 
-        {
-            if(_oldState != null && _currentState != null) 
-            {
-                return(_oldState.Value.IsKeyUp(inputScheme.pause) && !_oldState.Value.IsKeyDown(inputScheme.pause));
-            }
-
-            return false;
-        }
-
-        public bool GetShoot()
-        {
-            return (_currentState != null && _currentState.Value.IsKeyDown(inputScheme.shoot));
-        }
-
-        private int KeyToInt(Keys key) 
-        {
-            return _currentState.Value.IsKeyDown(key) ? 1 : 0;
+            return null;
         }
 
         public void Update()
         {
-            if(!usingGamepad)
-            {
-                _oldState = _currentState;
-                _currentState = Keyboard.GetState();
-            }
+            _inputMethod.Update();
         }
     }
 }

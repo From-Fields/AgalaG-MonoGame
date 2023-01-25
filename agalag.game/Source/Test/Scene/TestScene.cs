@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
 using agalag.game;
+using agalag.game.input;
+using System.Diagnostics;
 
 namespace agalag.test 
 {
@@ -53,6 +55,9 @@ namespace agalag.test
         }
 
         public override void Update(GameTime gameTime)
-        { }
+        {
+            if(InputHandler.Instance.GetPause())
+                Debug.WriteLine("pause");
+        }
     }
 }

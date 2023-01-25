@@ -17,7 +17,7 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\agalag.lib\agalag.lib.csproj" />
+    <ProjectReference Include="..\agalag.game\agalag.game.csproj" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
@@ -25,7 +25,7 @@
   </Target>
   
   <ItemGroup>
-      <MonoGameContentReference Include="..\agalag.lib\Content\Content.mgcb">
+      <MonoGameContentReference Include="..\agalag.game\Content\Content.mgcb">
         <Link>Content\GameContent.mgcb</Link>
       </MonoGameContentReference>
   </ItemGroup>

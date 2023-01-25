@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using agalag.engine;
+using agalag.game.input;
 using System.Diagnostics;
 
 namespace agalag.game;
