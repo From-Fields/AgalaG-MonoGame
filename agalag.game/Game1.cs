@@ -52,7 +52,7 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(Color.Black);
         _spriteBatch.Begin(
             SpriteSortMode.BackToFront
         );
@@ -63,9 +63,5 @@ public class Game1 : Game
 
         // TODO: Add your drawing code here
         base.Draw(gameTime);
-    }
-
-    protected void FixedUpdate(GameTime gameTime) {
-        _sceneManager.FixedUpdateChildren(gameTime);
     }
 }

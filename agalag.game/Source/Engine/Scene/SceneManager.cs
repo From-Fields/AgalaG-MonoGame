@@ -12,6 +12,7 @@ namespace agalag.engine
         private Scene _defaultScene;
         private Scene _currentScene;
         private Queue<Scene> _sceneQueue = new Queue<Scene>();
+        private FixedUpdater _updater = new FixedUpdater();
 
         //Methods
         public void SwitchScene(Scene newScene, ContentManager content)
@@ -54,6 +55,10 @@ namespace agalag.engine
             scene.LoadContent(content);
             scene.Initialize();
         }
+        private void ConfigureFixedUpdate(float fixedUpdateDelta, float maxFrameTime)
+        {
+            this._updater = new FixedUpdater(fixedUpdateDelta, maxFrameTime);
+        }
 
         #region Interface Implementation
 
@@ -66,18 +71,20 @@ namespace agalag.engine
                 _currentScene.DrawChildren(spriteBatch);
             }
         }
-        public void FixedUpdateChildren(GameTime gameTime)
+        public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             if(_currentScene != null)
             {
-                _currentScene.FixedUpdate(gameTime);
-                _currentScene.FixedUpdateChildren(gameTime);
+                _currentScene.FixedUpdate(gameTime, fixedFrameTime);
+                _currentScene.FixedUpdateChildren(gameTime, fixedFrameTime);
             }
         }
         public void UpdateChildren(GameTime gameTime)
         {
             if(_currentScene != null)
             {
+                _updater.ExecuteFixedUpdate(gameTime, (gT, ffT) => FixedUpdateChildren(gT, ffT));
+
                 _currentScene.Update(gameTime);
                 _currentScene.UpdateChildren(gameTime);
             }

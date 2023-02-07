@@ -23,7 +23,7 @@ namespace agalag.game
         public abstract void TakeDamage (int damage);
         public abstract void Die();
         
-        public Entity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, Collider collider = null) 
+        public Entity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, iCollider collider = null) 
             : base(sprite, position, scale, rotation, collider) { }
     }
 }

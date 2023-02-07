@@ -23,7 +23,7 @@ namespace agalag.test
             
         }
 
-        public override void FixedUpdate(GameTime gameTime)
+        public override void FixedUpdate(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             
         }
@@ -31,7 +31,8 @@ namespace agalag.test
         public override void Initialize()
         {
             List<MonoEntity> entities = new List<MonoEntity>();
-            entities.Add(new Player(playerSprite, new Vector2(20, 20), Vector2.One));
+            entities.Add(new Player(playerSprite, new Vector2(280, 280)));
+            //entities.Add(new SpriteTest(playerSprite, new Vector2(150, 150)));
             SceneLayer layer = new SceneLayer(0, entities);
 
             this.AddLayer(layer);
