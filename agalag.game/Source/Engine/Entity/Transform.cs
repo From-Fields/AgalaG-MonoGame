@@ -10,6 +10,7 @@ namespace agalag.engine
         public float rotation;
         public Vector2 velocity;
         public float drag = 0.5f;
+        public bool simulate = false;
 
         //Constructors
         public Transform(Vector2 position, Vector2 scale, float rotation) 
@@ -22,8 +23,11 @@ namespace agalag.engine
         //Methods
         public void ApplyVelocity()
         {
-            position = Vector2.LerpPrecise(position, position + velocity, FixedUpdater.FixedFrameTime.frameTime);
-            velocity = Vector2.Lerp(velocity, Vector2.Zero, FixedUpdater.FixedFrameTime.frameTime * drag);
+            if(simulate)
+            {
+                position = Vector2.LerpPrecise(position, position + velocity, FixedUpdater.FixedFrameTime.frameTime);
+                velocity = Vector2.Lerp(velocity, Vector2.Zero, FixedUpdater.FixedFrameTime.frameTime * drag);
+            }
         }
     }
 }
