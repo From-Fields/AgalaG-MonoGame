@@ -19,16 +19,20 @@ namespace agalag.game
         private Weapon _defaultWeapon = null;
 
         public float currentSpeed;
-        private float _defaultSpeed = 500;
+        private float _defaultSpeed = 10;
+
+        public float currentAcceleration;
+        private float _defaultAcceleration = 10;
+
         public List<PowerUp> powerUps;
 
         //References
         private GameTime _gameTime;
-        private GameTime _fixedGameTime;
+        private FixedFrameTime _fixedGameTime;
         private InputHandler _inputHandler;
 
-        //Properties
-        public override int health => _currentHealth;
+        //Input Variables
+        private Vector2 _movement;
 
         //Constructors
         public Player(Texture2D sprite, Vector2 position): 
@@ -36,6 +40,8 @@ namespace agalag.game
         public Player(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, iCollider collider = null) 
             : base(sprite, position, scale, rotation, collider) 
         {
+            _movement = Vector2.Zero;
+            currentAcceleration = _defaultAcceleration;
             currentSpeed = _defaultSpeed;
             currentWeapon = _defaultWeapon;
             _currentHealth = _maxHealth;
@@ -65,13 +71,23 @@ namespace agalag.game
         
         #region InterfaceImplementation
         //Entity
-        public override void Move(Vector2 direction, float speed)
+        public override int health => _currentHealth;
+        public override Vector2 position => _transform.position;
+        public override Vector2 currentVelocity => _transform.velocity;
+        public override void Move(Vector2 direction, float speed, float acceleration)
         {
-            direction.Normalize();
+            if(direction != Vector2.Zero)
+                direction.Normalize();
 
-            Vector2 destination = _transform.position + direction * speed;
+            speed *= 100;
 
-            _transform.position = Vector2.Lerp(_transform.position, destination, (float)_gameTime.ElapsedGameTime.TotalSeconds);
+            Vector2 movementVector = direction * speed;
+
+            _transform.velocity = Vector2.Lerp(_transform.velocity, movementVector, _fixedGameTime.frameTime * acceleration);
+
+            Vector2 destination = Vector2.Lerp(_transform.position, _transform.position + _transform.velocity, _fixedGameTime.frameTime);
+            
+            _transform.position = destination;
         }
         public override void Shoot()
         {
@@ -99,13 +115,14 @@ namespace agalag.game
         }
         public override void FixedUpdate(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
-            this._fixedGameTime = gameTime;
+            this._fixedGameTime = fixedFrameTime;
+                        
+            Move(_movement, currentSpeed, currentAcceleration);
         }
         public override void Update(GameTime gameTime)
         {
+            _movement = (_inputHandler.HasMovement) ? _inputHandler.GetMovement() : Vector2.Zero;
             if(!isDead) {
-                if(_inputHandler.HasMovement)
-                    Move(_inputHandler.GetMovement(), currentSpeed);
                 if(_inputHandler.GetShoot())
                     Shoot();
             }

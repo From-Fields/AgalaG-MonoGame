@@ -38,6 +38,10 @@ namespace agalag.engine
             Vector2 positionOffset = dimensions * anchor + offset;
 
             position = position - positionOffset;
+            Vector2 velocity = transform.velocity * FixedUpdater.FixedFrameTime.frameTime;
+
+            Vector2 oldPos = position;
+            position = Vector2.Lerp(position - velocity, position, FixedUpdater.FixedFrameTime.frameProgress);
 
             spriteBatch.Draw(
                 _sprite,

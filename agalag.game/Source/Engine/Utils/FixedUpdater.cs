@@ -13,6 +13,12 @@ namespace agalag.engine
         private float _maxFrameTime;
         private float _frameProgress;
 
+        private static FixedFrameTime _frameTime;
+        public static FixedFrameTime FixedFrameTime => _frameTime;
+
+        private static GameTime _gameTime;
+        public static GameTime GameTime => _gameTime;
+
         public FixedUpdater(float fixedUpdateDelta = -1, float maxFrameTime = 250)
         {
             fixedUpdateDelta = (fixedUpdateDelta < 0.15f) ? (int)(1000 / (float)30) : fixedUpdateDelta;
@@ -23,10 +29,13 @@ namespace agalag.engine
             this._frameProgress = 0;
             this._maxFrameTime = maxFrameTime;
             this._fixedUpdateDelta = fixedUpdateDelta;
+            _frameTime = new FixedFrameTime(_fixedUpdateDelta, 0, _maxFrameTime/1000, _frameProgress);
+            _gameTime = null;
         }
 
         public void ExecuteFixedUpdate(GameTime gameTime, System.Action<GameTime, FixedFrameTime> callback)
         {
+            _gameTime = gameTime;
             
             if (_previousTime == 0)
             {
@@ -46,23 +55,25 @@ namespace agalag.engine
         
             while (_frameAccumulator >= _fixedUpdateDelta)
             {
-                callback.Invoke(gameTime, new FixedFrameTime(_fixedUpdateDelta, frameTime, _maxFrameTime, ref _frameProgress));
+                callback.Invoke(gameTime, new FixedFrameTime(_fixedUpdateDelta, frameTime/1000, _maxFrameTime/1000, _frameProgress));
                 _frameAccumulator -= _fixedUpdateDelta;
             }
             _frameProgress = (_frameAccumulator / _fixedUpdateDelta);
+
+            _frameTime = new FixedFrameTime(_fixedUpdateDelta, frameTime/1000, _maxFrameTime/1000, _frameProgress);
         }
     }
 
     public struct FixedFrameTime
     {
-        public float fixedUpdateDelta;
+        public float DesiredDelta;
         public float frameTime;
         public float maxFrameTime;
         public float frameProgress;
 
-        public FixedFrameTime(float fixedUpdateDelta, float frameTime, float maxFrameTime, ref float frameProgress)
+        public FixedFrameTime(float DesiredDelta, float frameTime, float maxFrameTime, float frameProgress)
         {
-            this.fixedUpdateDelta = fixedUpdateDelta;
+            this.DesiredDelta = DesiredDelta;
             this.frameTime = frameTime;
             this.maxFrameTime = maxFrameTime;
             this.frameProgress = frameProgress;
