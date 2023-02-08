@@ -72,12 +72,12 @@ namespace agalag.engine
                 layer.DrawChildren(spriteBatch);
             }
         }
-        public void FixedUpdateChildren(GameTime gameTime)
+        public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             foreach(SceneLayer layer in _layers.Values)
             {
-                layer.FixedUpdate(gameTime);
-                layer.FixedUpdateChildren(gameTime);
+                layer.FixedUpdate(gameTime, fixedFrameTime);
+                layer.FixedUpdateChildren(gameTime, fixedFrameTime);
             }
         }
         public void UpdateChildren(GameTime gameTime)
@@ -91,7 +91,7 @@ namespace agalag.engine
 
         //iObject
         public abstract void Draw(SpriteBatch spriteBatch);
-        public abstract void FixedUpdate(GameTime gameTime);
+        public abstract void FixedUpdate(GameTime gameTime, FixedFrameTime fixedFrameTime);
         public abstract void Update(GameTime gameTime);
 
         #endregion

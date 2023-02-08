@@ -9,7 +9,6 @@ namespace agalag.engine
         //Attributes
         public int zPosition { get; protected set; }
         protected List<MonoEntity> _entities;
-        protected CollisionManager _collisionManager;
 
         //Constructors
         public SceneLayer(int zPosition, List<MonoEntity> entities = null) 
@@ -36,23 +35,28 @@ namespace agalag.engine
         public void DrawChildren(SpriteBatch spriteBatch)
         {
             foreach(MonoEntity entity in _entities)
+            {
                 entity.Draw(spriteBatch);
+                entity.DrawCollider(spriteBatch);
+            }
         }
         public void UpdateChildren(GameTime gameTime)
         {
             foreach(MonoEntity entity in _entities)
                 entity.Update(gameTime);
         }
-        public void FixedUpdateChildren(GameTime gameTime)
+        public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             foreach(MonoEntity entity in _entities)
-                entity.FixedUpdate(gameTime);
+                entity.FixedUpdate(gameTime, fixedFrameTime);
+
+            CollisionManager.CheckCollisions(_entities);
         }
 
         //iObject
         public virtual void Draw(SpriteBatch spriteBatch) {}
         public virtual void Update(GameTime gameTime) {}
-        public virtual void FixedUpdate(GameTime gameTime) {}
+        public virtual void FixedUpdate(GameTime gameTime, FixedFrameTime fixedFrameTime) {}
 
         #endregion
 
