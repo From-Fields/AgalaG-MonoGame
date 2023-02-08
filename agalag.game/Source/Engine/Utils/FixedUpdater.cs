@@ -30,7 +30,7 @@ namespace agalag.engine
             this._maxFrameTime = maxFrameTime;
             this._fixedUpdateDelta = fixedUpdateDelta;
             _frameTime = new FixedFrameTime(_fixedUpdateDelta, 0, _maxFrameTime/1000, _frameProgress);
-            _gameTime = null;
+            _gameTime = new GameTime();
         }
 
         public void ExecuteFixedUpdate(GameTime gameTime, System.Action<GameTime, FixedFrameTime> callback)

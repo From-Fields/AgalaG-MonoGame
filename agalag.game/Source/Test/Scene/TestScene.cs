@@ -12,6 +12,7 @@ namespace agalag.test
     public class TestScene : Scene
     {
         Texture2D playerSprite;
+        Texture2D kamikazeSprite;
 
         public override void Clear()
         {
@@ -31,7 +32,9 @@ namespace agalag.test
         public override void Initialize()
         {
             List<MonoEntity> entities = new List<MonoEntity>();
-            entities.Add(new Player(playerSprite, new Vector2(280, 280)));
+            Player player = new Player(playerSprite, new Vector2(960, 540));
+            entities.Add(player);
+            entities.Add(new TestEnemy(kamikazeSprite, new Vector2(960, 120), Vector2.One, player));
             //entities.Add(new SpriteTest(playerSprite, new Vector2(150, 150)));
             SceneLayer layer = new SceneLayer(0, entities);
 
@@ -43,6 +46,7 @@ namespace agalag.test
         public override bool LoadContent(ContentManager content)
         {
             playerSprite = content.Load<Texture2D>("Sprites/player");
+            kamikazeSprite = content.Load<Texture2D>("Sprites/kamikaze");
 
             this.isLoaded = true;
             return true;
