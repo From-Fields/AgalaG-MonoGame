@@ -48,7 +48,10 @@ namespace agalag.engine
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             foreach(MonoEntity entity in _entities)
+            {
                 entity.FixedUpdate(gameTime, fixedFrameTime);
+                entity.ApplyVelocity();
+            }
 
             CollisionManager.CheckCollisions(_entities);
         }

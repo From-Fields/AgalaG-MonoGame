@@ -40,6 +40,7 @@ namespace agalag.game
         public Player(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, iCollider collider = null) 
             : base(sprite, position, scale, rotation, collider) 
         {
+            _transform.simulate = true;
             _movement = Vector2.Zero;
             currentAcceleration = _defaultAcceleration;
             currentSpeed = _defaultSpeed;
@@ -83,13 +84,7 @@ namespace agalag.game
 
             Vector2 movementVector = direction * speed;
 
-            Vector2 velocity = Vector2.Lerp(_transform.velocity, movementVector, _fixedGameTime.frameTime * acceleration);
-
-            _transform.velocity = (velocity.Length() > movementVector.Length()) ? movementVector : velocity;
-
-            Vector2 destination = Vector2.Lerp(_transform.position, _transform.position + _transform.velocity, _fixedGameTime.frameTime);
-            
-            _transform.position = destination;
+            _transform.velocity = Vector2.Lerp(_transform.velocity, movementVector, _fixedGameTime.frameTime * acceleration);
         }
         public override void Shoot()
         {

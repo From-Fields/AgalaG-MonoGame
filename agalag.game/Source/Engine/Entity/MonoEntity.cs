@@ -59,7 +59,8 @@ namespace agalag.engine
             this._collider?.Draw(spriteBatch);
             #endif
         }
-        
+        public void ApplyVelocity() => _transform.ApplyVelocity();
+
         #region Interface Implementation
 
         //iObject
