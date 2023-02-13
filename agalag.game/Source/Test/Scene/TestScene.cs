@@ -34,7 +34,18 @@ namespace agalag.test
             List<MonoEntity> entities = new List<MonoEntity>();
             Player player = new Player(playerSprite, new Vector2(960, 540));
             entities.Add(player);
-            entities.Add(new TestEnemy(kamikazeSprite, new Vector2(960, 120), Vector2.One, player));
+            
+            
+            EnemyKamikaze enemyK = new EnemyKamikaze(kamikazeSprite, new Vector2(960, 120), Vector2.One, player);            
+
+            Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
+            queue.Enqueue(new MoveTowards(1, 1, 1f, 180, 10f, new Vector2(350, 180)));
+            queue.Enqueue(new Shoot(2));
+            queue.Enqueue(new MoveTowards(5, 1, 0.5f, 40, 1f, player));
+            enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
+
+            entities.Add(enemyK);
+
             //entities.Add(new SpriteTest(playerSprite, new Vector2(150, 150)));
             SceneLayer layer = new SceneLayer(0, entities);
 

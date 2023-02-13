@@ -6,13 +6,15 @@ namespace agalag.engine
     public abstract class MonoEntity: iObject
     {
         //Attributes
+        protected bool _active;
         protected Sprite _sprite;
         protected iCollider _collider;
         protected Transform _transform;
         
         //Properties
-        public Transform Transform => _transform;
-        public iCollider Collider => _collider;
+        public bool IsActive => this._active;
+        public Transform Transform => this._transform;
+        public iCollider Collider => this._collider;
         public bool HasCollider => this._collider != null;
 
         //Constructors
@@ -36,6 +38,7 @@ namespace agalag.engine
             this._sprite = new Sprite(sprite);
             _transform = new Transform(position, scale, 0f);
             SetCollider(collider);
+            SetActive(true);
         }
         
         #endregion
@@ -49,9 +52,8 @@ namespace agalag.engine
             _collider.Parent = this._transform;
             return true;
         }
-        public void RemoveCollider() {
-            _collider = null;
-        }
+        public void RemoveCollider() => _collider = null;
+        public void SetActive(bool active) => this._active = active;
         public abstract void OnCollision(MonoEntity other);
         public void DrawCollider(SpriteBatch spriteBatch)
         {
