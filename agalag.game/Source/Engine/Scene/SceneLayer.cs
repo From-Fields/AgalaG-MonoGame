@@ -36,21 +36,28 @@ namespace agalag.engine
         {
             foreach(MonoEntity entity in _entities)
             {
-                entity.Draw(spriteBatch);
-                entity.DrawCollider(spriteBatch);
+                if(entity.IsActive)
+                {
+                    entity.Draw(spriteBatch);
+                    entity.DrawCollider(spriteBatch);
+                }
             }
         }
         public void UpdateChildren(GameTime gameTime)
         {
             foreach(MonoEntity entity in _entities)
-                entity.Update(gameTime);
+                if(entity.IsActive)
+                    entity.Update(gameTime);
         }
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             foreach(MonoEntity entity in _entities)
             {
-                entity.FixedUpdate(gameTime, fixedFrameTime);
-                entity.ApplyVelocity();
+                if(entity.IsActive)
+                {
+                    entity.FixedUpdate(gameTime, fixedFrameTime);
+                    entity.ApplyVelocity();
+                }
             }
 
             CollisionManager.CheckCollisions(_entities);

@@ -58,7 +58,7 @@ namespace agalag.game
             this._timeoutAction = timeoutAction;
             this._transform.position = startingPoint;
 
-            this._sprite.SetVisibility(true);
+            this.SetActive(true);
 
             if(this._startingAction != null)
                 this.SwitchAction(this._startingAction);
@@ -74,8 +74,7 @@ namespace agalag.game
             this._timeoutAction = null;
             this._transform.position = Vector2.Zero;
 
-            this.RemoveCollider();
-            this._sprite.SetVisibility(false);
+            this.SetActive(false);
         }
 
         public override void Update(GameTime gameTime)
@@ -91,7 +90,7 @@ namespace agalag.game
         }
         public override void FixedUpdate(GameTime gameTime, FixedFrameTime fixedGameTime)
         {
-            if(_currentAction == null)
+            if(_isDead || _currentAction == null)
                 return;
             
             if(!_currentAction.CheckCondition(this))
