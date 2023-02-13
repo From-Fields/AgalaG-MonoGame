@@ -36,7 +36,7 @@ namespace agalag.game
 
         //Constructors
         public Player(Texture2D sprite, Vector2 position): 
-            this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(100, 60))) { }
+            this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(72, 64), null, new Point(0, 4))) { }
         public Player(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, iCollider collider = null) 
             : base(sprite, position, scale, rotation, collider) 
         {
