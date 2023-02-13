@@ -5,26 +5,18 @@ using agalag.game;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace agalag.test
+namespace agalag.game
 {
-    public class TestEnemy : Enemy
+    public class EnemyKamikaze : Enemy
     {
-        public TestEnemy(Texture2D sprite, Vector2 position, Vector2 scale, Entity target, float rotation = 0, iCollider collider = null) : 
+        private int _suicideDamage = 1;
+
+        private int _maxHealth = 1;
+        private int _health;
+
+        public EnemyKamikaze(Texture2D sprite, Vector2 position, Vector2 scale, Entity target,float rotation = 0, iCollider collider = null) : 
         base(sprite, position, scale, rotation, collider)
-        {
-            _defaultSpeed = 10f;
-            _defaultAcceleration = 10f;
-            
-            currentSpeed = _defaultSpeed;
-            currentAcceleration = _defaultAcceleration;
-
-            Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
-            queue.Enqueue(new MoveTowards(1, 1, 1f, 180, 10f, new Vector2(350, 180)));
-            queue.Enqueue(new Shoot(2));
-            queue.Enqueue(new MoveTowards(5, 1, 0.5f, 40, 1f, target));
-
-            Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), this.position);
-        }
+        { }
 
         public override int health => 0;
 
@@ -33,7 +25,7 @@ namespace agalag.test
 
         public override void Die()
         {
-            Debug.WriteLine("OMAEWA MOU SHINDEIRU");
+            this.Reserve();
         }
 
         public override void Move(Vector2 direction, float speed, float acceleration)
@@ -51,12 +43,28 @@ namespace agalag.test
 
         public override void TakeDamage(int damage)
         {
-            Debug.WriteLine("OWIE " + damage);
+            _health = System.Math.Clamp(_health - damage, 0, _maxHealth);
+
+            if(_health == 0)
+                Die();
         }
 
         public override void OnCollision(MonoEntity other)
         {
-            Debug.WriteLine("COLLIDED!");
+            if(!_isDead)
+            {
+                Entity otherEntity = other as Entity;
+                if(otherEntity != null) 
+                {
+                    Die();
+                    otherEntity.TakeDamage(_suicideDamage);
+                }
+            }
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
         }
 
         public override void FixedUpdate(GameTime gameTime, FixedFrameTime fixedGameTime)
@@ -70,6 +78,15 @@ namespace agalag.test
         }
 
         protected override void SubInitialize()
-        { }
+        {
+            this.SetCollider(new RectangleCollider(new Point(82, 84)));
+            _health = _maxHealth;
+
+            _defaultSpeed = 10f;
+            _defaultAcceleration = 10f;
+            
+            currentSpeed = _defaultSpeed;
+            currentAcceleration = _defaultAcceleration;
+        }
     }
 }

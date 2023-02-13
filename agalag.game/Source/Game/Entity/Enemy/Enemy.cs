@@ -15,6 +15,8 @@ namespace agalag.game
         public float currentAcceleration;
         protected float _defaultAcceleration;
 
+        protected bool _isDead;
+
         protected Queue<iEnemyAction> _actionQueue;
         protected iEnemyAction _startingAction;
         protected iEnemyAction _timeoutAction;
@@ -30,7 +32,7 @@ namespace agalag.game
         //Methods
         public void ExecuteNextAction()
         {
-            if(this._actionQueue.Count > 0)
+            if(this._actionQueue?.Count > 0)
                 this.SwitchAction(this._actionQueue.Dequeue());
             else
                 this.SwitchAction(null);
@@ -48,6 +50,9 @@ namespace agalag.game
             if(actionQueue == null || timeoutAction == null)
                 throw new System.ArgumentNullException("Action queue and Timeout action may not be null");
 
+            SubInitialize();
+
+            this._isDead = false;
             this._actionQueue = actionQueue;
             this._startingAction = startingAction;
             this._timeoutAction = timeoutAction;
@@ -63,16 +68,19 @@ namespace agalag.game
         
         public void Reserve()
         {
+            this._isDead = true;
             this._actionQueue = null;
             this._startingAction = null;
             this._timeoutAction = null;
             this._transform.position = Vector2.Zero;
+
+            this.RemoveCollider();
             this._sprite.SetVisibility(false);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if(_currentAction == null)
+            if(_isDead || _currentAction == null)
                 return;
 
             if(_currentAction.CheckCondition(this))
@@ -89,5 +97,7 @@ namespace agalag.game
             if(!_currentAction.CheckCondition(this))
                 _currentAction.FixedUpdate(this);
         }
+
+        protected abstract void SubInitialize();
     }
 }

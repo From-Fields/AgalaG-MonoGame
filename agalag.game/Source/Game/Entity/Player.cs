@@ -94,6 +94,7 @@ namespace agalag.game
         {
             _currentHealth = Math.Clamp(_currentHealth - damage, 0, _maxHealth);
 
+            // Debug.WriteLine((_currentHealth + damage) + "-" + damage + "=" + _currentHealth);
             if(_currentHealth == 0)
                 Die();
         }        
