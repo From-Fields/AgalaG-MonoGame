@@ -118,6 +118,7 @@ namespace agalag.game
         public override void Die()
         {
             Debug.WriteLine("NANI");
+            this.SetActive(false);
             this.isDead = true;
         }
 

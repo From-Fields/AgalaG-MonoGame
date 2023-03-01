@@ -107,15 +107,11 @@ namespace agalag.engine
         }
         public void UpdateChildren(GameTime gameTime)
         {
-            List<MonoEntity> entities = new();
             foreach (SceneLayer layer in _layers.Values)
             {
                 layer.Update(gameTime);
                 layer.UpdateChildren(gameTime);
-                entities.AddRange(layer.Entities);
             }
-
-            CollisionManager.CheckCollisions(entities);
         }
 
         //iObject

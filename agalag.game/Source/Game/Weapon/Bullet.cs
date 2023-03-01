@@ -42,7 +42,7 @@ namespace agalag.game {
         public Bullet(Vector2 position, Vector2 scale, int damage, Vector2 direction, float speed, string shooter = null, Texture2D sprite = null, float rotation = 0f, iCollider collider = null) 
             : base(sprite ?? Prefabs.StandardBullet, position, scale, rotation, 
                   collider ?? new RectangleCollider(new Point(32, 60), null, new Point(0, 4)), 
-                  layer: Layer.Objects) 
+                  layer: Layer.Objects)
         {
             _damage = damage;
             _direction = direction;
@@ -74,14 +74,14 @@ namespace agalag.game {
 
         public override void OnCollision(MonoEntity other)
         {
-            Debug.WriteLine("bullet: Colisão!");
+            //Debug.WriteLine("bullet: Colisão!");
 
             if (other is Entity entity)
             {
-                Debug.WriteLine("Entidade encontrada!");
+                //Debug.WriteLine("Entidade encontrada!");
                 if (!string.IsNullOrEmpty(entity.Tag) && string.Compare(entity.Tag, _shooter) != 0)
                 {
-                    Debug.WriteLine("alvo encontrado!");
+                    //Debug.WriteLine("alvo encontrado!");
                     entity.TakeDamage(_damage);
                     DestroySelf();
                 }

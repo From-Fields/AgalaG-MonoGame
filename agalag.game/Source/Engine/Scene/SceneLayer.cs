@@ -51,8 +51,6 @@ namespace agalag.engine
             foreach(MonoEntity entity in _entities.ToList())
                 if(entity.IsActive)
                     entity.Update(gameTime);
-
-            //CollisionManager.CheckCollisions(_entities);
         }
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
@@ -65,8 +63,6 @@ namespace agalag.engine
                     entity.ApplyVelocity();
                 }
             }
-
-            //CollisionManager.CheckCollisions(entities);
         }
 
         //iObject

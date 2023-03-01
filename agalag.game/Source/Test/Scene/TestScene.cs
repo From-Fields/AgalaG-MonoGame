@@ -19,9 +19,9 @@ namespace agalag.test
         public TestScene(List<SceneLayer> layers = null) : base(layers)
         {
             entities = new List<MonoEntity>();
-            AddLayer(new SceneLayer((int)Layer.Default, entities));
-            AddLayer(new SceneLayer((int)Layer.Objects, entities));
-            AddLayer(new SceneLayer((int)Layer.Entities, entities));
+            AddLayer(new SceneLayer((int)Layer.Default, null));
+            AddLayer(new SceneLayer((int)Layer.Objects, null));
+            AddLayer(new SceneLayer((int)Layer.Entities, null));
         }
 
         public override void Clear()
@@ -47,11 +47,17 @@ namespace agalag.test
             //Bullet bullet = new Bullet(new Vector2(900, 100), 0, new Vector2(0, 1), 0f);
 
             Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
-            queue.Enqueue(new MoveTowards(1, 1, 1f, 180, 10f, new Vector2(350, 180)));
-            queue.Enqueue(new Shoot(2));
-            queue.Enqueue(new MoveTowards(5, 1, 0.5f, 40, 1f, player));
+            // queue.Enqueue(new MoveTowards(1, 1, 1f, 180, 10f, new Vector2(350, 180)));
+            // queue.Enqueue(new Shoot(2));
+            // queue.Enqueue(new MoveTowards(5, 1, 0.5f, 40, 1f, player));
             enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
             
+            enemyK = new EnemyKamikaze(kamikazeSprite, new Vector2(1260, 120), Vector2.One, player);
+            enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
+            enemyK = new EnemyKamikaze(kamikazeSprite, new Vector2(660, 120), Vector2.One, player);
+            enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
+
+            System.Diagnostics.Debug.WriteLine(this._layers[(int)Layer.Entities].Entities.Count);
 
             this.isInitialized = true;
         }
