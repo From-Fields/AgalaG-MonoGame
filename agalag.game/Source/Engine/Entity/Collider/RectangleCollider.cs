@@ -37,7 +37,7 @@ namespace agalag.engine
         }
 
         public FlattenedPolygon FlattenedPolygon 
-        { 
+        {
             get => new FlattenedPolygon(
                 new Vector2(_Rect.Left, _Rect.Right), new Vector2(_Rect.Top, _Rect.Bottom)
             );

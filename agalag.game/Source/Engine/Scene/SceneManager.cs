@@ -10,7 +10,7 @@ namespace agalag.engine
     {
         //Attributes
         private Scene _defaultScene;
-        private Scene _currentScene;
+        private static Scene _currentScene;
         private Queue<Scene> _sceneQueue = new Queue<Scene>();
         private FixedUpdater _updater = new FixedUpdater();
 
@@ -22,15 +22,14 @@ namespace agalag.engine
             
             if(_currentScene != null)
                 ClearScene(_currentScene, content);
-            
+
+            _currentScene = newScene;
             InitializeScene(newScene, content);
 
             if(!newScene.isLoaded)
                 throw new System.Exception("Scene failed to Load");
             if(!newScene.isInitialized)
                 throw new System.Exception("Scene failed to Initialize");
-
-            _currentScene = newScene;
         }
         public void SwitchToDefaultScene(ContentManager content) => SwitchScene(_defaultScene, content);
 
@@ -59,6 +58,19 @@ namespace agalag.engine
         {
             this._updater = new FixedUpdater(fixedUpdateDelta, maxFrameTime);
         }
+
+        # region HandlingSceneObjects
+        public static void AddToMainScene(MonoEntity entity, Layer layer = Layer.Default)
+        {
+            _currentScene.AddElementToLayer(entity, layer);
+        }
+
+        public static void RemoveFromScene(MonoEntity entity)
+        {
+            _currentScene.RemoveElementFromLayer(entity);
+        }
+
+        #endregion
 
         #region Interface Implementation
 

@@ -38,7 +38,7 @@ namespace agalag.game
 
         public override void Shoot()
         {
-            Debug.WriteLine("FIRING MAH LAZOR");
+            //Debug.WriteLine("FIRING MAH LAZOR");
         }
 
         public override void TakeDamage(int damage)
@@ -60,16 +60,6 @@ namespace agalag.game
                     otherEntity.TakeDamage(_suicideDamage);
                 }
             }
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-        }
-
-        public override void FixedUpdate(GameTime gameTime, FixedFrameTime fixedGameTime)
-        {
-            base.FixedUpdate(gameTime, fixedGameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

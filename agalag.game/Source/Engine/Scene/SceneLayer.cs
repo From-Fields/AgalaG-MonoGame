@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,6 +10,8 @@ namespace agalag.engine
         //Attributes
         public int zPosition { get; protected set; }
         protected List<MonoEntity> _entities;
+
+        public List<MonoEntity> Entities => _entities;
 
         //Constructors
         public SceneLayer(int zPosition, List<MonoEntity> entities = null) 
@@ -45,13 +48,16 @@ namespace agalag.engine
         }
         public void UpdateChildren(GameTime gameTime)
         {
-            foreach(MonoEntity entity in _entities)
+            foreach(MonoEntity entity in _entities.ToList())
                 if(entity.IsActive)
                     entity.Update(gameTime);
+
+            //CollisionManager.CheckCollisions(_entities);
         }
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
-            foreach(MonoEntity entity in _entities)
+            var entities = _entities.ToList();
+            foreach(MonoEntity entity in entities)
             {
                 if(entity.IsActive)
                 {
@@ -60,7 +66,7 @@ namespace agalag.engine
                 }
             }
 
-            CollisionManager.CheckCollisions(_entities);
+            //CollisionManager.CheckCollisions(entities);
         }
 
         //iObject
