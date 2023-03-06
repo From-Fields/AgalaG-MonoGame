@@ -18,12 +18,21 @@ public class AgalagGame : Game
     public static GameTime _globalGameTime;
     public static GameTime GlobalGameTime => _globalGameTime;
 
+    private int _internalResolutionHeight = 1080, _internalResolutionWidth = 1920;
+    private int _finalResolutionHeight = 1080, _finalResolutionWidth = 1920;
+    private bool _isFullscreen = true;
+
     public AgalagGame()
     {
         _graphics = new GraphicsDeviceManager(this);
-        _graphics.PreferredBackBufferWidth = 1920;
-        _graphics.PreferredBackBufferHeight = 1080;
-        _graphics.ApplyChanges();
+        
+        ResolutionScaler.SetResolution(
+            _graphics,
+            _internalResolutionWidth, _internalResolutionHeight, 
+            _finalResolutionWidth, _finalResolutionHeight,
+            _isFullscreen
+        );
+
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
@@ -63,7 +72,8 @@ public class AgalagGame : Game
     {
         GraphicsDevice.Clear(Color.Black);
         _spriteBatch.Begin(
-            SpriteSortMode.BackToFront
+            SpriteSortMode.BackToFront,
+            transformMatrix: ResolutionScaler.ResolutionMatrix
         );
 
         _sceneManager.DrawChildren(_spriteBatch);
