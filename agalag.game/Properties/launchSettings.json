@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "agalag.game": {
+      "commandName": "Project",
+      "remoteDebugEnabled": false
+    }
+  }
+}

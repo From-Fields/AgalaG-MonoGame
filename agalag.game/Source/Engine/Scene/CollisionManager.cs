@@ -1,4 +1,6 @@
+using agalag.game;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace agalag.engine
 {
@@ -13,13 +15,15 @@ namespace agalag.engine
             {
                 for (int j = i + 1; j < length; j++)
                 {
+                    if(colliders[j].Collider == null || colliders[i].Collider == null)
+                        continue;
                     if(colliders[i].Collider.HasCollided(colliders[j].Collider))
                     {
                         colliders[i].OnCollision(colliders[j]);
                         colliders[j].OnCollision(colliders[i]);
                     }
                 }
+            }
         }
     }
-            }
 }

@@ -15,7 +15,7 @@ namespace agalag.game
         private int _maxHealth = 3;
         private int _currentHealth;
         
-        public Weapon currentWeapon;
+        public Weapon _currentWeapon;
         private Weapon _defaultWeapon = null;
 
         public float currentSpeed;
@@ -37,23 +37,35 @@ namespace agalag.game
         //Constructors
         public Player(Texture2D sprite, Vector2 position): 
             this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(72, 64), null, new Point(0, 4))) { }
+        
         public Player(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, iCollider collider = null) 
             : base(sprite, position, scale, rotation, collider) 
         {
+            SetTag("Player");
             _transform.simulate = true;
             _movement = Vector2.Zero;
+            _defaultWeapon = new DefaultWeapon(_transform, "Player");
+
+            //Updating Current Stuff
             currentAcceleration = _defaultAcceleration;
             currentSpeed = _defaultSpeed;
-            currentWeapon = _defaultWeapon;
+            _currentWeapon = _defaultWeapon;
             _currentHealth = _maxHealth;
+            //Controls
             _inputHandler = InputHandler.Instance;
         }
 
         //Methods
         public void SwitchWeapon(Weapon newWeapon) 
         {
-            this.currentWeapon = newWeapon;
+            this._currentWeapon = newWeapon;
         }
+
+        public void SwitchToDefaultWeapon()
+        {
+            SwitchWeapon(_defaultWeapon);
+        }
+
         public void AddPowerUp(PowerUp newPowerUp) 
         {
             if(!this.powerUps.Contains(newPowerUp)) 
@@ -88,8 +100,12 @@ namespace agalag.game
         }
         public override void Shoot()
         {
-            Debug.WriteLine("PEW");
+            if (_currentWeapon == null) 
+                throw new Exception("Current Weapon cannot be null");
+
+            _currentWeapon.Shoot();
         }
+        
         public override void TakeDamage(int damage)
         {
             _currentHealth = Math.Clamp(_currentHealth - damage, 0, _maxHealth);
@@ -98,9 +114,11 @@ namespace agalag.game
             if(_currentHealth == 0)
                 Die();
         }        
+        
         public override void Die()
         {
             Debug.WriteLine("NANI");
+            this.SetActive(false);
             this.isDead = true;
         }
 
@@ -111,12 +129,14 @@ namespace agalag.game
                 this._sprite.Draw(Transform, spriteBatch);
             }
         }
+        
         public override void FixedUpdate(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             this._fixedGameTime = fixedFrameTime;
                         
             Move(_movement, currentSpeed, currentAcceleration);
         }
+        
         public override void Update(GameTime gameTime)
         {
             _movement = (_inputHandler.HasMovement) ? _inputHandler.GetMovement() : Vector2.Zero;

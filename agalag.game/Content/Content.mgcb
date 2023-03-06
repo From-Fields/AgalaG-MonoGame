@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/enemyBlue4.png;Sprites/kamikaze.png
 
+#begin Sprites/laserRed06.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/laserRed06.png;Sprites/bullet_player.png
+
 #begin Sprites/playerShip2_red.png
 /importer:TextureImporter
 /processor:TextureProcessor

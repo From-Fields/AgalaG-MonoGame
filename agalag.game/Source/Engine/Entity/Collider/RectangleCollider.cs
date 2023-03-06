@@ -37,9 +37,9 @@ namespace agalag.engine
         }
 
         public FlattenedPolygon FlattenedPolygon 
-        { 
+        {
             get => new FlattenedPolygon(
-                new Vector2(_Rect.Left, _Rect.Right), new Vector2(_Rect.Top, _Rect.Bottom)
+                _Rect.Left, _Rect.Right, _Rect.Top, _Rect.Bottom
             );
         }
 
@@ -54,7 +54,7 @@ namespace agalag.engine
             } 
         }
 
-        public bool HasCollided(iCollider other) => this.FlattenedPolygon.Intersects(other.FlattenedPolygon);
+        public bool HasCollided(iCollider other) => this.FlattenedPolygon.Intersects(other.FlattenedPolygon) || other.FlattenedPolygon.Intersects(this.FlattenedPolygon);
 
         public void Draw(SpriteBatch spriteBatch)
         {

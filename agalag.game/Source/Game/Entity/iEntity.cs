@@ -28,6 +28,6 @@ namespace agalag.game
         public abstract void Die();
         
         public Entity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, iCollider collider = null) 
-            : base(sprite, position, scale, rotation, collider) { }
+            : base(sprite, position, scale, rotation, collider, layer: Layer.Entities) { }
     }
 }

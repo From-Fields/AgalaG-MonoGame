@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "agalag.game", "agalag.game.csproj", "{D0F91093-F2E6-42EA-9BC2-5EB31D03E96B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "agalag.dx", "..\agalag.dx\agalag.dx.csproj", "{FDB20A42-C5E2-4CDF-8488-81A6D01896CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0F91093-F2E6-42EA-9BC2-5EB31D03E96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F91093-F2E6-42EA-9BC2-5EB31D03E96B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0F91093-F2E6-42EA-9BC2-5EB31D03E96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0F91093-F2E6-42EA-9BC2-5EB31D03E96B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDB20A42-C5E2-4CDF-8488-81A6D01896CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB20A42-C5E2-4CDF-8488-81A6D01896CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB20A42-C5E2-4CDF-8488-81A6D01896CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB20A42-C5E2-4CDF-8488-81A6D01896CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9A2A5741-A194-4FF6-88C9-9067827539B9}
+	EndGlobalSection
+EndGlobal

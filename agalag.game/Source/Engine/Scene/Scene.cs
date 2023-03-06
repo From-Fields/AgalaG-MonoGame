@@ -55,6 +55,27 @@ namespace agalag.engine
             return false;
         }
 
+        public bool AddElementToLayer(MonoEntity entity, Layer layer)
+        {
+            int key = (int)layer;
+            if (_layers.Count == 0 || _layers[key] == null) return false;
+
+            SceneLayer sceneLayer = _layers[key];
+
+            return sceneLayer.AddEntity(entity);
+        }
+
+        public bool RemoveElementFromLayer(MonoEntity entity)
+        {
+            foreach (SceneLayer layer in _layers.Values)
+            {
+                if (layer.RemoveEntity(entity))
+                    return true;
+            }
+
+            return false;
+        }
+
         public abstract bool LoadContent(ContentManager content);
         public abstract bool UnloadContent(ContentManager content);
 
@@ -74,15 +95,19 @@ namespace agalag.engine
         }
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
+            List<MonoEntity> entities = new();
             foreach(SceneLayer layer in _layers.Values)
             {
                 layer.FixedUpdate(gameTime, fixedFrameTime);
                 layer.FixedUpdateChildren(gameTime, fixedFrameTime);
+                entities.AddRange(layer.Entities);
             }
+
+            CollisionManager.CheckCollisions(entities);
         }
         public void UpdateChildren(GameTime gameTime)
         {
-            foreach(SceneLayer layer in _layers.Values)
+            foreach (SceneLayer layer in _layers.Values)
             {
                 layer.Update(gameTime);
                 layer.UpdateChildren(gameTime);

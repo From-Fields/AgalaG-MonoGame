@@ -4,17 +4,21 @@ using Microsoft.Xna.Framework.Input;
 using agalag.engine;
 using agalag.game.input;
 using System.Diagnostics;
+using agalag.game.prefabs;
 
 namespace agalag.game;
 
-public class Game1 : Game
+public class AgalagGame : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private SceneManager _sceneManager = SceneManager.Instance;
     private InputHandler _inputHandler;
 
-    public Game1()
+    public static GameTime _globalGameTime;
+    public static GameTime GlobalGameTime => _globalGameTime;
+
+    public AgalagGame()
     {
         _graphics = new GraphicsDeviceManager(this);
         _graphics.PreferredBackBufferWidth = 1920;
@@ -24,6 +28,7 @@ public class Game1 : Game
         IsMouseVisible = true;
 
         _inputHandler = InputHandler.Instance;
+        Prefabs.DefineContent(Content);
     }
 
     protected override void Initialize()
@@ -42,12 +47,13 @@ public class Game1 : Game
     protected override void Update(GameTime gameTime)
     {
         _inputHandler.Update();
-        
+
         // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
         //     Exit();
 
         // TODO: Add your update logic here
 
+        _globalGameTime = gameTime;
         _sceneManager.UpdateChildren(gameTime);
 
         base.Update(gameTime);

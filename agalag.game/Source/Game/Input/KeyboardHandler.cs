@@ -75,7 +75,7 @@ namespace agalag.game.input
         }
         public bool GetShoot()
         {
-            return GetKeyDown(inputScheme.shoot);
+            return GetKeyTap(inputScheme.shoot);
         }
 
         public void Update()

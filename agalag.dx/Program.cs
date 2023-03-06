@@ -1,3 +1,3 @@
 ﻿
-using var game = new agalag.game.Game1();
+using var game = new agalag.game.AgalagGame();
 game.Run();

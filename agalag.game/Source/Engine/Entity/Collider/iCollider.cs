@@ -18,24 +18,28 @@ namespace agalag.engine
 
     public class FlattenedPolygon
     {
-        public Vector2 xDelta;
-        public Vector2 yDelta;
+        public float minX;
+        public float maxX;
+        public float minY;
+        public float maxY;
 
-        public FlattenedPolygon(Vector2 xDelta, Vector2 yDelta) 
+        public FlattenedPolygon(float minX, float maxX, float minY, float maxY) 
         {
-            this.xDelta = xDelta;
-            this.yDelta = yDelta;
+            this.minX = minX;
+            this.maxX = maxX;
+            this.minY = minY;
+            this.maxY = maxY;
         }
 
         public bool Intersects(FlattenedPolygon other)
         {
-            bool xIntersectsA = (this.xDelta.X <= other.xDelta.X && other.xDelta.X <= this.xDelta.Y);
-            bool xIntersectsB = (this.xDelta.X <= other.xDelta.Y && other.xDelta.Y <= this.xDelta.Y);
+            bool xIntersectsA = (other.minX >= this.minX && other.minX <= this.maxX);
+            bool xIntersectsB = (other.maxX >= this.minX && other.maxX <= this.maxX);
 
             bool xIntersects = xIntersectsA || xIntersectsB;
 
-            bool yIntersectsA = (this.yDelta.X <= other.yDelta.X && other.yDelta.X <= this.yDelta.Y);
-            bool yIntersectsB = (this.yDelta.X <= other.yDelta.Y && other.yDelta.Y <= this.yDelta.Y);
+            bool yIntersectsA = (other.minY >= this.minY && other.minY <= this.maxY);
+            bool yIntersectsB = (other.maxY >= this.minY && other.maxY <= this.maxY);
 
             bool yIntersects = yIntersectsA || yIntersectsB;
 
