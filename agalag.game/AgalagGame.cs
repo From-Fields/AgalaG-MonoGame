@@ -19,7 +19,7 @@ public class AgalagGame : Game
     public static GameTime GlobalGameTime => _globalGameTime;
 
     private int _internalResolutionHeight = 1080, _internalResolutionWidth = 1920;
-    private int _finalResolutionHeight = 1080, _finalResolutionWidth = 1920;
+    private int _finalResolutionHeight = 2060, _finalResolutionWidth = 4096;
     private bool _isFullscreen = true;
 
     public AgalagGame()

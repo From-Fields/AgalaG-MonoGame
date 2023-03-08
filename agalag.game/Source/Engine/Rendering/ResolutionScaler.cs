@@ -1,5 +1,6 @@
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace agalag.engine
 {
@@ -41,10 +42,19 @@ namespace agalag.engine
             GraphicsDeviceManager _graphics, int internalWidth, int internalHeight, 
             int width, int height, bool fullscreen = false
         ) {
-            SetAllResolutions(internalWidth, internalHeight, width, height);
+            int screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+
+            if(fullscreen){
+                width = (width > screenWidth) ? screenWidth : width;
+                height = (height > screenHeight) ? screenHeight : height;
+            }
 
             _graphics.PreferredBackBufferWidth = width;
             _graphics.PreferredBackBufferHeight = height;
+
+            SetAllResolutions(internalWidth, internalHeight, width, height);
+
             _graphics.IsFullScreen = fullscreen;
             _graphics.ApplyChanges();
         }
