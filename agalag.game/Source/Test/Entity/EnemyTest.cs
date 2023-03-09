@@ -21,9 +21,9 @@ namespace agalag.test
             currentAcceleration = _defaultAcceleration;
 
             Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
-            queue.Enqueue(new MoveTowards(1, 1, 1f, 180, 10f, new Vector2(350, 180)));
+            queue.Enqueue(new MoveTowards(new Vector2(350, 180), maximumAngle: 180));
             queue.Enqueue(new Shoot(2));
-            queue.Enqueue(new MoveTowards(5, 1, 0.5f, 40, 1f, target));
+            queue.Enqueue(new MoveTowards(target, 5, trackingSpeed: 0.5f));
 
             Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), this.position);
         }

@@ -17,25 +17,31 @@ namespace agalag.game
         private Vector2 _desiredDirection = Vector2.Zero;
 
         //Constructors
-        public MoveTowards(float speedModifier, float accelerationModifier, float trackingSpeed, float maximumAngle, float minimumDistance, Vector2 targetPosition)
+        public MoveTowards(Vector2 targetPosition,
+            float speedModifier = 1, float accelerationModifier = 1, float trackingSpeed = 1f, 
+            float maximumAngle = 360, float minimumDistance = 40
+        ) : this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance)
         {
-            _speedModifier = speedModifier;
-            _accelerationModifier = accelerationModifier;
-            _steeringSpeed = trackingSpeed;
-            _maximumAngle = maximumAngle;
-            _minimumDistance = minimumDistance;
             _targetPosition = targetPosition;
             _targetObject = null;
         }
-        public MoveTowards(float speedModifier, float accelerationModifier, float trackingSpeed, float maximumAngle, float minimumDistance, Entity targetObject)
+        public MoveTowards(Entity targetObject,
+            float speedModifier = 1, float accelerationModifier = 1, float trackingSpeed = 1f, 
+            float maximumAngle = 360, float minimumDistance = 40
+        ): this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance)
         {
+            _targetObject = targetObject;
+            _targetPosition = _targetObject.position;
+        }
+        public MoveTowards(
+            float speedModifier, float accelerationModifier, float trackingSpeed, 
+            float maximumAngle, float minimumDistance
+        ) {
             _speedModifier = speedModifier;
             _accelerationModifier = accelerationModifier;
             _steeringSpeed = trackingSpeed;
             _maximumAngle = maximumAngle;
             _minimumDistance = minimumDistance;
-            _targetObject = targetObject;
-            _targetPosition = _targetObject.position;
         }
 
         //Methods

@@ -86,18 +86,18 @@ namespace agalag.test
             WaveController wave = new WaveController(10, new List<iWaveUnit>(new[] {
                 new WaveUnit<EnemyKamikaze>(
                     new Vector2(700, -64),
-                    new MoveTowards(0.7f, 1, 0.9f, 360, 40, new Vector2(700, 180)),
-                    new MoveTowards(1.5f, 1, 1f, 360, 40, new Vector2(-450, 500)),
+                    new MoveTowards(new Vector2(700, 180), 0.7f, 1, 0.9f),
+                    new MoveTowards(new Vector2(-450, 500), 1.5f),
                     new Queue<iEnemyAction>(new [] {
-                        new MoveTowards(1.5f, 1, 0.9f, 360, 40, new Vector2(450, 500))
+                        new MoveTowards(new Vector2(450, 500), 1.5f, 1, 0.9f)
                     })
                 ),
                 new WaveUnit<EnemyKamikaze>(
                     new Vector2(1920 - 700, -64),
-                    new MoveTowards(1, 1, 0.9f, 360, 40, new Vector2(1920 - 700, 180)),
-                    new MoveTowards(1, 1, 1f, 360, 40, new Vector2(1920 + 450, 500)),
+                    new MoveTowards(new Vector2(1920 - 700, 180), 1, 1, 0.9f),
+                    new MoveTowards(new Vector2(1920 + 450, 500)),
                     new Queue<iEnemyAction>(new[] {
-                        new MoveTowards(1, 1, 0.9f, 360, 40, new Vector2(1920 - 450, 500))
+                        new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f)
                     })
                 )
             }));
