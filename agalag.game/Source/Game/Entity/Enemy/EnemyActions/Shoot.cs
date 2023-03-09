@@ -1,4 +1,4 @@
-using agalag.engine;
+using agalag.engine.routines;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,11 +13,11 @@ namespace agalag.game
         public Shoot(float timeout) => _timeout = timeout;
 
         #region Interface Implementation
-        public bool CheckCondition(Enemy target) => _done;
-        public void FixedUpdate(Enemy target) { return; }
-        public void Update(Enemy target) => target.Shoot();
-        public void OnStart(Enemy target) => RoutineManager.Instance.CallbackTimer(_timeout, () => _done = true);
-        public void OnFinish(Enemy target) { return; }
+        public bool CheckCondition(iEnemy target) => _done;
+        public void FixedUpdate(iEnemy target) { return; }
+        public void Update(iEnemy target) => target.Shoot();
+        public void OnStart(iEnemy target) => RoutineManager.Instance.CallbackTimer(_timeout, () => _done = true);
+        public void OnFinish(iEnemy target) { return; }
         #endregion
     }
 }

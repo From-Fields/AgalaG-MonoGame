@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using agalag.engine;
-using agalag.game.prefabs;
+using agalag.engine.routines;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -32,16 +32,18 @@ namespace agalag.game {
         /// <param name="sprite"></param>
         /// <param name="rotation"></param>
         /// <param name="collider"></param>
-        public Bullet(Vector2 position, int damage, Vector2 direction, float speed, string shooter = null, Texture2D sprite = null, float rotation = 0f, iCollider collider = null)
-            : this(position, Vector2.One, damage, direction, speed, shooter, 
-                  sprite ?? Prefabs.StandardBullet, rotation, 
-                  collider ?? new RectangleCollider(new Point(32, 60), null, new Point(0, 4))) { }
 
-        public Bullet(Vector2 position, Vector2 scale, int damage, Vector2 direction, float speed, string shooter = null, Texture2D sprite = null, float rotation = 0f, iCollider collider = null) 
-            : base(sprite ?? Prefabs.StandardBullet, position, scale, rotation, 
-                  collider ?? new RectangleCollider(new Point(32, 60), null, new Point(0, 4)), 
-                  layer: Layer.Objects)
-        {
+        public Bullet(Vector2 position, int damage, Vector2 direction, float speed, Texture2D sprite, string shooter = null, float rotation = 0f, iCollider collider = null)
+            : this(position, Vector2.One, damage, direction, speed, sprite, 
+                shooter, rotation, 
+                collider ?? new RectangleCollider(new Point(32, 60), null, new Point(0, 4))
+        ) { }
+
+        public Bullet(Vector2 position, Vector2 scale, int damage, Vector2 direction, float speed, Texture2D sprite, string shooter = null, float rotation = 0f, iCollider collider = null) 
+            : base(sprite, position, scale, rotation, 
+                collider ?? new RectangleCollider(new Point(32, 60), null, new Point(0, 4)), 
+                layer: Layer.Objects
+        ) {
             if (direction != Vector2.Zero)
                 direction.Normalize();
          

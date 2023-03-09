@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using agalag.engine.content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -81,6 +82,8 @@ namespace agalag.engine
 
         public abstract void Initialize();
         public abstract void Clear();
+
+        public T GetPrefab<T>() where T: MonoEntity => Prefabs.GetPrefabOfType<T>();
 
         #region Interface Implementation
         

@@ -29,5 +29,12 @@ namespace agalag.engine
                 velocity = Vector2.Lerp(velocity, Vector2.Zero, FixedUpdater.FixedFrameTime.frameTime * drag);
             }
         }
+
+        public void Reset()
+        {
+            this.velocity = Vector2.Zero;
+            this.scale = Vector2.One;
+            this.rotation = 0f;
+        }
     }
 }

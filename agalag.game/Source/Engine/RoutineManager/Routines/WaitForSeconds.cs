@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace agalag.engine
+namespace agalag.engine.routines
 {
     public class WaitForSeconds: Routine
     {

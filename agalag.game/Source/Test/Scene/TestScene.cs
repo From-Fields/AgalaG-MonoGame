@@ -11,9 +11,6 @@ namespace agalag.test
 {
     public class TestScene : Scene
     {
-        Texture2D playerSprite;
-        Texture2D kamikazeSprite;
-
         List<MonoEntity> entities;
 
         public TestScene(List<SceneLayer> layers = null) : base(layers)
@@ -41,32 +38,32 @@ namespace agalag.test
 
         public override void Initialize()
         {
-            Player player = new Player(playerSprite, new Vector2(960, 540));
-            
-            EnemyKamikaze enemyK = new EnemyKamikaze(kamikazeSprite, new Vector2(960, 120), Vector2.One, player);
+            Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540));
+
+            CreateWave();
+
+            // EnemyKamikaze enemyK = new EnemyKamikaze(GetPrefab<EnemyKamikaze>(), true);
             //Bullet bullet = new Bullet(new Vector2(900, 100), 0, new Vector2(0, 1), 0f);
 
-            Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
+            // Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
             // queue.Enqueue(new MoveTowards(1, 1, 1f, 180, 10f, new Vector2(350, 180)));
             // queue.Enqueue(new Shoot(2));
             // queue.Enqueue(new MoveTowards(5, 1, 0.5f, 40, 1f, player));
-            enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
-            
-            enemyK = new EnemyKamikaze(kamikazeSprite, new Vector2(1260, 120), Vector2.One, player);
-            enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
-            enemyK = new EnemyKamikaze(kamikazeSprite, new Vector2(660, 120), Vector2.One, player);
-            enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
+            // enemyK.Initialize(queue, new WaitSeconds(2), new MoveTowards(5, 1, 0.5f, 40, 1f, player),  new Vector2(960, 120));
 
-            System.Diagnostics.Debug.WriteLine(this._layers[(int)Layer.Entities].Entities.Count);
+            
+            // enemyK = new EnemyKamikaze(kamikazeSprite, new Vector2(1260, 120), Vector2.One, player);
+            // enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
+            // enemyK = new EnemyKamikaze(kamikazeSprite, new Vector2(660, 120), Vector2.One, player);
+            // enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
+
+            // System.Diagnostics.Debug.WriteLine(this._layers[(int)Layer.Entities].Entities.Count);
 
             this.isInitialized = true;
         }
 
         public override bool LoadContent(ContentManager content)
         {
-            playerSprite = content.Load<Texture2D>("Sprites/player");
-            kamikazeSprite = content.Load<Texture2D>("Sprites/kamikaze");
-
             this.isLoaded = true;
             return true;
         }
@@ -82,6 +79,32 @@ namespace agalag.test
         {
             if(InputHandler.Instance.GetPause())
                 Debug.WriteLine("pause");
+        }
+
+        private void CreateWave()
+        {
+            WaveController wave = new WaveController(10, new List<iWaveUnit>(new[] {
+                new WaveUnit<EnemyKamikaze>(
+                    new Vector2(700, -64),
+                    new MoveTowards(0.7f, 1, 0.9f, 360, 40, new Vector2(700, 180)),
+                    new MoveTowards(1.5f, 1, 1f, 360, 40, new Vector2(-450, 500)),
+                    new Queue<iEnemyAction>(new [] {
+                        new MoveTowards(1.5f, 1, 0.9f, 360, 40, new Vector2(450, 500))
+                    })
+                ),
+                new WaveUnit<EnemyKamikaze>(
+                    new Vector2(1920 - 700, -64),
+                    new MoveTowards(1, 1, 0.9f, 360, 40, new Vector2(1920 - 700, 180)),
+                    new MoveTowards(1, 1, 1f, 360, 40, new Vector2(1920 + 450, 500)),
+                    new Queue<iEnemyAction>(new[] {
+                        new MoveTowards(1, 1, 0.9f, 360, 40, new Vector2(1920 - 450, 500))
+                    })
+                )
+            }));
+
+            wave.onWaveDone += CreateWave;
+
+            wave.Initialize();
         }
     }
 }

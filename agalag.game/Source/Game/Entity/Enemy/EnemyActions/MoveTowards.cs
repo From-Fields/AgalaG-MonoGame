@@ -65,23 +65,23 @@ namespace agalag.game
         #region Interface Implementation
         //Behaviour ends if distance is less than the desired distance.
         //Desired direction is calculated on Update, applied on FixedUpdate.
-        public bool CheckCondition(Enemy target)
+        public bool CheckCondition(iEnemy target)
         {
             return Vector2.Distance(target.position, _targetPosition) <= _minimumDistance; 
         } 
-        public void FixedUpdate(Enemy target) 
+        public void FixedUpdate(iEnemy target) 
         {
-            target.Move(_desiredDirection, target.currentSpeed * _speedModifier, target.currentAcceleration * _accelerationModifier);
+            target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target.CurrentAcceleration * _accelerationModifier);
         }
-        public void Update(Enemy target) 
+        public void Update(iEnemy target) 
         {
             if(_targetObject != null)
                 this._targetPosition = _targetObject.position;
 
-            _desiredDirection = GetSteeringVector(target.currentSpeed, target.position, target.currentVelocity);
+            _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.position, target.currentVelocity);
         }
-        public void OnStart(Enemy target) { return; }
-        public void OnFinish(Enemy target) 
+        public void OnStart(iEnemy target) { return; }
+        public void OnFinish(iEnemy target) 
         { 
             //target.Move(Vector2.Zero, target.currentSpeed, target.currentAcceleration); 
         }

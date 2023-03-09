@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using agalag.engine.utils;
+using agalag.engine.routines;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -63,7 +64,7 @@ namespace agalag.engine
         # region HandlingSceneObjects
         public static void AddToMainScene(MonoEntity entity, Layer layer = Layer.Default)
         {
-            _currentScene.AddElementToLayer(entity, layer);
+            _currentScene?.AddElementToLayer(entity, layer);
         }
 
         public static void RemoveFromScene(MonoEntity entity)

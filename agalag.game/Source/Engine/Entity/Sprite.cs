@@ -14,6 +14,7 @@ namespace agalag.engine
         //Properties
         public bool IsVisible => this._visible;
         private Vector2 _Dimensions => new Vector2(_sprite.Width, _sprite.Height);
+        public Texture2D Texture => this._sprite;
 
         //Constructors
         public Sprite(Texture2D sprite, bool visibility = true, Vector2? _anchor = null, Vector2? _offset = null)

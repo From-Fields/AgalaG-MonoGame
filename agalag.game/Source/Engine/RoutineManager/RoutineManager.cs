@@ -5,7 +5,7 @@ using System.Linq;
 using agalag.engine.utils;
 using Microsoft.Xna.Framework;
 
-namespace agalag.engine
+namespace agalag.engine.routines
 {
     public class RoutineManager: Singleton<RoutineManager>
     {
@@ -13,7 +13,7 @@ namespace agalag.engine
 
         public void Update(GameTime gameTime) 
         {
-            _routines.ForEach((routine) => routine.Update(gameTime));
+            _routines.ToList().ForEach((routine) => routine.Update(gameTime));
 
             foreach(var runner in _routines.Where((runner) => runner.IsDone).ToList())
                 _routines.Remove(runner);

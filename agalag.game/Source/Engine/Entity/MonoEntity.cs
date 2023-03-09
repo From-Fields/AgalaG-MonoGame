@@ -18,7 +18,7 @@ namespace agalag.engine
         public bool IsActive => this._active;
         public Transform Transform => this._transform;
         public iCollider Collider => this._collider;
-        public bool HasCollider => this._collider != null;
+        public bool HasCollider => this._active && this._collider != null;
 
         public string Tag => _tag;
         protected string SetTag(string tag) => _tag = tag;

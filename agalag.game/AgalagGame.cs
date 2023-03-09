@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework.Input;
 using agalag.engine;
 using agalag.game.input;
 using System.Diagnostics;
-using agalag.game.prefabs;
+using agalag.engine.content;
+using Microsoft.Xna.Framework.Content;
 
 namespace agalag.game;
 
@@ -19,8 +20,8 @@ public class AgalagGame : Game
     public static GameTime GlobalGameTime => _globalGameTime;
 
     private int _internalResolutionHeight = 1080, _internalResolutionWidth = 1920;
-    private int _finalResolutionHeight = 2060, _finalResolutionWidth = 4096;
-    private bool _isFullscreen = true;
+    private int _finalResolutionHeight = 720, _finalResolutionWidth = 1280;
+    private bool _isFullscreen = false;
 
     public AgalagGame()
     {
@@ -32,7 +33,6 @@ public class AgalagGame : Game
             _finalResolutionWidth, _finalResolutionHeight,
             _isFullscreen
         );
-
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
@@ -42,8 +42,6 @@ public class AgalagGame : Game
 
     protected override void Initialize()
     {
-        _sceneManager.SetDefaultScene(new test.TestScene());
-        _sceneManager.SwitchToDefaultScene(Content);
 
         base.Initialize();
     }
@@ -51,6 +49,17 @@ public class AgalagGame : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+        Prefabs.AddPrefab<Bullet>(Content.Load<Texture2D>("Sprites/bullet_player"));
+        
+        Texture2D playerSprite = Content.Load<Texture2D>("Sprites/player");
+        Prefabs.AddPrefab<Player>(new Player(playerSprite, Vector2.Zero), playerSprite);
+
+        Texture2D kamikazeSprite = Content.Load<Texture2D>("Sprites/kamikaze");
+        Prefabs.AddPrefab<EnemyKamikaze>(new EnemyKamikaze(kamikazeSprite, Vector2.Zero, Vector2.One), kamikazeSprite);
+
+        _sceneManager.SetDefaultScene(new test.TestScene());
+        _sceneManager.SwitchToDefaultScene(Content);
     }
 
     protected override void Update(GameTime gameTime)
