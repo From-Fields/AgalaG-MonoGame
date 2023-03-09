@@ -13,6 +13,7 @@ namespace agalag.engine
         private static Scene _currentScene;
         private Queue<Scene> _sceneQueue = new Queue<Scene>();
         private FixedUpdater _updater = new FixedUpdater();
+        private RoutineManager _routineManager = RoutineManager.Instance;
 
         //Methods
         public void SwitchScene(Scene newScene, ContentManager content)
@@ -96,7 +97,8 @@ namespace agalag.engine
             if(_currentScene != null)
             {
                 _updater.ExecuteFixedUpdate(gameTime, (gT, ffT) => FixedUpdateChildren(gT, ffT));
-
+                
+                _routineManager.Update(gameTime);
                 _currentScene.Update(gameTime);
                 _currentScene.UpdateChildren(gameTime);
             }

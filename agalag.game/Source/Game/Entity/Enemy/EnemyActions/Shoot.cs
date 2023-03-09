@@ -6,28 +6,17 @@ namespace agalag.game
 {
     public class Shoot: iEnemyAction
     {
-        //Attributes
-        private float _startingGameTime;
         private float _timeout;
+        private bool _done = false;
 
         //Constructors
-        public Shoot(float timeout)
-        {
-            this._timeout = timeout;
-        }
+        public Shoot(float timeout) => _timeout = timeout;
 
         #region Interface Implementation
-        public bool CheckCondition(Enemy target)
-        {
-            float gameDelta = FixedUpdater.GameTime.TotalGameTime.Seconds - this._startingGameTime;
-            return gameDelta >= _timeout;
-        }
+        public bool CheckCondition(Enemy target) => _done;
         public void FixedUpdate(Enemy target) { return; }
         public void Update(Enemy target) => target.Shoot();
-        public void OnStart(Enemy target)
-        {
-            this._startingGameTime = FixedUpdater.GameTime.TotalGameTime.Seconds;
-        }
+        public void OnStart(Enemy target) => RoutineManager.Instance.CallbackTimer(_timeout, () => _done = true);
         public void OnFinish(Enemy target) { return; }
         #endregion
     }
