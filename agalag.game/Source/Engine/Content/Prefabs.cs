@@ -9,10 +9,13 @@ namespace agalag.engine.content {
     public static class Prefabs {
         private static ContentManager _content;
 
-        public static void DefineContent(ContentManager content) => _content = content;
+        private static Dictionary<string, SpriteFont> _fonts = new();
 
         private static Dictionary<Type, Prefab> _prefabs = new Dictionary<Type, Prefab>();
         private static Dictionary<Type, Texture2D> _prefabTextures = new Dictionary<Type, Texture2D>();
+
+        public static void DefineContent(ContentManager content) => _content = content;
+        public static SpriteFont StandardFont => GetFont("Standard");
 
         public static void AddPrefab<T>(T entity, Texture2D texture = null)
             where T: MonoEntity
@@ -43,6 +46,18 @@ namespace agalag.engine.content {
 
             _prefabTextures.Add(type, texture);
         }
+
+        public static void DefineStandardFont(SpriteFont font)
+        {
+            AddFont("Standard", font);
+        }
+
+        public static void AddFont(string key, SpriteFont font)
+        {
+            _fonts.Add(key, font);
+        }
+
+        public static SpriteFont GetFont(string key) => _fonts[key];
 
         public static Texture2D GetTextureOfType<T>()
             where T: MonoEntity

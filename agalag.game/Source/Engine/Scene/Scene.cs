@@ -95,6 +95,8 @@ namespace agalag.engine
                 layer.Draw(spriteBatch);
                 layer.DrawChildren(spriteBatch);
             }
+
+            UIHandler.Instance.Draw(spriteBatch);
         }
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
@@ -115,6 +117,7 @@ namespace agalag.engine
                 layer.Update(gameTime);
                 layer.UpdateChildren(gameTime);
             }
+            UIHandler.Instance.Update(gameTime);
         }
 
         //iObject

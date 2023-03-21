@@ -11,6 +11,8 @@ namespace agalag.game.input
         public bool GetPause();
         public bool GetShoot();
         public void Update();
+        public bool DownPressed();
+        public bool UpPressed();
     }
 
     public enum InputMethods 
