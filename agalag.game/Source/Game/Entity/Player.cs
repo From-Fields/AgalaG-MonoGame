@@ -35,6 +35,8 @@ namespace agalag.game
         private Vector2 _movement;
 
         //Constructors
+        public Player(Player player, Vector2 position):
+            this(player._sprite.Texture, position, player.Transform.scale, player.Transform.rotation, player.Collider) { }
         public Player(Texture2D sprite, Vector2 position): 
             this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(72, 64), null, new Point(0, 4))) { }
         
@@ -117,7 +119,7 @@ namespace agalag.game
         
         public override void Die()
         {
-            Debug.WriteLine("NANI");
+            //Debug.WriteLine("NANI");
             this.SetActive(false);
             this.isDead = true;
         }
