@@ -31,9 +31,13 @@ namespace agalag.game.Source.Game.Scenes
 
         public override void Initialize()
         {
-            UIText title = new UIText("AgalaG", new Vector2(Utils.ScreenWidth/2, Utils.ScreenHeight/4), Prefabs.GetFont("Title"));
+            UIText title = new UIText("AgalaG", new Vector2(Utils.ScreenWidth/2, 50f), Prefabs.GetFont("Title"));
             title.SetColor(Color.OrangeRed);
             title.SetAlign(TextAlign.Center);
+
+            _ = new UIButton("Start", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2), new Vector2(400, 120));
+            _ = new UIButton("Settings", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + 180), new Vector2(400, 120));
+            _ = new UIButton("Exit", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + (180*2)), new Vector2(400, 120), hoverColor: Color.DarkRed);
 
             this.isInitialized = true;
         }
@@ -46,6 +50,8 @@ namespace agalag.game.Source.Game.Scenes
 
         public override bool UnloadContent(ContentManager content)
         {
+            UIHandler.Instance.Clean();
+
             this.isLoaded = false;
             return true;
         }

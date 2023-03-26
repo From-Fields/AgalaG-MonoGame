@@ -32,6 +32,21 @@ namespace agalag.game.input
         public bool GetPause() => _inputMethod.GetPause();
         public bool GetShoot() => _inputMethod.GetShoot();
 
+        public bool PressedDown() => _inputMethod.DownPressed();
+        public bool PressedUp() => _inputMethod.UpPressed();
+
+        public Vector2 GetMousePosition()
+        {
+            MouseState mouseState = Mouse.GetState();
+            return new Vector2(mouseState.Position.X, mouseState.Position.Y);
+        }
+
+        public bool GetMouseLeftPressed()
+        {
+            MouseState mouseState = Mouse.GetState();
+            return mouseState.LeftButton == ButtonState.Pressed;
+        }
+
         public bool SwitchInputMethod(InputMethods method)
         {
             iInputHandler handler = GetInputMethod(method);

@@ -89,7 +89,7 @@ namespace agalag.game.input
 
         public bool DownPressed()
         {
-            return GetKeyDown(inputScheme.down);
+            return GetKeyTap(inputScheme.down);
         }
 
         public void Update()

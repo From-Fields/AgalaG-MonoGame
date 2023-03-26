@@ -16,6 +16,8 @@ namespace agalag.engine
         {
             _transform = new Transform(position, Vector2.One, 0f);
             _active = true;
+
+            UIHandler.Instance.AddElement(this);
         }
 
         public void SetActive(bool active) => this._active = active;

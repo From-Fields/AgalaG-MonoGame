@@ -1,4 +1,5 @@
 ﻿using agalag.engine.utils;
+using agalag.game.input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -13,6 +14,11 @@ namespace agalag.engine
     {
         private List<UIElement> _elements = new();
 
+        private LinkedListNode<UIElement> _selected = null;
+        private LinkedList<UIElement> _interactable = new();
+
+        public UIElement Selected => _selected?.Value;
+
         public void AddElement(UIElement e)
         {
             if (_elements.Contains(e)) return;
@@ -25,8 +31,55 @@ namespace agalag.engine
             _elements.Remove(e);
         }
 
+        public void AddToInteractable(UIElement e)
+        {
+            if (!_elements.Contains(e) || _interactable.Contains(e)) return;
+
+            _interactable.AddLast(new LinkedListNode<UIElement>(e));
+        }
+
+        public UIElement PreviousInteractable()
+        {
+            if (_selected == null || _selected.Previous == null)
+            {
+                _selected = _interactable.Last;
+            }
+            else
+            {
+                _selected = _selected.Previous;
+            }
+
+            return _selected.Value;
+        }
+
+        public UIElement NextInteractable()
+        {
+            if (_selected == null || _selected.Next == null)
+            {
+                _selected = _interactable.First;
+            }
+            else
+            {
+                _selected = _selected.Next;
+            }
+
+            return _selected.Value;
+        }
+
+        public void Clean()
+        {
+            _elements.Clear();
+            _interactable.Clear();
+            _selected = null;
+        }
+
         public void Update(GameTime gameTime)
         {
+            if (InputHandler.Instance.PressedUp())
+                PreviousInteractable();
+            if (InputHandler.Instance.PressedDown())
+                NextInteractable();
+
             foreach (var e in _elements)
             {
                 e.Update(gameTime);

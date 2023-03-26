@@ -95,8 +95,6 @@ namespace agalag.engine
                 layer.Draw(spriteBatch);
                 layer.DrawChildren(spriteBatch);
             }
-
-            UIHandler.Instance.Draw(spriteBatch);
         }
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
