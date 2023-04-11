@@ -41,6 +41,18 @@ namespace agalag.game.input
             return true;
         }
 
+        public Vector2 ScaledMousePosition {
+            get {
+                Matrix scalingMatrix = engine.ResolutionScaler.ResolutionMatrix;
+                MouseState mouseState = Mouse.GetState();
+
+                Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+                Vector2 scaledMousePosition = Vector2.Transform(mousePosition, Matrix.Invert(scalingMatrix));
+
+                return scaledMousePosition;
+            }
+        }
+
         private iInputHandler GetInputMethod(InputMethods method)
         {
             switch(method)
