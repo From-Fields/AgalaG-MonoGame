@@ -26,6 +26,8 @@ namespace agalag.game
 
         public List<PowerUp> powerUps;
 
+        public Action onDeath;
+
         //References
         private GameTime _gameTime;
         private FixedFrameTime _fixedGameTime;
@@ -122,6 +124,7 @@ namespace agalag.game
             //Debug.WriteLine("NANI");
             this.SetActive(false);
             this.isDead = true;
+            this.onDeath?.Invoke();
         }
 
         //MonoEntity
