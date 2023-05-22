@@ -64,6 +64,10 @@ public class AgalagGame : Game
         Texture2D geminiChildSprite = Content.Load<Texture2D>("Sprites/enemy_gemini");
         Prefabs.AddPrefab<EnemyGeminiChild>(new EnemyGeminiChild(geminiChildSprite, Vector2.Zero, Vector2.One, bulletTexture: geminiBullet), geminiChildSprite);
 
+        Texture2D bumblebeeBullet = Content.Load<Texture2D>("Sprites/bullet_bumblebee");
+        Texture2D bumblebeeSprite = Content.Load<Texture2D>("Sprites/enemy_bumblebee");
+        Prefabs.AddPrefab<EnemyBumblebee>(new EnemyBumblebee(bumblebeeSprite, Vector2.Zero, Vector2.One, bulletTexture: bumblebeeBullet), bumblebeeSprite);
+
         _sceneManager.SetDefaultScene(new test.TestScene());
         _sceneManager.SwitchToDefaultScene(Content);
     }
