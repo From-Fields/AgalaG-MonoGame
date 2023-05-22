@@ -117,6 +117,10 @@ namespace agalag.game
             }
             _children.Clear();
         }
+        public override void OnCollision(MonoEntity other)
+        {
+            //Do Nothing
+        }
         #endregion    
     }
 }
