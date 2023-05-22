@@ -32,6 +32,7 @@ namespace agalag.game
         public EnemyGeminiChild(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, Texture2D bulletTexture = null) : 
         base(sprite, position, scale, rotation, collider) 
         {
+            _weapon = new DefaultWeapon(_transform);
             _bulletTexture = bulletTexture;
         }
         public EnemyGeminiChild(EnemyGeminiChild prefab, bool active = false) : 
