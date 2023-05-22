@@ -11,11 +11,12 @@ namespace agalag.game
 {
     public class EnemyKamikaze : Enemy<EnemyKamikaze>
     {
-        private int _suicideDamage = 1;
+        //Health
+        private int _defaultHealth = 1;
+        private int _maxHealth;
+        private int _currentHealth;
 
-        private int _maxHealth = 1;
-        private int _health;
-
+        //Constructors
         public EnemyKamikaze(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null) : 
         base(sprite, position, scale, rotation, collider) { }
         public EnemyKamikaze(EnemyKamikaze prefab, bool active = false) : 
@@ -26,9 +27,9 @@ namespace agalag.game
 
         #region InterfaceImplementation
         //iEntity
-        public override int health => 0;
-        public override Vector2 currentVelocity => _transform.velocity;
-        public override Vector2 position => _transform.position;
+        public override int Health => _currentHealth;
+        public override Vector2 CurrentVelocity => _transform.velocity;
+        public override Vector2 Position => _transform.position;
 
         public override void Move(Vector2 direction, float speed, float acceleration)
         {
@@ -40,25 +41,13 @@ namespace agalag.game
         public override void Shoot() { }
         public override void TakeDamage(int damage)
         {
-            _health = System.Math.Clamp(_health - damage, 0, _maxHealth);
+            _currentHealth = System.Math.Clamp(_currentHealth - damage, 0, _maxHealth);
 
-            if(_health == 0)
+            if(_currentHealth == 0)
                 Die();
         }
 
         //MonoEntity
-        public override void OnCollision(MonoEntity other)
-        {
-            if(!_isDead)
-            {
-                Entity otherEntity = other as Entity;
-                if(otherEntity != null) 
-                {
-                    Die();
-                    otherEntity.TakeDamage(_suicideDamage);
-                }
-            }
-        }
         public override void Draw(SpriteBatch spriteBatch)
         {
             _sprite?.Draw(_transform, spriteBatch);
@@ -73,13 +62,16 @@ namespace agalag.game
         protected override void SubInitialize()
         {
             this.SetCollider(new RectangleCollider(new Point(82, 84)));
-            _health = _maxHealth;
+            _maxHealth = _defaultHealth;
+            _currentHealth = _defaultHealth;
 
             _defaultSpeed = 10f;
             _defaultAcceleration = 10f;
             
             currentSpeed = _defaultSpeed;
             currentAcceleration = _defaultAcceleration;
+
+            _collisionDamage = _defaultCollisionDamage;
         }
         public override void Reserve() => Pool.Release(this);
         #endregion    

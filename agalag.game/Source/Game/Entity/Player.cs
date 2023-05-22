@@ -88,9 +88,9 @@ namespace agalag.game
         
         #region InterfaceImplementation
         //Entity
-        public override int health => _currentHealth;
-        public override Vector2 position => _transform.position;
-        public override Vector2 currentVelocity => _transform.velocity;
+        public override int Health => _currentHealth;
+        public override Vector2 Position => _transform.position;
+        public override Vector2 CurrentVelocity => _transform.velocity;
         public override void Move(Vector2 direction, float speed, float acceleration)
         {
             if(direction != Vector2.Zero)

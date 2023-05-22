@@ -31,7 +31,7 @@ namespace agalag.game
         ): this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance)
         {
             _targetObject = targetObject;
-            _targetPosition = _targetObject.position;
+            _targetPosition = _targetObject.Position;
         }
         public MoveTowards(
             float speedModifier, float accelerationModifier, float trackingSpeed, 
@@ -73,7 +73,7 @@ namespace agalag.game
         //Desired direction is calculated on Update, applied on FixedUpdate.
         public bool CheckCondition(iEnemy target)
         {
-            return Vector2.Distance(target.position, _targetPosition) <= _minimumDistance; 
+            return Vector2.Distance(target.Position, _targetPosition) <= _minimumDistance; 
         } 
         public void FixedUpdate(iEnemy target) 
         {
@@ -82,9 +82,9 @@ namespace agalag.game
         public void Update(iEnemy target) 
         {
             if(_targetObject != null)
-                this._targetPosition = _targetObject.position;
+                this._targetPosition = _targetObject.Position;
 
-            _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.position, target.currentVelocity);
+            _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.Position, target.CurrentVelocity);
         }
         public void OnStart(iEnemy target) { return; }
         public void OnFinish(iEnemy target) 
