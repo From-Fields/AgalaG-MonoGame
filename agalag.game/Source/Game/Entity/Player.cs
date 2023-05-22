@@ -102,6 +102,7 @@ namespace agalag.game
 
             _transform.velocity = Vector2.Lerp(_transform.velocity, movementVector, _fixedGameTime.frameTime * acceleration);
         }
+        public override void Stop() => _transform.velocity = Vector2.Zero;
         public override void Shoot()
         {
             if (_currentWeapon == null) 

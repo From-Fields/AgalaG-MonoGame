@@ -38,6 +38,8 @@ namespace agalag.game
             float frameTime = FixedUpdater.FixedFrameTime.frameTime;
             _transform.velocity = Vector2.Lerp(_transform.velocity, direction * speed, frameTime * acceleration);
         }
+        public override void Stop() =>
+            _transform.velocity = Vector2.Lerp(_transform.velocity, Vector2.Zero, 0.99f);
         public override void Shoot() { }
         public override void TakeDamage(int damage)
         {

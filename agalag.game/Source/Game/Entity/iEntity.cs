@@ -12,6 +12,7 @@ namespace agalag.game
 
         public void Move (Vector2 direction, float speed, float acceleration);
         public void Shoot();
+        public void Stop();
         public void TakeDamage (int damage);
         public void Die();
     }
@@ -24,6 +25,7 @@ namespace agalag.game
 
         public abstract void Move (Vector2 direction, float speed, float acceleration);
         public abstract void Shoot();
+        public abstract void Stop();
         public abstract void TakeDamage (int damage);
         public abstract void Die();
         

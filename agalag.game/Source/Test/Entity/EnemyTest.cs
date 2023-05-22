@@ -44,6 +44,7 @@ namespace agalag.test
             float frameTime = FixedUpdater.FixedFrameTime.frameTime;
             _transform.velocity = Vector2.Lerp(_transform.velocity, direction * speed, frameTime * acceleration);
         }
+        public override void Stop() => _transform.velocity = Vector2.Zero;
         public override void Shoot() => Debug.WriteLine("FIRING MAH LAZOR");
         public override void TakeDamage(int damage )=> Debug.WriteLine("OWIE " + damage);
         public override void OnCollision(MonoEntity other) => Debug.WriteLine("COLLIDED!");
