@@ -42,7 +42,7 @@ namespace agalag.engine
         public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, iCollider collider, Layer layer = Layer.Default) 
         {
             this._sprite = new Sprite(sprite);
-            _transform = new Transform(position, scale, 0f);
+            _transform = new Transform(position, scale, rotation);
             SetCollider(collider);
             SetActive(true);
             SceneManager.AddToMainScene(this, layer);
