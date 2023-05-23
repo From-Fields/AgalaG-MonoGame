@@ -14,7 +14,7 @@ namespace agalag.game
         //Attributes
         private int _weaponDamage = 1;
         private float _weaponCooldown = 0.5f;
-        private float _missileSpeed = 5f;
+        private float _missileSpeed = 15f;
         private DefaultWeapon _weapon;
 
         //Health
@@ -29,7 +29,7 @@ namespace agalag.game
         public EnemyBumblebee(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, Texture2D bulletTexture = null) : 
         base(sprite, position, scale, rotation, collider) 
         { 
-            _weapon = new DefaultWeapon(_transform);
+            _weapon = new DefaultWeapon(_transform, Utils.Tags[EntityTag.Enemy]);
             _bulletTexture = bulletTexture;
         }
         public EnemyBumblebee(EnemyBumblebee prefab, bool active = false) : 

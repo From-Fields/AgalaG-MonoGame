@@ -21,14 +21,14 @@ namespace agalag.game
         private float _decelerationRadius = 2f;
 
         //Constructors
-        public MoveTowards(Vector2 targetPosition, bool decelerate = true, float decelerationRadius = 80, bool stopOnEnd = true): 
+        public MoveTowards(Vector2 targetPosition, bool decelerate = true, float decelerationRadius = 120, bool stopOnEnd = true): 
             this(targetPosition, 1, decelerate: decelerate, decelerationRadius: decelerationRadius) { }
         public MoveTowards(Entity target, bool decelerate = false, float decelerationRadius = -1, bool stopOnEnd = false): 
             this(target, 1, decelerate: decelerate, decelerationRadius: decelerationRadius) { }
         public MoveTowards(Vector2 targetPosition,
             float speedModifier, float accelerationModifier = 1, float trackingSpeed = 1f, 
             float maximumAngle = 360, float minimumDistance = 40,
-            bool decelerate = true, float decelerationRadius = 2f, bool stopOnEnd = true
+            bool decelerate = true, float decelerationRadius = 120, bool stopOnEnd = true
         ) : this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance, decelerate, decelerationRadius, stopOnEnd)
         {
             _targetPosition = targetPosition;
@@ -84,7 +84,7 @@ namespace agalag.game
                     decelerationMultiplier = System.Math.Clamp(distance, 0, distance) / _decelerationRadius;
                     steeringVector *= decelerationMultiplier;
                 }
-                System.Diagnostics.Debug.WriteLine(distance + " vector: " + _targetPosition + " Multiplier: " + decelerationMultiplier);
+                // System.Diagnostics.Debug.WriteLine(distance + " vector: " + _targetPosition + " Multiplier: " + decelerationMultiplier);
             }
 
             Vector2 finalDirection = currentVelocity + steeringVector;

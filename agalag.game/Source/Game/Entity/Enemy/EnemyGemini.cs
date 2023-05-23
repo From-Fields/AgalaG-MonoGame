@@ -12,11 +12,11 @@ namespace agalag.game
     public class EnemyGemini : Enemy<EnemyGemini>
     {
         //Attributes
-        private float _geminiPositionOffset = 0.5f;
+        private float _geminiPositionOffset = 100f;
         private float _orbitingVelocity = 1f;
         private int _geminiMissileDamage = 1;
         private float _weaponCooldown = 1f;
-        private float _missileSpeed = 4f;
+        private float _missileSpeed = 12f;
 
         //Health
         private int _defaultHealth = 2;
@@ -48,9 +48,11 @@ namespace agalag.game
 
             float frameTime = FixedUpdater.FixedFrameTime.frameTime;
             _transform.velocity = Vector2.Lerp(_transform.velocity, direction * speed, frameTime * acceleration);
+            
+            Debug.WriteLine("Parent: " + _transform.velocity);
 
             foreach(var child in _children) {
-                child.Move(direction, speed, acceleration);
+                child.Move(direction, speed, frameTime * acceleration);
             }
         }
         public override void Stop() =>
@@ -83,7 +85,7 @@ namespace agalag.game
         //Enemy
         protected override void SubInitialize()
         {
-            this.SetCollider(new RectangleCollider(new Point(82, 84)));
+            this.SetCollider(new RectangleCollider(new Point(1, 1)));
             _isDead = false;
             _maxHealth = _defaultHealth;
             _currentHealth = _defaultHealth;
@@ -111,10 +113,16 @@ namespace agalag.game
         protected override void SubReserve() {
             base.SubReserve();
 
-            foreach (var child in _children) {
+            int childCount = _children.Count;
+
+            for (int i = 0; i < childCount; i++)
+            {
+                EnemyGeminiChild child = _children[i];
+                
                 if(!child.IsDead)
                     child.Reserve();
             }
+
             _children.Clear();
         }
         public override void OnCollision(MonoEntity other)

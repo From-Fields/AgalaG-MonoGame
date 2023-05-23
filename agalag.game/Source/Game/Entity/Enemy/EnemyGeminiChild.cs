@@ -13,7 +13,8 @@ namespace agalag.game
     {
         //Attributes
         private float _positionOffset;
-        private float _velocityMultiplier = 20;
+        private float _velocityMultiplier = 100;
+        private float _orbitMultiplier = 60;
         private float _orbitingVelocity;
         private DefaultWeapon _weapon;
         private Vector2? _desiredVelocity;
@@ -32,7 +33,7 @@ namespace agalag.game
         public EnemyGeminiChild(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, Texture2D bulletTexture = null) : 
         base(sprite, position, scale, rotation, collider) 
         {
-            _weapon = new DefaultWeapon(_transform);
+            _weapon = new DefaultWeapon(_transform, Utils.Tags[EntityTag.Enemy]);
             _bulletTexture = bulletTexture;
         }
         public EnemyGeminiChild(EnemyGeminiChild prefab, bool active = false) : 
@@ -59,8 +60,6 @@ namespace agalag.game
 
         public override void Move(Vector2 direction, float speed, float acceleration)
         {
-            speed *= 100;
-
             _desiredVelocity = direction * speed;
         }
         public override void Stop() {
@@ -93,6 +92,7 @@ namespace agalag.game
         protected override void SubInitialize()
         {
             this.SetCollider(new RectangleCollider(new Point(82, 84)));
+            _transform.drag = 0;
             _isDead = false;
             _currentHealth = _maxHealth;
 
@@ -104,7 +104,7 @@ namespace agalag.game
             _collisionDamage = _defaultCollisionDamage;
 
             if(!_rotationMatrix.HasValue)
-                _rotationMatrix = Matrix.CreateRotationX(90);
+                _rotationMatrix = Matrix.CreateRotationZ(MathHelper.ToRadians(90));
         }
         public override void Reserve() => Pool.Release(this);
 
@@ -124,30 +124,28 @@ namespace agalag.game
         protected override void SubFixedUpdate(GameTime gameTime, FixedFrameTime fixedFrameTime) {
             if(!_toChild.HasValue || !_fromChild.HasValue || !_tangent.HasValue)
                 return;
+
             float distance = Vector2.Distance(Position, _parent.Position);
-            float offsetMultiplier = (_velocityMultiplier * distance/_positionOffset);
+            float offsetMultiplier = _velocityMultiplier * (_orbitMultiplier * distance/_positionOffset);
             float acceleration = _parent.CurrentAcceleration;
-            Vector2 _desiredOrbit = _tangent.Value * _orbitingVelocity * _velocityMultiplier * 2 * MathF.PI * _positionOffset / distance;
+            Vector2 _desiredOrbit = _velocityMultiplier * _tangent.Value * _orbitingVelocity * _orbitMultiplier * 2 * MathF.PI * _positionOffset / distance;
 
             _desiredOrbit += (_toChild.Value * _orbitingVelocity * offsetMultiplier);
+            
+            _desiredOrbit *= fixedFrameTime.frameTime;
 
-            if(_desiredVelocity != Vector2.Zero) {
-                _desiredOrbit += _desiredVelocity.Value;
-                _desiredVelocity = Vector2.Zero;
-                if(_desiredVelocity.HasValue) {
-                    if(_desiredVelocity == Vector2.Zero)
-                        _desiredVelocity = null;
-                    else {
-                        _desiredOrbit += _desiredVelocity.Value;
-                        _desiredVelocity = Vector2.Zero;
-                    }
+            _transform.velocity = Vector2.Lerp(_transform.velocity, _desiredOrbit, fixedFrameTime.frameTime * currentAcceleration);
+
+            if(_desiredVelocity.HasValue) {
+                if(_desiredVelocity == Vector2.Zero)
+                    _desiredVelocity = null;
+                else {
+                    _transform.velocity = Vector2.Lerp(_transform.velocity, _desiredVelocity.Value, fixedFrameTime.frameTime * acceleration);
+                    _desiredVelocity = Vector2.Zero;
                 }
-
-                _desiredOrbit *= fixedFrameTime.frameTime;
-                _desiredOrbit += _parent.CurrentVelocity;
-
-                _transform.velocity = Vector2.Lerp(_transform.velocity, _desiredOrbit, fixedFrameTime.frameTime * acceleration);
             }
+            // Debug.WriteLine("Tangent: " + _tangent);
+            // Debug.WriteLine("ToChild: " + _tangent);
         }
         #endregion    
     }

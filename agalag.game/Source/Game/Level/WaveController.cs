@@ -43,15 +43,24 @@ namespace agalag.game
         }
         private void TimeOutAllUnits()
         {
-            foreach (iWaveUnit unit in unitList)
+            int unitCount = unitList.Count;
+
+            for (int i = 0; i < unitCount; i++)
+            {
+                iWaveUnit unit = unitList[i];
                 unit.ExecuteTimeoutAction();
+            }
 
             RoutineManager.Instance.CallbackTimer(_timeout / 2, EliminateAllUnits);
         }
         private void EliminateAllUnits()
         {
-            foreach (iWaveUnit unit in unitList)
+            int unitCount = unitList.Count;
+
+            for (int i = 0; i < unitCount; i++)
             {
+                iWaveUnit unit = unitList[i];
+
                 if(_isDone)
                     return;
 
