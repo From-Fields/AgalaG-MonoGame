@@ -19,6 +19,7 @@ namespace agalag.game
         private bool _stopOnEnd = true;
         private bool _decelerate = false;
         private float _decelerationRadius = 2f;
+        private float _decelerationMultiplier = 1;
 
         //Constructors
         public MoveTowards(Vector2 targetPosition, bool decelerate = true, float decelerationRadius = 120, bool stopOnEnd = true): 
@@ -55,6 +56,7 @@ namespace agalag.game
             _decelerate = decelerate;
             _decelerationRadius = decelerationRadius;
             _stopOnEnd = stopOnEnd;
+            _decelerationMultiplier = 1;
         }
 
         //Methods
@@ -78,11 +80,11 @@ namespace agalag.game
             Vector2 steeringVector = (desiredVelocity - currentVelocity) * steeringMultiplier;
 
             if(_decelerate) {
-                float decelerationMultiplier = 1;
+                this._decelerationMultiplier = 1;
                 float distance = Vector2.Distance(currentPosition, _targetPosition);
                 if(distance <= _decelerationRadius) {
-                    decelerationMultiplier = System.Math.Clamp(distance, 0, distance) / _decelerationRadius;
-                    steeringVector *= decelerationMultiplier;
+                    this._decelerationMultiplier = System.Math.Clamp(distance, 0, distance) / _decelerationRadius;
+                    steeringVector *= this._decelerationMultiplier;
                 }
                 // System.Diagnostics.Debug.WriteLine(distance + " vector: " + _targetPosition + " Multiplier: " + decelerationMultiplier);
             }
@@ -102,7 +104,7 @@ namespace agalag.game
         } 
         public virtual void FixedUpdate(iEnemy target) 
         {
-            target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target.CurrentAcceleration * _accelerationModifier);
+            target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier * _decelerationMultiplier, target.CurrentAcceleration * _accelerationModifier);
         }
         public virtual void Update(iEnemy target) 
         {
