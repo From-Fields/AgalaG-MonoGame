@@ -71,6 +71,12 @@ namespace agalag.engine
             if (IsSelected && InputHandler.Instance.GetMouseLeftPressed())
             {
                 Debug.WriteLine("botão [" + _text + "] clicado");
+                if (_onClick == null)
+                {
+                    Debug.WriteLine("Action was not assigned to this button.");
+                    return;
+                }
+                _onClick.Invoke();
             }
         }
 

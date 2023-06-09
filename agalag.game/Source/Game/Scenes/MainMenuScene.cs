@@ -1,6 +1,7 @@
 ﻿using agalag.engine;
 using agalag.engine.content;
 using agalag.game.input;
+using agalag.test;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,7 +36,9 @@ namespace agalag.game.Source.Game.Scenes
             title.SetColor(Color.OrangeRed);
             title.SetAlign(TextAlign.Center);
 
-            _ = new UIButton("Start", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2), new Vector2(400, 120));
+            _ = new UIButton("Start", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2), new Vector2(400, 120), action: () => {
+                SceneManager.Instance.SwitchScene(new TestScene());
+            });
             _ = new UIButton("Settings", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + 180), new Vector2(400, 120));
             _ = new UIButton("Exit", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + (180*2)), new Vector2(400, 120), hoverColor: Color.DarkRed);
 

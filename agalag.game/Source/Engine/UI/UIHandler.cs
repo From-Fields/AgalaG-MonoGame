@@ -49,7 +49,7 @@ namespace agalag.engine
                 _selected = _selected.Previous;
             }
 
-            return _selected.Value;
+            return _selected?.Value;
         }
 
         public UIElement NextInteractable()
@@ -63,7 +63,7 @@ namespace agalag.engine
                 _selected = _selected.Next;
             }
 
-            return _selected.Value;
+            return _selected?.Value;
         }
 
         public void Clean()
@@ -80,7 +80,8 @@ namespace agalag.engine
             if (InputHandler.Instance.PressedDown())
                 NextInteractable();
 
-            foreach (var e in _elements)
+            var elements = new List<UIElement>(_elements); // evitar bug de alteração de elementos durante iteração
+            foreach (var e in elements)
             {
                 e.Update(gameTime);
             }
@@ -88,7 +89,8 @@ namespace agalag.engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var e in _elements)
+            var elements = new List<UIElement>(_elements);
+            foreach (var e in elements)
             {
                 e.Draw(spriteBatch);
             }
