@@ -45,7 +45,6 @@ namespace agalag.engine.content {
         }
 
         public static Texture2D GetTextureOfType<T>()
-            where T: MonoEntity
         {
             if(!_prefabTextures.ContainsKey(typeof(T)))
                 return null;

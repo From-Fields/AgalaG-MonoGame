@@ -36,6 +36,8 @@ namespace agalag.game
         //Input Variables
         private Vector2 _movement;
 
+        public int MaxHealth => _maxHealth;
+        
         //Constructors
         public Player(Player player, Vector2 position):
             this(player._sprite.Texture, position, player.Transform.scale, player.Transform.rotation, player.Collider) { }
@@ -91,6 +93,7 @@ namespace agalag.game
         public override int Health => _currentHealth;
         public override Vector2 Position => _transform.position;
         public override Vector2 CurrentVelocity => _transform.velocity;
+
         public override void Move(Vector2 direction, float speed, float acceleration)
         {
             if(direction != Vector2.Zero)
