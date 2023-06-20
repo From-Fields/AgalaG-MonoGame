@@ -65,5 +65,21 @@ namespace agalag.engine
 
             spriteBatch.Draw(whiteRectangle, Origin, _Rect, colour);
         }
+
+        public Vector2 ClosestPoint(Vector2 position) {
+            if(_Rect.Contains(position))
+                return position;
+
+            float maxX = Origin.X + _dimensions.X / 2;
+            float maxY = Origin.Y + _dimensions.Y / 2;
+
+            float minX = Origin.X - _dimensions.X / 2;
+            float minY = Origin.Y - _dimensions.Y / 2;
+
+            float x = MathHelper.Max(minX, MathHelper.Min(position.X, maxX));
+            float y = MathHelper.Max(minY, MathHelper.Min(position.Y, maxY));
+
+            return new Vector2(x, y);
+        }
     }
 }

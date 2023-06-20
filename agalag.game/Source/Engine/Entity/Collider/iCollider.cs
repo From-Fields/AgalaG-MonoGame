@@ -14,6 +14,7 @@ namespace agalag.engine
         //Methods
         public bool HasCollided(iCollider other);
         public void Draw(SpriteBatch spriteBatch);
+        public Vector2 ClosestPoint(Vector2 position);
     }
 
     public class FlattenedPolygon

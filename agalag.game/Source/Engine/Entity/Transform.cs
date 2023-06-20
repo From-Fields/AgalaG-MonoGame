@@ -36,5 +36,12 @@ namespace agalag.engine
             this.scale = Vector2.One;
             this.rotation = 0f;
         }
+
+        public void Rotate(float rotation_) {
+            rotation_ += this.rotation;
+            rotation_ = ExtensionMethods.Repeat(rotation_, 360);
+
+            this.rotation = rotation_;
+        }
     }
 }

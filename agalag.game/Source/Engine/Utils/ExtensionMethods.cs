@@ -18,5 +18,34 @@ namespace agalag.engine
 
             return newVector;
         }
+        public static float Repeat(float value, float max) {
+            if(value == 0)
+                return 0;
+
+            float remainder = value;
+
+            if(max > 0) 
+            {
+                while(value < 0 || value > max)
+                {
+                    while(value > max)
+                        remainder = max - value;
+                    while(value < 0)
+                        remainder = 0 - value;
+                }
+            }
+            else
+            {
+                while(value < 0 || value > max)
+                {
+                    while(value < max)
+                        remainder = max - value;
+                    while(value > 0)
+                        remainder = 0 - value;
+                }
+            }
+
+            return remainder;
+        }
     }
 }

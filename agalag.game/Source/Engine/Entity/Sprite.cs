@@ -47,12 +47,12 @@ namespace agalag.engine
             spriteBatch.Draw(
                 _sprite,
                 position,
-                null, 
-                Color.White, 
-                transform.rotation, 
-                Vector2.Zero, 
-                transform.scale, 
-                SpriteEffects.None, 
+                null,
+                Color.White,
+                transform.rotation,
+                Vector2.Zero,
+                transform.scale,
+                SpriteEffects.None,
                 0
             );
         }
