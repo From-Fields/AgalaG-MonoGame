@@ -4,7 +4,7 @@ using agalag.engine.pool;
 
 namespace agalag.game
 {
-    public interface iPoolableEntity<T> where T: Entity, iPoolableEntity<T>
+    public interface iPoolableEntity<T> where T: MonoEntity, iPoolableEntity<T>
 	{
 		public T OnCreate();
 		public Action<T> onGetFromPool { get; }
