@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace agalag.game
@@ -7,7 +8,7 @@ namespace agalag.game
         public bool IsInstant { get; }
         
         public void OnPickup(Player player);
-        public void OnTick();
+        public void OnTick(GameTime gameTime);
         public int OnTakeDamage(int damage, int playerHealth);
         public bool OnDeath();
         public void OnEnd();
@@ -22,7 +23,7 @@ namespace agalag.game
 
         protected void EndPowerUp() => OnEnd();
 
-        public virtual void OnTick() {}
+        public virtual void OnTick(GameTime gameTime) {}
         public virtual int OnTakeDamage(int damage, int playerHealth) => damage;
         public virtual bool OnDeath() => true;
 
