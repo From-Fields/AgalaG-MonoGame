@@ -12,6 +12,8 @@ namespace agalag.game
        None,
        Player,
        Enemy,
+       PlayerBullet,
+       PickUp
     }
 
     public static class Utils
@@ -21,6 +23,8 @@ namespace agalag.game
            { EntityTag.None, "unknown" },
            { EntityTag.Player, "Player" },
            { EntityTag.Enemy, "Enemy"},
+           { EntityTag.PlayerBullet, "PlayerBullet" },
+           { EntityTag.PickUp, "PickUp" },
        };
     }
 }
