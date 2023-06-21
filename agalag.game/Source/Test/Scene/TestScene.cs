@@ -49,9 +49,9 @@ namespace agalag.test
 
             Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540));
 
-            PickUp pickUp = EntityPool<PickUp>.Instance.Pool.Get();
+            // PickUp pickUp = EntityPool<PickUp>.Instance.Pool.Get();
 
-            pickUp.Initialize(new RepairPowerUp(), new Vector2(60, 60), new Vector2(0.5f, 0.5f));
+            // pickUp.Initialize(new RepairPowerUp(), new Vector2(60, 60), new Vector2(0.5f, 0.5f));
 
             CreateWave();
 

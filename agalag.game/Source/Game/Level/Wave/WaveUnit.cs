@@ -51,12 +51,10 @@ namespace agalag.game
         {
             if(_hasTimedOut)
                 return;
-
             _hasTimedOut = true;
-
             _enemy.ExecuteTimeoutAction();
         }
-        public void Reserve() =>_enemy.Reserve();
+        public void Reserve() => _enemy.Reserve();
         private void OnUnitReleased()
         {
             _enemy.onRelease -= OnUnitReleased;

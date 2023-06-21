@@ -79,13 +79,20 @@ namespace agalag.engine
 
                 if(_transform.simulate && _collisions[i].IsSolid && _collider.IsSolid) {
                     Vector2 normal = _collisions[i].Normal;
+                    Vector2 opposingForce = _transform.velocity;
 
-                    if(normal.Angle(_transform.velocity) < 180)
-                        _transform.velocity += _transform.velocity * normal.Negative() + normal;
+                    float angle = normal.Angle(_transform.velocity);
 
-                    Vector2 previousPosition =  _collisions[i].Self.position + (_collisions[i].Self.velocity * normal.Negative());
+                    if(angle > 90 || normal.Angle(_transform.velocity) == float.NaN) {
+                        _transform.velocity += _transform.velocity * normal.Negative(); 
+                        opposingForce = _transform.velocity + normal * _transform.velocity.Length();
+                    }
 
-                    _transform.position = Vector2.LerpPrecise(_transform.position, previousPosition, FixedUpdater.FixedFrameTime.frameTime);
+                    _transform.velocity = Vector2.LerpPrecise(_transform.velocity, opposingForce, FixedUpdater.FixedFrameTime.frameTime);
+
+                    // Vector2 previousPosition =  _collisions[i].Self.position + (_collisions[i].Self.velocity * normal.Negative());
+
+                    // _transform.position = Vector2.LerpPrecise(_transform.position, previousPosition, FixedUpdater.FixedFrameTime.frameTime);
                 }
 
                 OnCollision(_collisions[i].Other.entity);
