@@ -34,7 +34,7 @@ namespace agalag.game
 
             _enemy.onDeath += onDeath;
             _enemy.onRelease += onRelease;
-            _enemy.onRelease += () => onUnitReleased?.Invoke(this);
+            _enemy.onRelease += OnUnitReleased;
 
             _timeout = timeout;
             _hasTimedOut = false;
@@ -57,5 +57,10 @@ namespace agalag.game
             _enemy.ExecuteTimeoutAction();
         }
         public void Reserve() =>_enemy.Reserve();
+        private void OnUnitReleased()
+        {
+            _enemy.onRelease -= OnUnitReleased;
+            onUnitReleased?.Invoke(this);
+        }
     }
 }

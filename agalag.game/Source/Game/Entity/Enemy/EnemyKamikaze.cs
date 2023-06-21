@@ -77,7 +77,7 @@ namespace agalag.game
 
             System.Diagnostics.Debug.WriteLine(this + ": " + Tag);
         }
-        public override void Reserve() => Pool.Release(this);
+        protected override void ReserveToPool() => Pool.Release(this);
         #endregion    
     }
 }

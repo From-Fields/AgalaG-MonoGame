@@ -42,7 +42,8 @@ namespace agalag.game {
             : base(sprite, position, scale, rotation, 
                 collider ?? new RectangleCollider(new Point(32, 60), solid: false, offset: new Point(0, 4)), 
                 layer: Layer.Objects
-        ) {
+            ) 
+        {
             if (direction != Vector2.Zero)
                 direction.Normalize();
          

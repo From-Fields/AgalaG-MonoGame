@@ -38,7 +38,7 @@ namespace agalag.game
             _bulletTexture = bulletTexture;
         }
         public EnemyGeminiChild(EnemyGeminiChild prefab, bool active = false) : 
-        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider) 
+        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._bulletTexture) 
         {
             SetActive(active);
         }
@@ -110,7 +110,7 @@ namespace agalag.game
             if(!_rotationMatrix.HasValue)
                 _rotationMatrix = Matrix.CreateRotationZ(MathHelper.ToRadians(90));
         }
-        public override void Reserve() => Pool.Release(this);
+        protected override void ReserveToPool() => Pool.Release(this);
 
         protected override void SubReserve() {
             base.SubReserve();

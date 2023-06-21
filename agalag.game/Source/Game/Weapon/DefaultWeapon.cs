@@ -40,8 +40,8 @@ namespace agalag.game
             StartCooldown();
 
             Vector2 direction = (_shooter == EntityTag.PlayerBullet) ? new Vector2(0, -1) : new Vector2(0, 1);
-            float rotation = (direction == new Vector2(0, -1)) ? 0 : 180;
-            _ = new Bullet(spawnPoints[0] + _spawnerTransform.position, _damage, direction, _speed, _bulletPrefab, _shooter);
+            float rotation = (direction == new Vector2(0, -1)) ? 0 : MathHelper.ToRadians(180);
+            _ = new Bullet(spawnPoints[0] + _spawnerTransform.position, _damage, direction, _speed, _bulletPrefab, _shooter, rotation);
         }
 
          private void StartCooldown()  {
@@ -60,6 +60,9 @@ namespace agalag.game
             this._cooldown = (cooldown != -1) ? cooldown : _cooldown;
             this._damage = (damage != -1)? damage : _damage;
             this._bulletPrefab = (bulletTexture != null) ? bulletTexture : _bulletPrefab;
+
+            
+            System.Diagnostics.Debug.WriteLine(bulletTexture);
         }
     }
 }

@@ -105,7 +105,7 @@ namespace agalag.game
                 child.SetWeapon(_weaponCooldown, _geminiMissileDamage, _missileSpeed);
             }
         }
-        public override void Reserve() => Pool.Release(this);
+        protected override void ReserveToPool() => Pool.Release(this);
 
         protected override void SubReserve() {
             base.SubReserve();
@@ -125,6 +125,7 @@ namespace agalag.game
         public override void OnCollision(MonoEntity other)
         {
             //Do Nothing
+            System.Diagnostics.Debug.WriteLine("This shouldn't happen.");
         }
         #endregion    
     }

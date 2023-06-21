@@ -74,14 +74,14 @@ namespace agalag.engine
 
             for (int i = 0; i < _collisions.Count; i++)
             {
-                if(_collisions[i].Other == null)
+                if(_collisions[i].Other == null || !_collisions[i].Other.entity.IsActive)
                     continue;
 
                 if(_transform.simulate && _collisions[i].IsSolid && _collider.IsSolid) {
-
                     Vector2 normal = _collisions[i].Normal;
 
-                    _transform.velocity += _transform.velocity * normal.Negative() + normal;
+                    if(normal.Angle(_transform.velocity) < 180)
+                        _transform.velocity += _transform.velocity * normal.Negative() + normal;
 
                     Vector2 previousPosition =  _collisions[i].Self.position + (_collisions[i].Self.velocity * normal.Negative());
 

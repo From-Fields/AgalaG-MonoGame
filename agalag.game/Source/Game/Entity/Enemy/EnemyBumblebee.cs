@@ -33,7 +33,7 @@ namespace agalag.game
             _bulletTexture = bulletTexture;
         }
         public EnemyBumblebee(EnemyBumblebee prefab, bool active = false) : 
-        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider) 
+        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._bulletTexture) 
         {
             SetActive(active);
         }
@@ -95,7 +95,7 @@ namespace agalag.game
 
             this.SetWeapon(_weaponCooldown, _weaponDamage, _missileSpeed);
         }
-        public override void Reserve() => Pool.Release(this);
+        protected override void ReserveToPool() => Pool.Release(this);
         #endregion    
     }
 }

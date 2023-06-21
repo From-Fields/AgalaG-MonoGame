@@ -95,21 +95,21 @@ namespace agalag.game
                 this.ExecuteNextAction();
         }
         
-        public void OnReserve()
+        public void Reserve()
         {
-            this.onRelease?.Invoke();
-
             this._actionQueue = null;
             this._startingAction = null;
             this._timeoutAction = null;
 
             this.onDeath = null;
-            this.onRelease = null;
 
             this._isDead = true;
             this._transform.Reset();
             this.SetActive(false);
             this.SubReserve();
+            this.ReserveToPool();
+            
+            this.onRelease?.Invoke();
         }
 
         public override void Update(GameTime gameTime)
@@ -136,7 +136,7 @@ namespace agalag.game
 
         //Abstract Methods
         protected abstract void SubInitialize();
-        public abstract void Reserve();
+        protected abstract void ReserveToPool();
         
         //Virtual Methods
         protected virtual void SubReserve() { }
@@ -177,7 +177,7 @@ namespace agalag.game
         //iPoolableEntity
         public abstract T OnCreate();
         public abstract Action<T> onGetFromPool { get; }
-        public virtual Action<T> onReleaseToPool => (obj) => obj.OnReserve();
+        public virtual Action<T> onReleaseToPool { get; }
         public abstract iObjectPool<T> Pool { get; }
         #endregion
     }
