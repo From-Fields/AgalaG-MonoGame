@@ -127,7 +127,7 @@ namespace agalag.game
                 _damage = powerUps[i].OnTakeDamage(_damage, _currentHealth); 
             }
 
-            this._currentHealth -= _damage;
+            this._currentHealth = Math.Clamp(_currentHealth - _damage, 0, _maxHealth);
 
             //Debug.WriteLine((_currentHealth + damage) + "-" + damage + "=" + _currentHealth);
             if(_currentHealth == 0)
