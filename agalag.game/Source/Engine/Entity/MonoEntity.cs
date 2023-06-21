@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace agalag.engine
@@ -12,16 +13,17 @@ namespace agalag.engine
         protected Sprite _sprite;
         protected iCollider _collider;
         protected Transform _transform;
-        protected string _tag = null;
-        
+        protected EntityTag _tag = 0;
+        private List<Collision> _collisions = new List<Collision>();
+
         //Properties
         public bool IsActive => this._active;
         public Transform Transform => this._transform;
         public iCollider Collider => this._collider;
         public bool HasCollider => this._active && this._collider != null;
 
-        public string Tag => _tag;
-        protected string SetTag(string tag) => _tag = tag;
+        public EntityTag Tag => _tag;
+        protected EntityTag SetTag(EntityTag tag) => _tag = tag;
 
         //Constructors
         #region Constructors
@@ -41,6 +43,7 @@ namespace agalag.engine
             this(sprite, position, scale, 0f, collider) { }
         public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, iCollider collider, Layer layer = Layer.Default) 
         {
+            _collisions = new List<Collision>();
             this._sprite = new Sprite(sprite);
             _transform = new Transform(position, scale, rotation);
             SetCollider(collider);
@@ -63,6 +66,33 @@ namespace agalag.engine
         public void RemoveCollider() => _collider = null;
         public void SetActive(bool active) => this._active = active;
         public abstract void OnCollision(MonoEntity other);
+        internal void AddCollision(MonoEntity other) => _collisions.Add(new Collision(this, other));
+        internal void ManageCollisions() 
+        {
+            if(Collider == null || Transform == null)
+                return;
+
+            for (int i = 0; i < _collisions.Count; i++)
+            {
+                if(_collisions[i].Other == null)
+                    continue;
+
+                if(_transform.simulate && _collisions[i].IsSolid && _collider.IsSolid) {
+
+                    Vector2 normal = _collisions[i].Normal;
+
+                    _transform.velocity += _transform.velocity * normal.Negative() + normal;
+
+                    Vector2 previousPosition =  _collisions[i].Self.position + (_collisions[i].Self.velocity * normal.Negative());
+
+                    _transform.position = Vector2.LerpPrecise(_transform.position, previousPosition, FixedUpdater.FixedFrameTime.frameTime);
+                }
+
+                OnCollision(_collisions[i].Other.entity);
+            }
+            ClearCollisions();
+        }
+        internal void ClearCollisions() => _collisions.Clear();
         
         public void ApplyVelocity() => _transform?.ApplyVelocity();
 

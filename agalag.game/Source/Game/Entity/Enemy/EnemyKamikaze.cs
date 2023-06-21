@@ -74,6 +74,8 @@ namespace agalag.game
             currentAcceleration = _defaultAcceleration;
 
             _collisionDamage = _defaultCollisionDamage;
+
+            System.Diagnostics.Debug.WriteLine(this + ": " + Tag);
         }
         public override void Reserve() => Pool.Release(this);
         #endregion    

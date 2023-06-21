@@ -1,3 +1,4 @@
+using System;
 using agalag.engine;
 using Microsoft.Xna.Framework;
 
@@ -9,7 +10,8 @@ namespace agalag.engine
         {
             return (float)((180 / System.Math.PI) * System.Math.Atan2(vector.Y - other.Y, vector.X - other.X));
         }
-        public static Vector2 normalized(this Vector2 vector) {
+        public static Vector2 normalized(this Vector2 vector) 
+        {
             if(vector.Length() == 0)
                 return vector;
 
@@ -18,7 +20,25 @@ namespace agalag.engine
 
             return newVector;
         }
-        public static float Repeat(float value, float max) {
+        public static Vector2 Reflect(this Vector2 vector, Vector2 normal)
+        {
+            if(normal.Length() != 1)
+                normal.Normalize();
+            
+            return vector - 2 * (Vector2.Dot(vector, normal) * normal);
+        }
+        public static Vector2 Abs(this Vector2 vector)
+        {            
+            return new Vector2(MathF.Abs(vector.X), MathF.Abs(vector.Y));
+        }
+        public static Vector2 Negative(this Vector2 vector)
+        {            
+            return -1 * new Vector2(MathF.Abs(vector.X), MathF.Abs(vector.Y));
+        }
+
+
+        public static float Repeat(float value, float max) 
+        {
             if(value == 0)
                 return 0;
 
@@ -26,22 +46,22 @@ namespace agalag.engine
 
             if(max > 0) 
             {
-                while(value < 0 || value > max)
+                while(remainder < 0 || remainder > max)
                 {
-                    while(value > max)
-                        remainder = max - value;
-                    while(value < 0)
-                        remainder = 0 - value;
+                    if(remainder > max)
+                        remainder = 0 - (max - remainder);
+                    if(remainder < 0)
+                        remainder = max + remainder;
                 }
             }
             else
             {
-                while(value < 0 || value > max)
+                while(remainder < 0 || remainder > max)
                 {
-                    while(value < max)
-                        remainder = max - value;
-                    while(value > 0)
-                        remainder = 0 - value;
+                    if(remainder < max)
+                        remainder = 0 - (max + remainder);
+                    if(remainder > 0)
+                        remainder = 0 - remainder;
                 }
             }
 

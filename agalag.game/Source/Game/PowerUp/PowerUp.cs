@@ -6,6 +6,7 @@ namespace agalag.game
     public interface iPowerUp
     {
         public bool IsInstant { get; }
+        public Texture2D Sprite { get; }
         
         public void OnPickup(Player player);
         public void OnTick(GameTime gameTime);

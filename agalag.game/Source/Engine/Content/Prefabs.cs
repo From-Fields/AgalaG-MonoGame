@@ -35,7 +35,6 @@ namespace agalag.engine.content {
         }
 
         public static void AddPrefab<T>(Texture2D texture)
-            where T: MonoEntity
         {
             Type type = typeof(T);
             if(_prefabTextures.ContainsKey(type) || texture == null)

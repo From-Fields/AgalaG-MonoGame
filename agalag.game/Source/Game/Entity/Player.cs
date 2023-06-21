@@ -42,15 +42,15 @@ namespace agalag.game
         public Player(Player player, Vector2 position):
             this(player._sprite.Texture, position, player.Transform.scale, player.Transform.rotation, player.Collider) { }
         public Player(Texture2D sprite, Vector2 position): 
-            this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(72, 64), null, new Point(0, 4))) { }
+            this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(72, 64), offset: new Point(0, 4))) { }
         
         public Player(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, iCollider collider = null) 
             : base(sprite, position, scale, rotation, collider) 
         {
-            SetTag("Player");
+            SetTag(EntityTag.Player);
             _transform.simulate = true;
             _movement = Vector2.Zero;
-            _defaultWeapon = new DefaultWeapon(_transform, "Player");
+            _defaultWeapon = new DefaultWeapon(_transform, EntityTag.PlayerBullet);
 
             //Updating Current Stuff
             currentAcceleration = _defaultAcceleration;
@@ -129,7 +129,7 @@ namespace agalag.game
 
             this._currentHealth -= _damage;
 
-            // Debug.WriteLine((_currentHealth + damage) + "-" + damage + "=" + _currentHealth);
+            //Debug.WriteLine((_currentHealth + damage) + "-" + damage + "=" + _currentHealth);
             if(_currentHealth == 0)
                 Die();
         }        
@@ -179,7 +179,7 @@ namespace agalag.game
 
             this._gameTime = gameTime;
         }
-        public override void OnCollision(MonoEntity other) { }
+        public override void OnCollision(MonoEntity other)  { }
         #endregion
     }
 }

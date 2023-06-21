@@ -5,11 +5,12 @@ namespace agalag.engine
 {
     public class RectangleCollider : iCollider
     {
+        private bool _solid;
         private Transform _parent;
         private Point _dimensions;
         public Vector2 anchor; 
-        public Point offset; 
-                
+        public Point offset;
+
         private Rectangle _Rect 
         {
             get
@@ -20,14 +21,15 @@ namespace agalag.engine
             }
         }
 
-        public RectangleCollider(Point dimensions, Vector2? _anchor = null, Point? _offset = null)
+        public RectangleCollider(Point dimensions, bool solid = true, Vector2? anchor = null, Point? offset = null)
         {
-            Point offsetValue = (_offset == null) ? Point.Zero : _offset.Value;
-            Vector2 anchorValue = (_anchor == null) ? new Vector2(0.5f, 0.5f) : _anchor.Value;
+            Point offsetValue = (offset == null) ? Point.Zero : offset.Value;
+            Vector2 anchorValue = (anchor == null) ? new Vector2(0.5f, 0.5f) : anchor.Value;
 
             this._dimensions = dimensions;
             this.offset = offsetValue;
             this.anchor = anchorValue;
+            this._solid = solid;
         }
 
 
@@ -53,6 +55,7 @@ namespace agalag.engine
                     this._parent = value;
             } 
         }
+        public bool IsSolid => _solid;
 
         public bool HasCollided(iCollider other) => this.FlattenedPolygon.Intersects(other.FlattenedPolygon) || other.FlattenedPolygon.Intersects(this.FlattenedPolygon);
 
@@ -67,19 +70,21 @@ namespace agalag.engine
         }
 
         public Vector2 ClosestPoint(Vector2 position) {
-            if(_Rect.Contains(position))
-                return position;
+            float maxX = Origin.X + _dimensions.X;
+            float maxY = Origin.Y + _dimensions.Y;
 
-            float maxX = Origin.X + _dimensions.X / 2;
-            float maxY = Origin.Y + _dimensions.Y / 2;
-
-            float minX = Origin.X - _dimensions.X / 2;
-            float minY = Origin.Y - _dimensions.Y / 2;
+            float minX = Origin.X;
+            float minY = Origin.Y;
 
             float x = MathHelper.Max(minX, MathHelper.Min(position.X, maxX));
             float y = MathHelper.Max(minY, MathHelper.Min(position.Y, maxY));
 
             return new Vector2(x, y);
+        }
+
+        public void SetSolid(bool solid)
+        {
+            this._solid = solid;
         }
     }
 }

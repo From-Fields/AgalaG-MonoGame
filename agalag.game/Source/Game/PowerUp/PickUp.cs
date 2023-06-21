@@ -12,19 +12,23 @@ namespace agalag.game
     {
 
         private bool _rotate, _doScale, _scaleUp = true;
-        private float _rotationSpeed, _maximumScale, _scaleSpeed, _initialSpeed;
+        private float _rotationSpeed, _maximumScale, _scaleSpeed;
         private Vector2 _initialDirection = Vector2.Zero;
 
         // References
-        private PowerUp _powerUp;
+        private iPowerUp _powerUp;
 
-        public PickUp() => SetActive(false);
+        public PickUp(Layer layer = Layer.Default){
+            SceneManager.AddToMainScene(this, layer);
+            SetActive(false);
+        } 
 
         public void Initialize(
-            PowerUp powerUp, Vector2 position, Vector2 direction, float speed = 5, 
+            iPowerUp powerUp, Vector2 position, Vector2 direction, float speed = 750, 
             bool rotate = true, float rotationSpeed = 100f, 
             bool doScale = true, float maximumScale = 1.3f, float scaleSpeed = 5f
         ) {
+            SetCollider(new RectangleCollider(new Point(40, 40), solid: false));
             this._rotate = rotate;
             this._doScale = doScale;
             this._rotationSpeed = rotationSpeed;
@@ -32,10 +36,13 @@ namespace agalag.game
             this._scaleSpeed = scaleSpeed;
 
             this._powerUp = powerUp;
-            this._tag = Utils.Tags[EntityTag.PickUp];
+            this._tag = EntityTag.PickUp;
             this._sprite = new Sprite(powerUp.Sprite);
             
             _transform.position = position;
+            _transform.simulate = true;
+            _transform.drag = 0;
+            SetActive(true);
             
             ApplyMovement(direction, speed);
         }
@@ -45,10 +52,9 @@ namespace agalag.game
         private void ReflectMovement(MonoEntity other) {
             Vector2 contact = other.Collider.ClosestPoint(_transform.position);
             Vector2 velocity = _transform.velocity;
-            Vector2 normal = (Vector2) _transform.position - contact;
-            normal.Normalize();
+            Vector2 normal = _transform.position - contact;
 
-            Vector2 targetVelocity = velocity - 2 * (Vector2.Dot(velocity, normal) * normal);
+            Vector2 targetVelocity = velocity.Reflect(normal.normalized());
 
             _transform.velocity = targetVelocity;
         }
@@ -79,10 +85,12 @@ namespace agalag.game
             _sprite?.Draw(_transform, spriteBatch);
         }
         public override void OnCollision(MonoEntity other) {
-            Player player = (Player) other;
+            Player player = other as Player;
 
             if(player == null) {
-                ReflectMovement(other);
+                Wall wall = other as Wall;
+                if(wall != null)
+                    ReflectMovement(other);
                 return;
             }
 

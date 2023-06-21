@@ -21,7 +21,7 @@ namespace agalag.game
         private bool _canShoot = true;
         private Vector2 _direction = new Vector2(0, -1);
 
-        public DefaultWeapon(Transform spawnerTransform, string shooter = null)  
+        public DefaultWeapon(Transform spawnerTransform, EntityTag shooter = 0)  
             : base(spawnPoints, 999, shooter, speed) 
         {
             _spawnerTransform = spawnerTransform;
@@ -39,7 +39,7 @@ namespace agalag.game
 
             StartCooldown();
 
-            Vector2 direction = (string.Compare(_shooter, "Player") == 0) ? new Vector2(0, -1) : new Vector2(0, 1);
+            Vector2 direction = (_shooter == EntityTag.PlayerBullet) ? new Vector2(0, -1) : new Vector2(0, 1);
             float rotation = (direction == new Vector2(0, -1)) ? 0 : 180;
             _ = new Bullet(spawnPoints[0] + _spawnerTransform.position, _damage, direction, _speed, _bulletPrefab, _shooter);
         }

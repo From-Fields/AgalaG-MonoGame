@@ -29,7 +29,7 @@ namespace agalag.game
         public EnemyBumblebee(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, Texture2D bulletTexture = null) : 
         base(sprite, position, scale, rotation, collider) 
         { 
-            _weapon = new DefaultWeapon(_transform, Utils.Tags[EntityTag.Enemy]);
+            _weapon = new DefaultWeapon(_transform, EntityTag.Enemy);
             _bulletTexture = bulletTexture;
         }
         public EnemyBumblebee(EnemyBumblebee prefab, bool active = false) : 

@@ -40,6 +40,7 @@ namespace agalag.engine
         public void Rotate(float rotation_) {
             rotation_ += this.rotation;
             rotation_ = ExtensionMethods.Repeat(rotation_, 360);
+            // System.Diagnostics.Debug.WriteLine(rotation_);
 
             this.rotation = rotation_;
         }

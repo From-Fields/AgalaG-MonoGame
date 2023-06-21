@@ -12,6 +12,7 @@ namespace agalag.game
     public class EnemyGeminiChild : Enemy<EnemyGeminiChild>
     {
         //Attributes
+        private bool _wasKilled = false;
         private float _positionOffset;
         private float _velocityMultiplier = 100;
         private float _orbitMultiplier = 60;
@@ -33,7 +34,7 @@ namespace agalag.game
         public EnemyGeminiChild(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, Texture2D bulletTexture = null) : 
         base(sprite, position, scale, rotation, collider) 
         {
-            _weapon = new DefaultWeapon(_transform, Utils.Tags[EntityTag.Enemy]);
+            _weapon = new DefaultWeapon(_transform, EntityTag.Enemy);
             _bulletTexture = bulletTexture;
         }
         public EnemyGeminiChild(EnemyGeminiChild prefab, bool active = false) : 
@@ -73,8 +74,10 @@ namespace agalag.game
             damage = System.Math.Clamp(damage, 0, 1);
             _currentHealth = System.Math.Clamp(_currentHealth - damage, 0, _maxHealth);
 
-            if(_currentHealth == 0)
+            if(_currentHealth == 0) {
+                _wasKilled = true;
                 Die();
+            }
         }
 
         //MonoEntity
@@ -93,6 +96,7 @@ namespace agalag.game
         {
             this.SetCollider(new RectangleCollider(new Point(82, 84)));
             _transform.drag = 0;
+            _wasKilled = false;
             _isDead = false;
             _currentHealth = _maxHealth;
 
@@ -110,7 +114,8 @@ namespace agalag.game
 
         protected override void SubReserve() {
             base.SubReserve();
-            this._parent.TakeDamage(1);
+            if(_wasKilled)
+                this._parent.TakeDamage(1);
         }
 
         protected override void SubUpdate(GameTime gameTime) {

@@ -10,8 +10,10 @@ namespace agalag.engine
         public Transform Parent { get; set; }
         
         public FlattenedPolygon FlattenedPolygon { get; }
+        public bool IsSolid { get; }
 
         //Methods
+        public void SetSolid(bool solid);
         public bool HasCollided(iCollider other);
         public void Draw(SpriteBatch spriteBatch);
         public Vector2 ClosestPoint(Vector2 position);

@@ -36,7 +36,7 @@ namespace agalag.engine
 
             Vector2 position = transform.position;
             Vector2 dimensions = _Dimensions * transform.scale;
-            Vector2 positionOffset = dimensions * anchor + offset;
+            Vector2 positionOffset = offset;
 
             position = position - positionOffset;
             Vector2 velocity = transform.velocity * FixedUpdater.FixedFrameTime.frameTime;
@@ -50,7 +50,7 @@ namespace agalag.engine
                 null,
                 Color.White,
                 transform.rotation,
-                Vector2.Zero,
+                new Vector2(_Dimensions.X * anchor.X, _Dimensions.Y * anchor.X),
                 transform.scale,
                 SpriteEffects.None,
                 0
