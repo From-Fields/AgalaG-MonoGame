@@ -75,7 +75,6 @@ namespace agalag.game
             _currentHealth = System.Math.Clamp(_currentHealth - damage, 0, _maxHealth);
 
             if(_currentHealth == 0) {
-                _wasKilled = true;
                 Die();
             }
         }
@@ -99,6 +98,8 @@ namespace agalag.game
             _wasKilled = false;
             _isDead = false;
             _currentHealth = _maxHealth;
+
+            onDeath += (_) => _wasKilled = true;
 
             _defaultSpeed = 10f;
             _defaultAcceleration = 10f;
