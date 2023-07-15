@@ -117,6 +117,10 @@ namespace agalag.game
                 throw new Exception("Current Weapon cannot be null");
 
             _currentWeapon.Shoot();
+            if (_currentWeapon.isEmpty())
+            {
+                SwitchToDefaultWeapon();
+            }
         }
         
         public override void TakeDamage(int damage)
@@ -176,6 +180,15 @@ namespace agalag.game
             _movement = (_inputHandler.HasMovement) ? _inputHandler.GetMovement() : Vector2.Zero;
             if(_inputHandler.GetShoot())
                 Shoot();
+
+            if (_inputHandler.PressF2())
+            {
+                SwitchWeapon(new MissileWeapon(_transform, EntityTag.PlayerBullet));
+            }
+            else if (_inputHandler.PressF3())
+            {
+                SwitchWeapon(new TripleMachineGun(_transform, EntityTag.PlayerBullet));
+            }
 
             this._gameTime = gameTime;
         }

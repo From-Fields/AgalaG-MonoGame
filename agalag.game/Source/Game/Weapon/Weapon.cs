@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using agalag.engine;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace agalag.game {
     public abstract class Weapon {
@@ -15,14 +16,35 @@ namespace agalag.game {
         protected float _cooldown = 0.1f;
         protected EntityTag _shooter;
 
-        protected Weapon(Vector2[] spawnPoints, int maxAmmunition, EntityTag shooter = 0, float speed = 2f) : base() {
+        protected int _damage = 1;
+        protected bool _canShoot = true;
+
+        protected readonly Transform _spawnerTransform;
+        protected Texture2D _bulletPrefab;
+
+        protected Weapon(Vector2[] spawnPoints, int maxAmmunition, Transform spawnerTransform, EntityTag shooter = 0, float speed = 2f) : base() {
             _spawnPoints = spawnPoints;
             _speed = speed;
             _maxAmmunition = maxAmmunition;
+            _currentAmmunition = _maxAmmunition;
             _shooter = shooter;
+            _spawnerTransform = spawnerTransform;
+
+            _canShoot = true;
         }
 
-        protected abstract void isEmpty();
+        public abstract bool isEmpty();
         public abstract void Shoot();
+
+        protected void StartCooldown()
+        {
+            if (_cooldown <= 0)
+                return;
+
+            _canShoot = false;
+            engine.routines.RoutineManager.Instance.CallbackTimer(this._cooldown, OnCooldownEnd);
+        }
+
+        private void OnCooldownEnd() => _canShoot = true;
     }
 }

@@ -106,6 +106,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/laserRed06.png;Sprites/bullet_player.png
 
+#begin Sprites/Missile_Player.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Missile_Player.png;Sprites/missilePlayer.png
+
 #begin Sprites/playerShip2_red.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -117,6 +129,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/playerShip2_red.png;Sprites/player.png
+
+#begin Sprites/sonicExplosion_sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/sonicExplosion_sheet.png;Sprites/explosion.png
 
 #begin Sprites/spaceBuilding_006.png
 /importer:TextureImporter

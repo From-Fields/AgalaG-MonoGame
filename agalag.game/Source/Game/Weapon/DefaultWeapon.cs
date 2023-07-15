@@ -12,25 +12,20 @@ namespace agalag.game
 {
     public class DefaultWeapon : Weapon
     {
-        private int _damage = 1;
         private const float speed = 15f;
-        private readonly Transform _spawnerTransform;
         private static readonly Vector2[] spawnPoints = new Vector2[1];
-        Texture2D _bulletPrefab;
 
-        private bool _canShoot = true;
         private Vector2 _direction = new Vector2(0, -1);
 
         public DefaultWeapon(Transform spawnerTransform, EntityTag shooter = 0)  
-            : base(spawnPoints, 999, shooter, speed) 
+            : base(spawnPoints, maxAmmunition: 999, spawnerTransform, shooter, speed) 
         {
-            _spawnerTransform = spawnerTransform;
-            spawnPoints[0] = new Vector2(0, 10f);
+            spawnPoints[0] = new Vector2(0, -15f);
             _bulletPrefab = Prefabs.GetTextureOfType<Bullet>();
-            _canShoot = true;
+            _cooldown = .3f;
         }
 
-        protected override void isEmpty() { }
+        public override bool isEmpty() { return false; }
 
         public override void Shoot()
         {
@@ -39,19 +34,10 @@ namespace agalag.game
 
             StartCooldown();
 
-            Vector2 direction = (_shooter == EntityTag.PlayerBullet) ? new Vector2(0, -1) : new Vector2(0, 1);
+            Vector2 direction = (_shooter == EntityTag.PlayerBullet) ? _direction : new Vector2(0, 1);
             float rotation = (direction == new Vector2(0, -1)) ? 0 : MathHelper.ToRadians(180);
-            _ = new Bullet(spawnPoints[0] + _spawnerTransform.position, _damage, direction, _speed, _bulletPrefab, _shooter, rotation);
+            _ = new Bullet(_spawnPoints[0] + _spawnerTransform.position, _damage, direction, _speed, _bulletPrefab, _shooter, rotation);
         }
-
-         private void StartCooldown()  {
-            if(_cooldown <= 0)
-                return;
-
-            _canShoot = false;
-            engine.routines.RoutineManager.Instance.CallbackTimer(this._cooldown, OnCooldownEnd);
-        }
-        private void OnCooldownEnd() => _canShoot = true;
 
         public void SetAttributes(Vector2? direction = null, int maxAmmunition = -1, float speed = -1, float cooldown = -1, int damage = -1, Texture2D bulletTexture = null) {
             this._direction = direction.HasValue ? direction.Value : new Vector2(0, -1);

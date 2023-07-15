@@ -13,6 +13,7 @@ namespace agalag.game.input
         public void Update();
 		public bool DownPressed();
         public bool UpPressed();
+        public bool PressTestButton(Keys key);
     }
 
     public enum InputMethods 
@@ -34,6 +35,10 @@ namespace agalag.game.input
 		
 		public bool PressedDown() => _inputMethod.DownPressed();
         public bool PressedUp() => _inputMethod.UpPressed();
+
+        public bool PressF2() => _inputMethod.PressTestButton(Keys.F2);
+        public bool PressF3() => _inputMethod.PressTestButton(Keys.F3);
+
 
         public Vector2 GetMousePosition()
         {
