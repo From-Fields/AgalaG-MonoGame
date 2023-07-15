@@ -99,14 +99,17 @@ namespace agalag.engine
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             List<MonoEntity> entities = new();
+            
+            foreach(SceneLayer layer in _layers.Values)
+                entities.AddRange(layer.Entities);
+
+            CollisionManager.CheckCollisions(entities);
+            
             foreach(SceneLayer layer in _layers.Values)
             {
                 layer.FixedUpdate(gameTime, fixedFrameTime);
                 layer.FixedUpdateChildren(gameTime, fixedFrameTime);
-                entities.AddRange(layer.Entities);
             }
-
-            CollisionManager.CheckCollisions(entities);
         }
         public void UpdateChildren(GameTime gameTime)
         {

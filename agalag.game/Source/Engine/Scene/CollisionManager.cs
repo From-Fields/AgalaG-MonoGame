@@ -17,10 +17,15 @@ namespace agalag.engine
                 {
                     if(colliders[j].Collider == null || colliders[i].Collider == null)
                         continue;
+                    if(!TagUtils.GetInteraction(colliders[j].Tag, colliders[i].Tag))
+                        continue;
                     if(colliders[i].Collider.HasCollided(colliders[j].Collider))
                     {
-                        colliders[i].OnCollision(colliders[j]);
-                        colliders[j].OnCollision(colliders[i]);
+                        
+                        // colliders[i].OnCollision(colliders[j]);
+                        // colliders[j].OnCollision(colliders[i]);
+                        colliders[i].AddCollision(colliders[j]);
+                        colliders[j].AddCollision(colliders[i]);
                     }
                 }
             }

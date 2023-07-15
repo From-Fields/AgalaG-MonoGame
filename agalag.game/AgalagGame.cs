@@ -42,6 +42,19 @@ public class AgalagGame : Game
 
     protected override void Initialize()
     {
+        TagUtils.SetMask(EntityTag.Player, EntityTag.Player, false);
+        TagUtils.SetMask(EntityTag.Player, EntityTag.PlayerBullet, false);
+        TagUtils.SetMask(EntityTag.Player, EntityTag.Enemy, true);
+        TagUtils.SetMask(EntityTag.Player, EntityTag.Wall, true);
+        TagUtils.SetMask(EntityTag.PlayerBullet, EntityTag.Player, false);
+        TagUtils.SetMask(EntityTag.PlayerBullet, EntityTag.Enemy, true);
+        TagUtils.SetMask(EntityTag.PlayerBullet, EntityTag.Wall, false);
+        TagUtils.SetMask(EntityTag.Enemy, EntityTag.Enemy, false);
+        TagUtils.SetMask(EntityTag.Enemy, EntityTag.Wall, false);
+        TagUtils.SetMask(EntityTag.Enemy, EntityTag.PickUp, false);
+        TagUtils.SetMask(EntityTag.Wall, EntityTag.Wall, false);
+
+        // System.Diagnostics.Debug.WriteLine(TagUtils.GetInteraction(EntityTag.Player, EntityTag.Enemy));
 
         base.Initialize();
     }
@@ -50,23 +63,34 @@ public class AgalagGame : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        Prefabs.AddPrefab<Bullet>(Content.Load<Texture2D>("Sprites/bullet_player"));
         
+        //Player
+        Prefabs.AddPrefab<Bullet>(Content.Load<Texture2D>("Sprites/bullet_player"));
         Texture2D playerSprite = Content.Load<Texture2D>("Sprites/player");
         Prefabs.AddPrefab<Player>(new Player(playerSprite, Vector2.Zero), playerSprite);
 
+        // Kamikaze
         Texture2D kamikazeSprite = Content.Load<Texture2D>("Sprites/enemy_kamikaze");
         Prefabs.AddPrefab<EnemyKamikaze>(new EnemyKamikaze(kamikazeSprite, Vector2.Zero, Vector2.One), kamikazeSprite);
-        
+        // Gemini
         Prefabs.AddPrefab<EnemyGemini>(new EnemyGemini(null, Vector2.Zero, Vector2.One));
-
+        // GeminiChild
         Texture2D geminiBullet = Content.Load<Texture2D>("Sprites/bullet_gemini");
         Texture2D geminiChildSprite = Content.Load<Texture2D>("Sprites/enemy_gemini");
         Prefabs.AddPrefab<EnemyGeminiChild>(new EnemyGeminiChild(geminiChildSprite, Vector2.Zero, Vector2.One, bulletTexture: geminiBullet), geminiChildSprite);
-
+        // Bumblebee
         Texture2D bumblebeeBullet = Content.Load<Texture2D>("Sprites/bullet_bumblebee");
         Texture2D bumblebeeSprite = Content.Load<Texture2D>("Sprites/enemy_bumblebee");
         Prefabs.AddPrefab<EnemyBumblebee>(new EnemyBumblebee(bumblebeeSprite, Vector2.Zero, Vector2.One, bulletTexture: bumblebeeBullet), bumblebeeSprite);
+
+        // PickUp
+        Prefabs.AddPrefab<PickUp>(new PickUp());
+        // Shield
+        Texture2D shieldSprite = Content.Load<Texture2D>("Sprites/pu_shield");
+        Prefabs.AddPrefab<ShieldPowerUp>(shieldSprite);
+        // Repair
+        Texture2D repairSprite = Content.Load<Texture2D>("Sprites/pu_repair");
+        Prefabs.AddPrefab<RepairPowerUp>(repairSprite);
 
         _sceneManager.SetDefaultScene(new test.TestScene());
         _sceneManager.SwitchToDefaultScene(Content);

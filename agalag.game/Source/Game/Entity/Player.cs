@@ -24,7 +24,7 @@ namespace agalag.game
         public float currentAcceleration;
         private float _defaultAcceleration = 10;
 
-        public List<PowerUp> powerUps;
+        public List<iPowerUp> powerUps = new List<iPowerUp>();
 
         public Action onDeath;
 
@@ -36,19 +36,21 @@ namespace agalag.game
         //Input Variables
         private Vector2 _movement;
 
+        public int MaxHealth => _maxHealth;
+        
         //Constructors
         public Player(Player player, Vector2 position):
             this(player._sprite.Texture, position, player.Transform.scale, player.Transform.rotation, player.Collider) { }
         public Player(Texture2D sprite, Vector2 position): 
-            this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(72, 64), null, new Point(0, 4))) { }
+            this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(72, 64), offset: new Point(0, 4))) { }
         
         public Player(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, iCollider collider = null) 
             : base(sprite, position, scale, rotation, collider) 
         {
-            SetTag("Player");
+            SetTag(EntityTag.Player);
             _transform.simulate = true;
             _movement = Vector2.Zero;
-            _defaultWeapon = new DefaultWeapon(_transform, "Player");
+            _defaultWeapon = new DefaultWeapon(_transform, EntityTag.PlayerBullet);
 
             //Updating Current Stuff
             currentAcceleration = _defaultAcceleration;
@@ -70,14 +72,19 @@ namespace agalag.game
             SwitchWeapon(_defaultWeapon);
         }
 
-        public void AddPowerUp(PowerUp newPowerUp) 
+        public void AddPowerUp(iPowerUp newPowerUp) 
         {
+            newPowerUp.OnPickup(this);
+
+            if(newPowerUp.IsInstant)
+                return;
+
             if(!this.powerUps.Contains(newPowerUp)) 
             {
                 this.powerUps.Add(newPowerUp);
             }
         }
-        public void RemovePowerUp(PowerUp powerUp) 
+        public void RemovePowerUp(iPowerUp powerUp) 
         {
             this.powerUps.Remove(powerUp);
         }
@@ -91,6 +98,7 @@ namespace agalag.game
         public override int Health => _currentHealth;
         public override Vector2 Position => _transform.position;
         public override Vector2 CurrentVelocity => _transform.velocity;
+
         public override void Move(Vector2 direction, float speed, float acceleration)
         {
             if(direction != Vector2.Zero)
@@ -113,9 +121,15 @@ namespace agalag.game
         
         public override void TakeDamage(int damage)
         {
-            _currentHealth = Math.Clamp(_currentHealth - damage, 0, _maxHealth);
+            int _damage = damage;
 
-            // Debug.WriteLine((_currentHealth + damage) + "-" + damage + "=" + _currentHealth);
+            for (int i = 0; i < powerUps.Count; i++) {
+                _damage = powerUps[i].OnTakeDamage(_damage, _currentHealth); 
+            }
+
+            this._currentHealth = Math.Clamp(_currentHealth - _damage, 0, _maxHealth);
+
+            //Debug.WriteLine((_currentHealth + damage) + "-" + damage + "=" + _currentHealth);
             if(_currentHealth == 0)
                 Die();
         }        
@@ -123,6 +137,14 @@ namespace agalag.game
         public override void Die()
         {
             //Debug.WriteLine("NANI");
+            bool die = true;    
+
+            for (int i = 0; i < powerUps.Count; i++)
+                die = powerUps[i].OnDeath();
+
+            if(!die)
+                return;
+
             this.SetActive(false);
             this.isDead = true;
             this.onDeath?.Invoke();
@@ -145,15 +167,19 @@ namespace agalag.game
         
         public override void Update(GameTime gameTime)
         {
+            if(isDead)
+                return;
+
+            for (int i = 0; i < powerUps.Count; i++)
+                powerUps[i].OnTick(gameTime);
+
             _movement = (_inputHandler.HasMovement) ? _inputHandler.GetMovement() : Vector2.Zero;
-            if(!isDead) {
-                if(_inputHandler.GetShoot())
-                    Shoot();
-            }
+            if(_inputHandler.GetShoot())
+                Shoot();
 
             this._gameTime = gameTime;
         }
-        public override void OnCollision(MonoEntity other) { }
+        public override void OnCollision(MonoEntity other)  { }
         #endregion
     }
 }

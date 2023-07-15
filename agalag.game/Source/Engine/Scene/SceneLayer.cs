@@ -60,6 +60,7 @@ namespace agalag.engine
                 if(entity.IsActive)
                 {
                     entity.FixedUpdate(gameTime, fixedFrameTime);
+                    entity.ManageCollisions();
                     entity.ApplyVelocity();
                 }
             }

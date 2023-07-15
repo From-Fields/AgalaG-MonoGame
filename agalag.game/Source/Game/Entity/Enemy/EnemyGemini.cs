@@ -49,8 +49,6 @@ namespace agalag.game
             float frameTime = FixedUpdater.FixedFrameTime.frameTime;
             _transform.velocity = Vector2.Lerp(_transform.velocity, direction * speed, frameTime * acceleration);
             
-            Debug.WriteLine("Parent: " + _transform.velocity);
-
             foreach(var child in _children) {
                 child.Move(direction, speed, frameTime * acceleration);
             }
@@ -85,7 +83,6 @@ namespace agalag.game
         //Enemy
         protected override void SubInitialize()
         {
-            this.SetCollider(new RectangleCollider(new Point(1, 1)));
             _isDead = false;
             _maxHealth = _defaultHealth;
             _currentHealth = _defaultHealth;
@@ -108,7 +105,7 @@ namespace agalag.game
                 child.SetWeapon(_weaponCooldown, _geminiMissileDamage, _missileSpeed);
             }
         }
-        public override void Reserve() => Pool.Release(this);
+        protected override void ReserveToPool() => Pool.Release(this);
 
         protected override void SubReserve() {
             base.SubReserve();
@@ -128,6 +125,7 @@ namespace agalag.game
         public override void OnCollision(MonoEntity other)
         {
             //Do Nothing
+            System.Diagnostics.Debug.WriteLine("This shouldn't happen.");
         }
         #endregion    
     }

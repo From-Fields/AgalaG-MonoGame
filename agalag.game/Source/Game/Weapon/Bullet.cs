@@ -17,7 +17,6 @@ namespace agalag.game {
         private int _damage;
         // private Vector2 _direction;
         // private float _speed;
-        private string _shooter;
 
         private readonly float _destroyTime = 2f;
 
@@ -33,17 +32,18 @@ namespace agalag.game {
         /// <param name="rotation"></param>
         /// <param name="collider"></param>
 
-        public Bullet(Vector2 position, int damage, Vector2 direction, float speed, Texture2D sprite, string shooter = null, float rotation = 0f, iCollider collider = null)
+        public Bullet(Vector2 position, int damage, Vector2 direction, float speed, Texture2D sprite, EntityTag shooter = 0, float rotation = 0f, iCollider collider = null)
             : this(position, Vector2.One, damage, direction, speed, sprite, 
                 shooter, rotation, 
-                collider ?? new RectangleCollider(new Point(32, 60), null, new Point(0, 4))
+                collider ?? new RectangleCollider(new Point(32, 60), solid: false, offset: new Point(0, 4))
         ) { }
 
-        public Bullet(Vector2 position, Vector2 scale, int damage, Vector2 direction, float speed, Texture2D sprite, string shooter = null, float rotation = 0f, iCollider collider = null) 
+        public Bullet(Vector2 position, Vector2 scale, int damage, Vector2 direction, float speed, Texture2D sprite, EntityTag shooter = 0, float rotation = 0f, iCollider collider = null) 
             : base(sprite, position, scale, rotation, 
-                collider ?? new RectangleCollider(new Point(32, 60), null, new Point(0, 4)), 
+                collider ?? new RectangleCollider(new Point(32, 60), solid: false, offset: new Point(0, 4)), 
                 layer: Layer.Objects
-        ) {
+            ) 
+        {
             if (direction != Vector2.Zero)
                 direction.Normalize();
          
@@ -51,7 +51,7 @@ namespace agalag.game {
             // _direction = direction;
 
             _damage = damage;
-            _shooter = shooter ?? "unknown";
+            SetTag(shooter);
             
             _transform.drag = 0;
             _transform.velocity = (direction * speed * 100);
@@ -82,17 +82,10 @@ namespace agalag.game {
 
         public override void OnCollision(MonoEntity other)
         {
-            //Debug.WriteLine("bullet: Colisão!");
-
             if (other is Entity entity)
             {
-                //Debug.WriteLine("Entidade encontrada!");
-                if (!string.IsNullOrEmpty(entity.Tag) && string.Compare(entity.Tag, _shooter) != 0)
-                {
-                    //Debug.WriteLine("alvo encontrado!");
-                    entity.TakeDamage(_damage);
-                    DestroySelf();
-                }
+                entity.TakeDamage(_damage);
+                DestroySelf();
             }
         }
 

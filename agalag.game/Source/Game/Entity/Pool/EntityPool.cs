@@ -1,10 +1,11 @@
 using agalag.engine.content;
 using agalag.engine.utils;
 using agalag.engine.pool;
+using agalag.engine;
 
 namespace agalag.game
 {    
-    public class EntityPool<T> : Singleton<EntityPool<T>> where T: Entity, iPoolableEntity<T>
+    public class EntityPool<T> : Singleton<EntityPool<T>> where T: MonoEntity, iPoolableEntity<T>
     {
         private iObjectPool<T> _pool;
         private T _prefab;

@@ -55,11 +55,9 @@ namespace agalag.test
 
         protected override void SubInitialize() { }
 
-        
-
         public override Action<TestEnemy> onGetFromPool => null;
         public override iObjectPool<TestEnemy> Pool => EntityPool<TestEnemy>.Instance.Pool;
-        public override void Reserve() => Pool.Release(this);
+        protected override void ReserveToPool() => Pool.Release(this);
         public override TestEnemy OnCreate() => new TestEnemy(EntityPool<TestEnemy>.Instance.Prefab);
     }
 }

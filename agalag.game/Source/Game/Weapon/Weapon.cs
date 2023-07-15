@@ -13,13 +13,13 @@ namespace agalag.game {
         protected int _currentAmmunition;
         protected float _speed = 2f;
         protected float _cooldown = 0.1f;
-        protected string _shooter;
+        protected EntityTag _shooter;
 
-        protected Weapon(Vector2[] spawnPoints, int maxAmmunition, string shooter = null, float speed = 2f) : base() {
+        protected Weapon(Vector2[] spawnPoints, int maxAmmunition, EntityTag shooter = 0, float speed = 2f) : base() {
             _spawnPoints = spawnPoints;
             _speed = speed;
             _maxAmmunition = maxAmmunition;
-            _shooter = shooter ?? "unknown";
+            _shooter = shooter;
         }
 
         protected abstract void isEmpty();

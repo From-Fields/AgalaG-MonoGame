@@ -32,7 +32,7 @@ namespace agalag.game
         
         protected Enemy(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null) 
         : base(sprite, position, scale, rotation, collider) {
-            SetTag(Utils.Tags[EntityTag.Enemy]);
+            SetTag(EntityTag.Enemy);
             _transform.drag = 10f;
             _transform.simulate = true;
         }
@@ -46,7 +46,8 @@ namespace agalag.game
         //Events
         public Action<int> onDeath;
         public Action onRelease;
-        
+        private iPowerUp _droppedItem;
+
         //Methods
         public void ExecuteNextAction()
         {
@@ -71,7 +72,7 @@ namespace agalag.game
             if(_currentAction == null)
                 Reserve();
         }
-        public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint)
+        public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint, iPowerUp drop = null)
         {
             if(actionQueue == null || timeoutAction == null)
                 throw new System.ArgumentNullException("Action queue and Timeout action may not be null");
@@ -81,6 +82,8 @@ namespace agalag.game
             this._startingAction = startingAction;
             this._timeoutAction = timeoutAction;
             this._transform.position = startingPoint;
+
+            this._droppedItem = drop;
 
             SubInitialize();
 
@@ -92,21 +95,21 @@ namespace agalag.game
                 this.ExecuteNextAction();
         }
         
-        public void OnReserve()
+        public void Reserve()
         {
-            this.onRelease?.Invoke();
-
             this._actionQueue = null;
             this._startingAction = null;
             this._timeoutAction = null;
 
             this.onDeath = null;
-            this.onRelease = null;
 
             this._isDead = true;
             this._transform.Reset();
             this.SetActive(false);
             this.SubReserve();
+            this.ReserveToPool();
+            
+            this.onRelease?.Invoke();
         }
 
         public override void Update(GameTime gameTime)
@@ -133,14 +136,14 @@ namespace agalag.game
 
         //Abstract Methods
         protected abstract void SubInitialize();
-        public abstract void Reserve();
+        protected abstract void ReserveToPool();
         
         //Virtual Methods
         protected virtual void SubReserve() { }
         protected virtual void SubUpdate(GameTime gameTime) { }
         protected virtual void SubFixedUpdate(GameTime gameTime, FixedFrameTime fixedGameTime) { }
         public override void OnCollision(MonoEntity other) {
-            if(_isDead || other.Tag == this._tag)
+            if(_isDead)
                 return;
 
             Entity otherEntity = other as Entity;
@@ -157,13 +160,24 @@ namespace agalag.game
         public override void Die()
         {
             onDeath?.Invoke(this.score);
+        
+            if(_droppedItem != null) {
+                double randomX = Random.Shared.NextDouble() * 2 - 1;
+                double randomY = Random.Shared.NextDouble() * 2 - 1;
+
+                Vector2 randomDirection = new Vector2((float) randomX, (float) randomY);
+                randomDirection.Normalize();
+
+                EntityPool<PickUp>.Instance.Pool.Get().Initialize(_droppedItem, _transform.position, randomDirection);
+            }
+
             Reserve();
         }
 
         //iPoolableEntity
         public abstract T OnCreate();
         public abstract Action<T> onGetFromPool { get; }
-        public virtual Action<T> onReleaseToPool => (obj) => obj.OnReserve();
+        public virtual Action<T> onReleaseToPool { get; }
         public abstract iObjectPool<T> Pool { get; }
         #endregion
     }
