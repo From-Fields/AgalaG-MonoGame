@@ -21,20 +21,20 @@ namespace agalag.test
             currentAcceleration = _defaultAcceleration;
 
             Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
-            queue.Enqueue(new MoveTowards(new Vector2(350, 180), maximumAngle: 180));
+            queue.Enqueue(new MoveTowards(new Vector2(350, 180), 1, maximumAngle: 180));
             queue.Enqueue(new Shoot(2));
             queue.Enqueue(new MoveTowards(target, 5, trackingSpeed: 0.5f));
 
-            Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), this.position);
+            Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), this.Position);
         }
         public TestEnemy(TestEnemy prefab):
         this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, null, prefab.Transform.rotation, prefab.Collider)
         {}
 
-        public override int health => 0;
+        public override int Health => 0;
 
-        public override Vector2 currentVelocity => _transform.velocity;
-        public override Vector2 position => _transform.position;
+        public override Vector2 CurrentVelocity => _transform.velocity;
+        public override Vector2 Position => _transform.position;
 
         public override void Die() => Debug.WriteLine("OMAEWA MOU SHINDEIRU");
         public override void Move(Vector2 direction, float speed, float acceleration)
@@ -44,6 +44,7 @@ namespace agalag.test
             float frameTime = FixedUpdater.FixedFrameTime.frameTime;
             _transform.velocity = Vector2.Lerp(_transform.velocity, direction * speed, frameTime * acceleration);
         }
+        public override void Stop() => _transform.velocity = Vector2.Zero;
         public override void Shoot() => Debug.WriteLine("FIRING MAH LAZOR");
         public override void TakeDamage(int damage )=> Debug.WriteLine("OWIE " + damage);
         public override void OnCollision(MonoEntity other) => Debug.WriteLine("COLLIDED!");

@@ -12,6 +12,7 @@ namespace agalag.game {
         protected int _maxAmmunition = 999;
         protected int _currentAmmunition;
         protected float _speed = 2f;
+        protected float _cooldown = 0.1f;
         protected string _shooter;
 
         protected Weapon(Vector2[] spawnPoints, int maxAmmunition, string shooter = null, float speed = 2f) : base() {

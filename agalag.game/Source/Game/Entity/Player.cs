@@ -26,6 +26,8 @@ namespace agalag.game
 
         public List<PowerUp> powerUps;
 
+        public Action onDeath;
+
         //References
         private GameTime _gameTime;
         private FixedFrameTime _fixedGameTime;
@@ -86,9 +88,9 @@ namespace agalag.game
         
         #region InterfaceImplementation
         //Entity
-        public override int health => _currentHealth;
-        public override Vector2 position => _transform.position;
-        public override Vector2 currentVelocity => _transform.velocity;
+        public override int Health => _currentHealth;
+        public override Vector2 Position => _transform.position;
+        public override Vector2 CurrentVelocity => _transform.velocity;
         public override void Move(Vector2 direction, float speed, float acceleration)
         {
             if(direction != Vector2.Zero)
@@ -100,6 +102,7 @@ namespace agalag.game
 
             _transform.velocity = Vector2.Lerp(_transform.velocity, movementVector, _fixedGameTime.frameTime * acceleration);
         }
+        public override void Stop() => _transform.velocity = Vector2.Zero;
         public override void Shoot()
         {
             if (_currentWeapon == null) 
@@ -122,6 +125,7 @@ namespace agalag.game
             //Debug.WriteLine("NANI");
             this.SetActive(false);
             this.isDead = true;
+            this.onDeath?.Invoke();
         }
 
         //MonoEntity

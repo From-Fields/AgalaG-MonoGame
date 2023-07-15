@@ -9,20 +9,36 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace agalag.game
 {
-    public class EnemyKamikaze : Enemy<EnemyKamikaze>
+    public class EnemyBumblebee : Enemy<EnemyBumblebee>
     {
+        //Attributes
+        private int _weaponDamage = 1;
+        private float _weaponCooldown = 0.5f;
+        private float _missileSpeed = 15f;
+        private DefaultWeapon _weapon;
+
         //Health
         private int _defaultHealth = 1;
         private int _maxHealth;
         private int _currentHealth;
 
+        //References
+        private Texture2D _bulletTexture;
+
         //Constructors
-        public EnemyKamikaze(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null) : 
-        base(sprite, position, scale, rotation, collider) { }
-        public EnemyKamikaze(EnemyKamikaze prefab, bool active = false) : 
+        public EnemyBumblebee(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, Texture2D bulletTexture = null) : 
+        base(sprite, position, scale, rotation, collider) 
+        { 
+            _weapon = new DefaultWeapon(_transform, Utils.Tags[EntityTag.Enemy]);
+            _bulletTexture = bulletTexture;
+        }
+        public EnemyBumblebee(EnemyBumblebee prefab, bool active = false) : 
         this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider) 
         {
             SetActive(active);
+        }
+        public void SetWeapon(float weaponCooldown, int missileDamage, float missileSpeed) {
+            this._weapon.SetAttributes(damage: missileDamage, cooldown: weaponCooldown, speed: missileSpeed, direction: new Vector2(0, 1), bulletTexture: _bulletTexture);
         }
 
         #region InterfaceImplementation
@@ -40,7 +56,9 @@ namespace agalag.game
         }
         public override void Stop() =>
             _transform.velocity = Vector2.Lerp(_transform.velocity, Vector2.Zero, 0.99f);
-        public override void Shoot() { }
+        public override void Shoot() {
+            _weapon.Shoot();
+        }
         public override void TakeDamage(int damage)
         {
             _currentHealth = System.Math.Clamp(_currentHealth - damage, 0, _maxHealth);
@@ -56,9 +74,9 @@ namespace agalag.game
         }
 
         //iPoolableEntity
-        public override EnemyKamikaze OnCreate() => new EnemyKamikaze(EntityPool<EnemyKamikaze>.Instance.Prefab);
-        public override Action<EnemyKamikaze> onGetFromPool => null;
-        public override iObjectPool<EnemyKamikaze> Pool => EntityPool<EnemyKamikaze>.Instance.Pool;
+        public override EnemyBumblebee OnCreate() => new EnemyBumblebee(EntityPool<EnemyBumblebee>.Instance.Prefab);
+        public override Action<EnemyBumblebee> onGetFromPool => null;
+        public override iObjectPool<EnemyBumblebee> Pool => EntityPool<EnemyBumblebee>.Instance.Pool;
 
         //Enemy
         protected override void SubInitialize()
@@ -74,6 +92,8 @@ namespace agalag.game
             currentAcceleration = _defaultAcceleration;
 
             _collisionDamage = _defaultCollisionDamage;
+
+            this.SetWeapon(_weaponCooldown, _weaponDamage, _missileSpeed);
         }
         public override void Reserve() => Pool.Release(this);
         #endregion    

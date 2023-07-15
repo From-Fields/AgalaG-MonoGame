@@ -38,7 +38,7 @@ namespace agalag.test
 
         public override void Initialize()
         {
-            Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540));
+            //Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540));
 
             CreateWave();
 
@@ -83,21 +83,33 @@ namespace agalag.test
 
         private void CreateWave()
         {
-            WaveController wave = new WaveController(10, new List<iWaveUnit>(new[] {
-                new WaveUnit<EnemyKamikaze>(
-                    new Vector2(700, -64),
-                    new MoveTowards(new Vector2(700, 180), 0.7f, 1, 0.9f),
+            // WaveController wave = new WaveController(10, new List<iWaveUnit>(new iWaveUnit[] {
+            //     new WaveUnit<EnemyBumblebee>(
+            //         new Vector2(700, -64),
+            //         new MoveAndShoot(new Vector2(700, 180), 0.7f, 1, 0.9f),
+            //         new MoveTowards(new Vector2(-450, 500), 1.5f),
+            //         new Queue<iEnemyAction>(new [] {
+            //             new MoveTowards(new Vector2(450, 500), 1.5f, 1, 0.9f)
+            //         })
+            //     ),
+            //     new WaveUnit<EnemyBumblebee>(
+            //         new Vector2(1920 - 700, -64),
+            //         new MoveAndShoot(new Vector2(1920 - 700, 180), 1, 1, 0.9f),
+            //         new MoveTowards(new Vector2(1920 + 450, 500)),
+            //         new Queue<iEnemyAction>(new[] {
+            //             new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f)
+            //         })
+            //     )
+            // }));
+
+            WaveController wave = new WaveController(10, new List<iWaveUnit>(new iWaveUnit[] {
+                new WaveUnit<EnemyGemini>(
+                    new Vector2(1920 / 2, 100),
+                    new Shoot(1),
                     new MoveTowards(new Vector2(-450, 500), 1.5f),
-                    new Queue<iEnemyAction>(new [] {
-                        new MoveTowards(new Vector2(450, 500), 1.5f, 1, 0.9f)
-                    })
-                ),
-                new WaveUnit<EnemyKamikaze>(
-                    new Vector2(1920 - 700, -64),
-                    new MoveTowards(new Vector2(1920 - 700, 180), 1, 1, 0.9f),
-                    new MoveTowards(new Vector2(1920 + 450, 500)),
-                    new Queue<iEnemyAction>(new[] {
-                        new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f)
+                    new Queue<iEnemyAction>(new iEnemyAction[] {
+                        new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f),
+                        new WaitSeconds(1)
                     })
                 )
             }));

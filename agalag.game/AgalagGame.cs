@@ -55,8 +55,18 @@ public class AgalagGame : Game
         Texture2D playerSprite = Content.Load<Texture2D>("Sprites/player");
         Prefabs.AddPrefab<Player>(new Player(playerSprite, Vector2.Zero), playerSprite);
 
-        Texture2D kamikazeSprite = Content.Load<Texture2D>("Sprites/kamikaze");
+        Texture2D kamikazeSprite = Content.Load<Texture2D>("Sprites/enemy_kamikaze");
         Prefabs.AddPrefab<EnemyKamikaze>(new EnemyKamikaze(kamikazeSprite, Vector2.Zero, Vector2.One), kamikazeSprite);
+        
+        Prefabs.AddPrefab<EnemyGemini>(new EnemyGemini(null, Vector2.Zero, Vector2.One));
+
+        Texture2D geminiBullet = Content.Load<Texture2D>("Sprites/bullet_gemini");
+        Texture2D geminiChildSprite = Content.Load<Texture2D>("Sprites/enemy_gemini");
+        Prefabs.AddPrefab<EnemyGeminiChild>(new EnemyGeminiChild(geminiChildSprite, Vector2.Zero, Vector2.One, bulletTexture: geminiBullet), geminiChildSprite);
+
+        Texture2D bumblebeeBullet = Content.Load<Texture2D>("Sprites/bullet_bumblebee");
+        Texture2D bumblebeeSprite = Content.Load<Texture2D>("Sprites/enemy_bumblebee");
+        Prefabs.AddPrefab<EnemyBumblebee>(new EnemyBumblebee(bumblebeeSprite, Vector2.Zero, Vector2.One, bulletTexture: bumblebeeBullet), bumblebeeSprite);
 
         _sceneManager.SetDefaultScene(new test.TestScene());
         _sceneManager.SwitchToDefaultScene(Content);

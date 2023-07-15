@@ -11,9 +11,15 @@ namespace agalag.game
     {
         public int score;
 
+        //Damage
+        protected int _defaultCollisionDamage = 1;
+        protected int _collisionDamage;
+
+        //Speed
         protected float currentSpeed;
         protected float _defaultSpeed;
 
+        //Acceleration
         protected float currentAcceleration;
         protected float _defaultAcceleration;
 
@@ -26,7 +32,7 @@ namespace agalag.game
         
         protected Enemy(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null) 
         : base(sprite, position, scale, rotation, collider) {
-            SetTag("Enemy");
+            SetTag(Utils.Tags[EntityTag.Enemy]);
             _transform.drag = 10f;
             _transform.simulate = true;
         }
@@ -70,13 +76,13 @@ namespace agalag.game
             if(actionQueue == null || timeoutAction == null)
                 throw new System.ArgumentNullException("Action queue and Timeout action may not be null");
 
-            SubInitialize();
-
             this._isDead = false;
             this._actionQueue = actionQueue;
             this._startingAction = startingAction;
             this._timeoutAction = timeoutAction;
             this._transform.position = startingPoint;
+
+            SubInitialize();
 
             this.SetActive(true);
 
@@ -100,6 +106,7 @@ namespace agalag.game
             this._isDead = true;
             this._transform.Reset();
             this.SetActive(false);
+            this.SubReserve();
         }
 
         public override void Update(GameTime gameTime)
@@ -111,6 +118,7 @@ namespace agalag.game
                 ExecuteNextAction();
 
             _currentAction?.Update(this);
+            SubUpdate(gameTime);
 
         }
         public override void FixedUpdate(GameTime gameTime, FixedFrameTime fixedGameTime)
@@ -120,11 +128,28 @@ namespace agalag.game
             
             if(!_currentAction.CheckCondition(this))
                 _currentAction.FixedUpdate(this);
+            SubFixedUpdate(gameTime, fixedGameTime);
         }
 
         //Abstract Methods
         protected abstract void SubInitialize();
         public abstract void Reserve();
+        
+        //Virtual Methods
+        protected virtual void SubReserve() { }
+        protected virtual void SubUpdate(GameTime gameTime) { }
+        protected virtual void SubFixedUpdate(GameTime gameTime, FixedFrameTime fixedGameTime) { }
+        public override void OnCollision(MonoEntity other) {
+            if(_isDead || other.Tag == this._tag)
+                return;
+
+            Entity otherEntity = other as Entity;
+            if(otherEntity != null) 
+            {
+                Die();
+                otherEntity.TakeDamage(_collisionDamage);
+            }
+        }
 
         #region InterfaceImplementation
 

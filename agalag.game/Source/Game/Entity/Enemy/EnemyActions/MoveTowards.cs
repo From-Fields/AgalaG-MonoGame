@@ -12,41 +12,58 @@ namespace agalag.game
         private float _steeringSpeed;
         private float _maximumAngle;
         private float _minimumDistance;
-        private Entity _targetObject;
-        private Vector2 _targetPosition;
+        protected Entity _targetObject;
+        protected Vector2 _targetPosition;
         private Vector2 _desiredDirection = Vector2.Zero;
 
+        private bool _stopOnEnd = true;
+        private bool _decelerate = false;
+        private float _decelerationRadius = 2f;
+        private float _decelerationMultiplier = 1;
+
         //Constructors
+        public MoveTowards(Vector2 targetPosition, bool decelerate = true, float decelerationRadius = 120, bool stopOnEnd = true): 
+            this(targetPosition, 1, decelerate: decelerate, decelerationRadius: decelerationRadius) { }
+        public MoveTowards(Entity target, bool decelerate = false, float decelerationRadius = -1, bool stopOnEnd = false): 
+            this(target, 1, decelerate: decelerate, decelerationRadius: decelerationRadius) { }
         public MoveTowards(Vector2 targetPosition,
-            float speedModifier = 1, float accelerationModifier = 1, float trackingSpeed = 1f, 
-            float maximumAngle = 360, float minimumDistance = 40
-        ) : this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance)
+            float speedModifier, float accelerationModifier = 1, float trackingSpeed = 1f, 
+            float maximumAngle = 360, float minimumDistance = 40,
+            bool decelerate = true, float decelerationRadius = 120, bool stopOnEnd = true
+        ) : this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance, decelerate, decelerationRadius, stopOnEnd)
         {
             _targetPosition = targetPosition;
             _targetObject = null;
         }
         public MoveTowards(Entity targetObject,
-            float speedModifier = 1, float accelerationModifier = 1, float trackingSpeed = 1f, 
-            float maximumAngle = 360, float minimumDistance = 40
-        ): this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance)
+            float speedModifier, float accelerationModifier = 1, float trackingSpeed = 1f, 
+            float maximumAngle = 360, float minimumDistance = 40,
+            bool decelerate = false, float decelerationRadius = -1, bool stopOnEnd = false
+        ): this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance, decelerate, decelerationRadius, stopOnEnd)
         {
             _targetObject = targetObject;
-            _targetPosition = _targetObject.position;
+            _targetPosition = _targetObject.Position;
         }
         public MoveTowards(
             float speedModifier, float accelerationModifier, float trackingSpeed, 
-            float maximumAngle, float minimumDistance
+            float maximumAngle, float minimumDistance, bool decelerate, float decelerationRadius, bool stopOnEnd
         ) {
             _speedModifier = speedModifier;
             _accelerationModifier = accelerationModifier;
-            _steeringSpeed = trackingSpeed;
+            _steeringSpeed = trackingSpeed / 10;
             _maximumAngle = maximumAngle;
             _minimumDistance = minimumDistance;
+            _decelerate = decelerate;
+            _decelerationRadius = decelerationRadius;
+            _stopOnEnd = stopOnEnd;
+            _decelerationMultiplier = 1;
         }
 
         //Methods
         private Vector2 GetSteeringVector(float speed, Vector2 currentPosition, Vector2 currentVelocity)
         {
+            float steeringMultiplier = _steeringSpeed;
+
             //Calculates velocity in a straight line towards target
             Vector2 desiredVelocity = _targetPosition - currentPosition;
             desiredVelocity.Normalize();
@@ -59,8 +76,18 @@ namespace agalag.game
                 return Vector2.Normalize(currentVelocity);
 
             //Calculates the hypotenuse vector between the current and desired velocities, multiplied by the turning speed.
-            //Returns this normalized value.
-            Vector2 steeringVector = (desiredVelocity - currentVelocity) * _steeringSpeed;
+            //Returns this normalized value. 
+            Vector2 steeringVector = (desiredVelocity - currentVelocity) * steeringMultiplier;
+
+            if(_decelerate) {
+                this._decelerationMultiplier = 1;
+                float distance = Vector2.Distance(currentPosition, _targetPosition);
+                if(distance <= _decelerationRadius) {
+                    this._decelerationMultiplier = System.Math.Clamp(distance, 0, distance) / _decelerationRadius;
+                    steeringVector *= this._decelerationMultiplier;
+                }
+                // System.Diagnostics.Debug.WriteLine(distance + " vector: " + _targetPosition + " Multiplier: " + decelerationMultiplier);
+            }
 
             Vector2 finalDirection = currentVelocity + steeringVector;
             finalDirection.Normalize();
@@ -73,23 +100,24 @@ namespace agalag.game
         //Desired direction is calculated on Update, applied on FixedUpdate.
         public bool CheckCondition(iEnemy target)
         {
-            return Vector2.Distance(target.position, _targetPosition) <= _minimumDistance; 
+            return Vector2.Distance(target.Position, _targetPosition) <= _minimumDistance; 
         } 
-        public void FixedUpdate(iEnemy target) 
+        public virtual void FixedUpdate(iEnemy target) 
         {
-            target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier, target.CurrentAcceleration * _accelerationModifier);
+            target.Move(_desiredDirection, target.DesiredSpeed * _speedModifier * _decelerationMultiplier, target.CurrentAcceleration * _accelerationModifier);
         }
-        public void Update(iEnemy target) 
+        public virtual void Update(iEnemy target) 
         {
             if(_targetObject != null)
-                this._targetPosition = _targetObject.position;
+                this._targetPosition = _targetObject.Position;
 
-            _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.position, target.currentVelocity);
+            _desiredDirection = GetSteeringVector(target.DesiredSpeed, target.Position, target.CurrentVelocity);
         }
         public void OnStart(iEnemy target) { return; }
         public void OnFinish(iEnemy target) 
         { 
-            //target.Move(Vector2.Zero, target.currentSpeed, target.currentAcceleration); 
+            if(_stopOnEnd)
+                target.Stop();
         }
         #endregion
     }
