@@ -95,7 +95,9 @@ namespace agalag.engine
                 layer.Draw(spriteBatch);
                 layer.DrawChildren(spriteBatch);
             }
+			
         }
+		
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             List<MonoEntity> entities = new();
@@ -110,7 +112,10 @@ namespace agalag.engine
                 layer.FixedUpdate(gameTime, fixedFrameTime);
                 layer.FixedUpdateChildren(gameTime, fixedFrameTime);
             }
+			
+			UIHandler.Instance.Update(gameTime);
         }
+		
         public void UpdateChildren(GameTime gameTime)
         {
             foreach (SceneLayer layer in _layers.Values)

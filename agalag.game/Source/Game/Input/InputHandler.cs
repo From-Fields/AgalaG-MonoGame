@@ -11,6 +11,8 @@ namespace agalag.game.input
         public bool GetPause();
         public bool GetShoot();
         public void Update();
+		public bool DownPressed();
+        public bool UpPressed();
     }
 
     public enum InputMethods 
@@ -29,6 +31,21 @@ namespace agalag.game.input
 
         public bool GetPause() => _inputMethod.GetPause();
         public bool GetShoot() => _inputMethod.GetShoot();
+		
+		public bool PressedDown() => _inputMethod.DownPressed();
+        public bool PressedUp() => _inputMethod.UpPressed();
+
+        public Vector2 GetMousePosition()
+        {
+            MouseState mouseState = Mouse.GetState();
+            return new Vector2(mouseState.Position.X, mouseState.Position.Y);
+        }
+
+        public bool GetMouseLeftPressed()
+        {
+            MouseState mouseState = Mouse.GetState();
+            return mouseState.LeftButton == ButtonState.Pressed;
+        }
 
         public bool SwitchInputMethod(InputMethods method)
         {
@@ -39,6 +56,18 @@ namespace agalag.game.input
             
             _inputMethod = handler;
             return true;
+        }
+		
+		public Vector2 ScaledMousePosition {
+            get {
+                Matrix scalingMatrix = engine.ResolutionScaler.ResolutionMatrix;
+                MouseState mouseState = Mouse.GetState();
+
+                Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
+                Vector2 scaledMousePosition = Vector2.Transform(mousePosition, Matrix.Invert(scalingMatrix));
+
+                return scaledMousePosition;
+            }
         }
 
         private iInputHandler GetInputMethod(InputMethods method)
