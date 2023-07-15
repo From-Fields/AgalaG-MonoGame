@@ -15,23 +15,13 @@ namespace agalag.engine
         private Queue<Scene> _sceneQueue = new Queue<Scene>();
         private FixedUpdater _updater = new FixedUpdater();
         private RoutineManager _routineManager = RoutineManager.Instance;
-        private ContentManager _content = null;
-
-        public void SwitchScene(Scene newScene)
-        {
-            SwitchScene(newScene, _content);
-        }
 
         //Methods
         public void SwitchScene(Scene newScene, ContentManager content)
         {
             if(newScene == null)
                 throw new System.ArgumentNullException("Switched Scene Cannot be Null");
-            if (content == null)
-                throw new System.ArgumentNullException("First Call should contain ContentManager");
-
-            if (_content == null) _content = content;
-
+            
             if(_currentScene != null)
                 ClearScene(_currentScene, content);
 
