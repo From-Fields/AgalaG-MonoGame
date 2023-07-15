@@ -11,7 +11,7 @@ namespace agalag.test
 {
     public class TestScene : Scene
     {
-        private readonly List<MonoEntity> entities;
+        List<MonoEntity> entities;
 
         public TestScene(List<SceneLayer> layers = null) : base(layers)
         {
@@ -41,8 +41,6 @@ namespace agalag.test
             Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540));
 
             CreateWave();
-
-            //new UIText("This is not a test", new Vector2(0, 0));
 
             // EnemyKamikaze enemyK = new EnemyKamikaze(GetPrefab<EnemyKamikaze>(), true);
             //Bullet bullet = new Bullet(new Vector2(900, 100), 0, new Vector2(0, 1), 0f);

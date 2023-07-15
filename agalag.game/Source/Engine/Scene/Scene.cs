@@ -115,7 +115,6 @@ namespace agalag.engine
                 layer.Update(gameTime);
                 layer.UpdateChildren(gameTime);
             }
-            UIHandler.Instance.Update(gameTime);
         }
 
         //iObject

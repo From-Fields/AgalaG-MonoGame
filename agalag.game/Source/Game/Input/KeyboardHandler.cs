@@ -33,7 +33,6 @@ namespace agalag.game.input
         {
             return _currentState.Value.IsKeyDown(key) ? 1 : 0;
         }
-
         private bool GetKeyTap(Keys key)
         {
             if(_oldState != null && _currentState != null) 
@@ -43,7 +42,6 @@ namespace agalag.game.input
 
             return false;
         }
-
         private bool GetKeyRelease(Keys key)
         {
             if(_oldState != null && _currentState != null) 
@@ -53,7 +51,6 @@ namespace agalag.game.input
 
             return false;
         }
-
         private bool GetKeyDown(Keys key)
         {
             return (_currentState != null && _currentState.Value.IsKeyDown(inputScheme.shoot));
@@ -76,20 +73,9 @@ namespace agalag.game.input
         {
             return GetKeyTap(inputScheme.pause);
         }
-
         public bool GetShoot()
         {
             return GetKeyTap(inputScheme.shoot);
-        }
-
-        public bool UpPressed()
-        {
-            return GetKeyTap(inputScheme.up);
-        }
-
-        public bool DownPressed()
-        {
-            return GetKeyTap(inputScheme.down);
         }
 
         public void Update()
