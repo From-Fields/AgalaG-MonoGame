@@ -6,6 +6,7 @@ using agalag.game.input;
 using System.Diagnostics;
 using agalag.engine.content;
 using Microsoft.Xna.Framework.Content;
+using agalag.game.Source.Game.Scenes;
 
 namespace agalag.game;
 
@@ -50,6 +51,7 @@ public class AgalagGame : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        Utils.ScreenManager = _graphics;
         Prefabs.AddPrefab<Bullet>(Content.Load<Texture2D>("Sprites/bullet_player"));
         
         Texture2D playerSprite = Content.Load<Texture2D>("Sprites/player");
@@ -58,7 +60,14 @@ public class AgalagGame : Game
         Texture2D kamikazeSprite = Content.Load<Texture2D>("Sprites/kamikaze");
         Prefabs.AddPrefab<EnemyKamikaze>(new EnemyKamikaze(kamikazeSprite, Vector2.Zero, Vector2.One), kamikazeSprite);
 
-        _sceneManager.SetDefaultScene(new test.TestScene());
+        Prefabs.DefineStandardFont(Content.Load<SpriteFont>("Fonts/Standard"));
+        Prefabs.AddFont("Title", Content.Load<SpriteFont>("Fonts/Title"));
+        Prefabs.AddFont("Button", Content.Load<SpriteFont>("Fonts/ButtonText"));
+
+        Prefabs.AddShape(new Texture2D(GraphicsDevice, 80, 30), Shapes.Rectangle);
+
+        //_sceneManager.SetDefaultScene(new test.TestScene());
+        _sceneManager.SetDefaultScene(new MainMenuScene());
         _sceneManager.SwitchToDefaultScene(Content);
     }
 
@@ -86,6 +95,15 @@ public class AgalagGame : Game
         );
 
         _sceneManager.DrawChildren(_spriteBatch);
+
+        _spriteBatch.End();
+
+        _spriteBatch.Begin(
+            SpriteSortMode.Immediate,
+            transformMatrix: ResolutionScaler.ResolutionMatrix
+        );
+
+        UIHandler.Instance.Draw(_spriteBatch);
 
         _spriteBatch.End();
 
