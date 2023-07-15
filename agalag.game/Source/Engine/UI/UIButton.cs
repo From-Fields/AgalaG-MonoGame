@@ -59,15 +59,21 @@ namespace agalag.engine
             Vector2 mousePosition = InputHandler.Instance.GetMousePosition();
             MousePos = InputHandler.Instance.GetMousePosition();
 
-            //float bbox_left = _relativePosition.X - (_size.X / 2);// - 60;
-            //float bbox_right = _relativePosition.X + (_size.X / 2);// - 140;
-            //float bbox_top = _relativePosition.Y - (_size.Y / 2);
-            //float bbox_bottom = _relativePosition.Y + (_size.Y / 2);
+            float bbox_left = _relativePosition.X - (_size.X / 2);// - 60;
+            float bbox_right = _relativePosition.X + (_size.X / 2);// - 140;
+            float bbox_top = _relativePosition.Y - 160;// / 2);
+            float bbox_bottom = _relativePosition.Y - 80;// + (_size.Y / 2);
 
-            //if (mousePosition.X >= bbox_left && mousePosition.X <= bbox_right)
-            //{
-            //    _selected = this;
-            //}
+            if (mousePosition.X >= bbox_left && mousePosition.X <= bbox_right 
+                && mousePosition.Y >= bbox_top && mousePosition.Y <= bbox_bottom)
+            {
+                UIHandler.Instance.SetSelected(this);
+            }
+            else if (UIHandler.Instance.Selected == this)
+            {
+                UIHandler.Instance.SetSelected(null);
+            }
+
             if (IsSelected && InputHandler.Instance.GetMouseLeftPressed())
             {
                 Debug.WriteLine("botão [" + _text + "] clicado");
@@ -90,10 +96,9 @@ namespace agalag.engine
             _relativeSize = _size * (IsSelected ? multiplier:1f);
             UpdateRelativePosition();
 
-            //spriteBatch.DrawString(Prefabs.StandardFont, "Mouse: (" + MousePos.X + " " + MousePos.Y + ")", new Vector2(50, 50), Color.White);
-            //spriteBatch.DrawString(Prefabs.StandardFont, "Button Pos: (" + _relativePosition.X + ", " + Transform.position.Y + ")", new Vector2(50, 150), Color.White);
-            //spriteBatch.DrawString(Prefabs.StandardFont, "left: " + (_relativePosition.X - (_relativeSize.X / 2)), new Vector2(50, 200), Color.White);
-            //spriteBatch.DrawString(Prefabs.StandardFont, "right: " + (_relativePosition.X + (_relativeSize.X / 2)), new Vector2(50, 250), Color.White);
+            spriteBatch.DrawString(Prefabs.StandardFont, "Mouse: (" + MousePos.X + " " + MousePos.Y + ")", new Vector2(50, 50), Color.White);
+            spriteBatch.DrawString(Prefabs.StandardFont, "Button Pos: (" + _relativePosition.X + ", " + _relativePosition.Y + ")", new Vector2(50, 150 + _relativePosition.Y * .2f), Color.White);
+            spriteBatch.DrawString(Prefabs.StandardFont, "top: " + (_relativePosition.Y - 160) + ", bottom: " + (_relativePosition.Y - 80) + " size: (" + _size.X + ", " + _size.Y + ")", new Vector2(350, 150 + _relativePosition.Y * .2f), Color.White);
 
             var textPos = _relativePosition + new Vector2(_relativeSize.X / 2f, _relativeSize.Y / 4f);
             _text.SetPos(textPos);

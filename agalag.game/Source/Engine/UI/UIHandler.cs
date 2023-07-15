@@ -66,6 +66,16 @@ namespace agalag.engine
             return _selected?.Value;
         }
 
+        public void SetSelected(UIElement e)
+        {
+            LinkedListNode<UIElement> item = null;
+            if (e != null)
+            {
+                item = _interactable.Find(e);
+            }
+            _selected = item;
+        }
+
         public void Clean()
         {
             _elements.Clear();
