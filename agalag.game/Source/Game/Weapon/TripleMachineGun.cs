@@ -16,7 +16,7 @@ namespace agalag.game
             new Vector2(35f, -15f), 
             new Vector2(-35f, -15f) 
         };
-        private const int speed = 25;
+        private const float speed = 21f;
 
         public TripleMachineGun(Transform spawnerTransform, EntityTag shooter = EntityTag.None) 
             : base(spawnPoints, maxAmmunition: 100, spawnerTransform, shooter, speed)

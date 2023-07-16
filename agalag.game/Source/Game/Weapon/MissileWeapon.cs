@@ -11,11 +11,11 @@ namespace agalag.game
 {
     class MissileWeapon : Weapon
     {
-        private const float speed = 8f;
+        private const float speed = 6f;
         private static readonly Vector2[] spawnPoints = new Vector2[1];
 
         public MissileWeapon(Transform spawnerTransform, EntityTag shooter = EntityTag.None) 
-            : base(spawnPoints, maxAmmunition: 30, spawnerTransform, shooter, speed)
+            : base(spawnPoints, maxAmmunition: 15, spawnerTransform, shooter, speed)
         {
             spawnPoints[0] = new Vector2(0f, 0f);
             _bulletPrefab = Prefabs.GetSprite("missile");
