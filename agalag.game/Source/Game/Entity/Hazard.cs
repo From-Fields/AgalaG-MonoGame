@@ -10,20 +10,20 @@ using Microsoft.Xna.Framework.Graphics;
 namespace agalag.game
 {
 
-    public class Hazard : MonoEntity, iPoolableEntity<Hazard>
+    public class Hazard : Entity, iPoolableEntity<Hazard>
     {
-        private uint _maxBounces = 0, _currentBounces = 0, _damage = 1;
+        private uint _maxBounces = 0, _currentBounces = 0, _damage = 1, _health = 1;
         private bool _rotate, _canBounce, _isWithinBounds;
         private float _rotationSpeed;
         private Vector2 _initialDirection = Vector2.Zero;
         private Rectangle _levelBounds;
 
         public Hazard(Hazard original) : this(original._sprite.Texture) { } 
-        public Hazard(Texture2D sprite) : base(layer: Layer.Objects, active: false, sprite: sprite) { } 
+        public Hazard(Texture2D sprite) : base(sprite: sprite, Vector2.Zero, Vector2.One) { } 
 
         public void Initialize(
             Vector2 position, Vector2 direction, Rectangle levelBounds,
-            float speed = 750, uint damage = 1,
+            float speed = 750, uint damage = 1, uint health = 1,
             bool rotate = true, float rotationSpeed = 1f,  Vector2? scale = null,
             uint maxBounces = 0
         ) {
@@ -47,12 +47,12 @@ namespace agalag.game
             this._maxBounces = maxBounces;
 
             this._damage = damage;
+            this._health = health;
             
-            ApplyMovement(direction, speed);
+            Move(direction, speed, 0f);
         }
 
         // Movement Methods
-        private void ApplyMovement(Vector2 direction, float speed) => _transform.velocity = direction * speed;
         private bool WillBounce() => (_canBounce && _isWithinBounds && _currentBounces < _maxBounces);
         private void ReflectMovement(MonoEntity other) 
         {
@@ -95,13 +95,13 @@ namespace agalag.game
             Player player = other as Player;
 
             if(player == null) {
-                Wall wall = other as Wall;
-                if(wall != null) {
+                if(other is Wall) {
                     if(WillBounce())
                         ReflectMovement(other);
                     else if(_isWithinBounds)
                         RoutineManager.Instance.CallbackTimer(1.5f, ReserveToPool);
                 }
+
                 return;
             }
             player.TakeDamage((int) _damage);
@@ -124,5 +124,21 @@ namespace agalag.game
             
             System.Diagnostics.Debug.WriteLine("meep");
         }
+
+        public override int Health => (int) this._health;
+        public override Vector2 Position => Transform.position;
+        public override Vector2 CurrentVelocity => Transform.velocity;
+        public override void Move(Vector2 direction, float speed, float acceleration) => _transform.velocity = direction * speed;
+        public override void Shoot() {  } //Do Nothing
+        public override void Stop() => _transform.velocity = Vector2.Zero;
+
+        public override void TakeDamage(int damage)
+        {
+            _health = (uint) Math.Clamp(_health - damage, 0, _health);
+
+            if(_health <= 0)
+                Die();
+        }
+        public override void Die() => ReserveToPool();
     }
 }

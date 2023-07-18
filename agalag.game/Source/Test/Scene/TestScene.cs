@@ -56,7 +56,7 @@ namespace agalag.test
 
             // pickUp.Initialize(new RepairPowerUp(), new Vector2(60, 60), new Vector2(0.5f, 0.5f));
 
-            // CreateWave();
+            CreateWave();
 
             // EnemyKamikaze enemyK = new EnemyKamikaze(GetPrefab<EnemyKamikaze>(), true);
             // Bullet bullet = new Bullet(new Vector2(900, 100), 0, new Vector2(0, 1), 0f);
