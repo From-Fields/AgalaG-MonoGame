@@ -13,7 +13,7 @@ namespace agalag.game
         public Action onWaveDone;
         private List<iWaveUnit> unitList;
 
-        public bool IsoDone => _isDone;
+        public bool IsDone => _isDone;
 
         public WaveController(float timeout, List<iWaveUnit> unitList)
         {
@@ -66,6 +66,11 @@ namespace agalag.game
 
                 unit?.Reserve();
             }
+
+            if(_isDone)
+                return;
+
+            onWaveDone?.Invoke();
         }
     }
 }

@@ -114,7 +114,7 @@ namespace agalag.game
         public Action<Hazard> onReleaseToPool => null;
         public iObjectPool<Hazard> Pool => EntityPool<Hazard>.Instance.Pool;
 
-        private void ReserveToPool() 
+        public void ReserveToPool() 
         {
             if(_active == false)
                 return;
