@@ -1,4 +1,5 @@
 using System;
+using agalag.engine.routines;
 using Microsoft.Xna.Framework;
 
 namespace agalag.game
@@ -8,7 +9,7 @@ namespace agalag.game
         public Action<iWaveUnit> onUnitReleased { get; set; }
 
         private Hazard _hazard;
-        private bool _rotate;
+        private bool _rotate, _waitForTimeout;
         private float _speed, _rotationSpeed;
         private uint _damage, _health, _maxBounces;
         private Vector2 _position, _direction, _scale;
@@ -17,7 +18,7 @@ namespace agalag.game
         public WaveHazard(
             Hazard hazard, Vector2 position, Vector2 direction, Rectangle levelBounds,
             bool rotate = true, float speed = 750, float rotationSpeed = 1, 
-            uint damage = 1, uint health = 1, uint maxBounces = 0,  
+            uint damage = 1, uint health = 1, uint maxBounces = 0, bool waitForTimeout = false,
             Vector2? scale = null, Action<iWaveUnit> onUnitReleased = null)
         {
             this.onUnitReleased = onUnitReleased;
@@ -32,15 +33,22 @@ namespace agalag.game
             _direction = direction;
             _scale = (scale.HasValue) ? scale.Value : new Vector2(0.6f, 0.6f);
             _levelBounds = levelBounds;
+            _waitForTimeout = waitForTimeout;
         }
 
         public void ExecuteTimeoutAction() { 
-            onUnitReleased?.Invoke(this);
+            if(_waitForTimeout)
+                onUnitReleased?.Invoke(this);
         }
 
-        public void Initialize() => _hazard.Initialize(
-            _position, _direction, _levelBounds, _speed, _damage, _health, _rotate, _rotationSpeed, _scale, _maxBounces
-        );
+        public void Initialize() {
+            _hazard.Initialize(
+                _position, _direction, _levelBounds, _speed, _damage, _health, _rotate, _rotationSpeed, _scale, _maxBounces
+            );
+            
+            if(!_waitForTimeout)
+                RoutineManager.Instance.CallbackTimer(0.5f, () => onUnitReleased?.Invoke(this));
+        } 
 
         public void Reserve() => _hazard.ReserveToPool();
     }

@@ -129,6 +129,13 @@ namespace agalag.test
                         new WaitSeconds(1)
                     }),
                     drop: new RepairPowerUp()
+                ),
+                new WaveHazard(
+                    EntityPool<Hazard>.Instance.Pool.Get(),
+                    new Vector2(20, -20), 
+                    new Vector2(0.2f, 1), 
+                    new Rectangle(Point.Zero, new Point(1920, 1080)), 
+                    maxBounces: 3
                 )
             }));
 
