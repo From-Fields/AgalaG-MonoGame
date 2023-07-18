@@ -53,6 +53,7 @@ public class AgalagGame : Game
         TagUtils.SetMask(EntityTag.Enemy, EntityTag.Enemy, false);
         TagUtils.SetMask(EntityTag.Enemy, EntityTag.Wall, false);
         TagUtils.SetMask(EntityTag.Enemy, EntityTag.PickUp, false);
+        TagUtils.SetMask(EntityTag.Enemy, EntityTag.Hazard, false);
         TagUtils.SetMask(EntityTag.Wall, EntityTag.Wall, false);
 
         // System.Diagnostics.Debug.WriteLine(TagUtils.GetInteraction(EntityTag.Player, EntityTag.Enemy));
@@ -90,6 +91,10 @@ public class AgalagGame : Game
         Texture2D bumblebeeBullet = Content.Load<Texture2D>("Sprites/bullet_bumblebee");
         Texture2D bumblebeeSprite = Content.Load<Texture2D>("Sprites/enemy_bumblebee");
         Prefabs.AddPrefab<EnemyBumblebee>(new EnemyBumblebee(bumblebeeSprite, Vector2.Zero, Vector2.One, bulletTexture: bumblebeeBullet), bumblebeeSprite);
+
+        //Hazard
+        Texture2D hazardSprite = Content.Load<Texture2D>("Sprites/hazard_a");
+        Prefabs.AddPrefab<Hazard>(new Hazard(hazardSprite), hazardSprite);
 
         // PickUp
         Prefabs.AddPrefab<PickUp>(new PickUp());

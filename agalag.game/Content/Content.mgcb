@@ -106,6 +106,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/laserRed06.png;Sprites/bullet_player.png
 
+#begin Sprites/meteorBrown_big1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/meteorBrown_big1.png;Sprites/hazard_a.png
+
 #begin Sprites/Missile_Player.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -15,7 +15,8 @@ namespace agalag.engine
         Enemy,
         PlayerBullet,
         PickUp,
-        Wall
+        Wall,
+        Hazard
     }
 
     public static class TagUtils
@@ -28,6 +29,7 @@ namespace agalag.engine
             { EntityTag.PlayerBullet, "PlayerBullet" },
             { EntityTag.PickUp, "PickUp" },
             { EntityTag.Wall, "Wall" },
+            { EntityTag.Hazard, "Hazard" },
         };
         
         private static bool[][] _tags;

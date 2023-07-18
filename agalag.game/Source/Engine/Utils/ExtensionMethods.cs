@@ -35,6 +35,10 @@ namespace agalag.engine
         {            
             return -1 * new Vector2(MathF.Abs(vector.X), MathF.Abs(vector.Y));
         }
+        public static Vector2 GetNormal(this Vector2 position, Vector2 otherPosition)
+        {
+            return (position - otherPosition).normalized();
+        }
 
 
         public static float Repeat(float value, float max) 

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -26,6 +27,13 @@ namespace agalag.engine
         public float minY;
         public float maxY;
 
+        public FlattenedPolygon(Rectangle rect) 
+        {
+            this.minX = rect.Left;
+            this.maxX = rect.Right;
+            this.minY = rect.Top;
+            this.maxY = rect.Bottom;
+        }
         public FlattenedPolygon(float minX, float maxX, float minY, float maxY) 
         {
             this.minX = minX;
@@ -47,6 +55,11 @@ namespace agalag.engine
             bool yIntersects = yIntersectsA || yIntersectsB;
 
             return xIntersects && yIntersects;
+        }
+
+        internal Rectangle toRectangle()
+        {
+            return new Rectangle((int) minX, (int) minY, (int) (maxX - minX), (int) (maxY - minY));
         }
     }
 }

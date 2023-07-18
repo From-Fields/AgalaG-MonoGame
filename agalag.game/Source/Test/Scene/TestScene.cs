@@ -49,11 +49,14 @@ namespace agalag.test
 
             Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540));
 
+            Hazard hazard = EntityPool<Hazard>.Instance.Pool.Get();
+            hazard.Initialize(new Vector2(20, -20), new Vector2(0.2f, 1), new Rectangle(Point.Zero, new Point(1920, 1080)), maxBounces: 3);
+
             // PickUp pickUp = EntityPool<PickUp>.Instance.Pool.Get();
 
             // pickUp.Initialize(new RepairPowerUp(), new Vector2(60, 60), new Vector2(0.5f, 0.5f));
 
-            CreateWave();
+            // CreateWave();
 
             // EnemyKamikaze enemyK = new EnemyKamikaze(GetPrefab<EnemyKamikaze>(), true);
             // Bullet bullet = new Bullet(new Vector2(900, 100), 0, new Vector2(0, 1), 0f);
