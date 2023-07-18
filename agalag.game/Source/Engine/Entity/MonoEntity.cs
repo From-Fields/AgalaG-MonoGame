@@ -28,17 +28,17 @@ namespace agalag.engine
         //Constructors
         #region Constructors
 
-        public MonoEntity(Texture2D sprite = null, Layer layer = Layer.Default, Vector2? offset = null) : 
-            this(sprite, Vector2.Zero, Vector2.One, 0f, layer, offset) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Layer layer = Layer.Default, Vector2? offset = null): 
-            this(sprite, position, Vector2.One, 0f, layer, offset) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, Layer layer = Layer.Default, Vector2? offset = null): 
-            this(sprite, position, scale, 0f, layer, offset) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, Layer layer = Layer.Default, Vector2? offset = null) 
+        public MonoEntity(Texture2D sprite = null, Layer layer = Layer.Default, Vector2? offset = null, bool active = false) : 
+            this(sprite, Vector2.Zero, Vector2.One, 0f, layer, offset, active) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Layer layer = Layer.Default, Vector2? offset = null, bool active = false): 
+            this(sprite, position, Vector2.One, 0f, layer, offset, active) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, Layer layer = Layer.Default, Vector2? offset = null, bool active = false): 
+            this(sprite, position, scale, 0f, layer, offset, active) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, Layer layer = Layer.Default, Vector2? offset = null, bool active = false) 
         {
             this._sprite = new Sprite(sprite, _offset: offset);
             _transform = new Transform(position, scale, rotation);
-            SetActive(true);
+            SetActive(active);
             SceneManager.AddToMainScene(this, layer);
         }
 

@@ -18,10 +18,7 @@ namespace agalag.game
         // References
         private iPowerUp _powerUp;
 
-        public PickUp(Layer layer = Layer.Default){
-            SceneManager.AddToMainScene(this, layer);
-            SetActive(false);
-        } 
+        public PickUp(Layer layer = Layer.Default) : base(layer: layer, active: false) { } 
 
         public void Initialize(
             iPowerUp powerUp, Vector2 position, Vector2 direction, float speed = 750, 
