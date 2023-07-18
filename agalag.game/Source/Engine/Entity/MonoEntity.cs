@@ -28,20 +28,23 @@ namespace agalag.engine
         //Constructors
         #region Constructors
 
-        public MonoEntity(Texture2D sprite = null, Layer layer = Layer.Default): 
-            this(sprite, Vector2.Zero, Vector2.One, 0f) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Layer layer = Layer.Default): 
-            this(sprite, position, Vector2.One, 0f) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, Layer layer = Layer.Default): 
-            this(sprite, position, scale, 0f) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, Layer layer = Layer.Default) 
+        public MonoEntity(Texture2D sprite = null, Layer layer = Layer.Default, Vector2? offset = null, bool active = false) : 
+            this(sprite, Vector2.Zero, Vector2.One, 0f, layer, offset, active) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Layer layer = Layer.Default, Vector2? offset = null, bool active = false): 
+            this(sprite, position, Vector2.One, 0f, layer, offset, active) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, Layer layer = Layer.Default, Vector2? offset = null, bool active = false): 
+            this(sprite, position, scale, 0f, layer, offset, active) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, Layer layer = Layer.Default, Vector2? offset = null, bool active = false) 
         {
-            this._sprite = new Sprite(sprite);
+            this._sprite = new Sprite(sprite, _offset: offset);
             _transform = new Transform(position, scale, rotation);
+            SetActive(active);
+            SceneManager.AddToMainScene(this, layer);
         }
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, iCollider collider, Layer layer = Layer.Default): 
-            this(sprite, position, scale, 0f, collider) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, iCollider collider, Layer layer = Layer.Default) 
+
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, iCollider collider, Layer layer = Layer.Default, Vector2? offset = null): 
+            this(sprite, position, scale, 0f, collider, layer) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, iCollider collider, Layer layer = Layer.Default, Vector2? offset = null) 
         {
             _collisions = new List<Collision>();
             this._sprite = new Sprite(sprite);

@@ -80,7 +80,7 @@ namespace agalag.game.input
 		
         public bool GetShoot()
         {
-            return GetKeyTap(inputScheme.shoot);
+            return KeyToInt(inputScheme.shoot) > 0;
         }
 		
 		public bool UpPressed()
@@ -91,6 +91,11 @@ namespace agalag.game.input
         public bool DownPressed()
         {
             return GetKeyTap(inputScheme.down);
+        }
+
+        public bool PressTestButton(Keys key)
+        {
+            return GetKeyTap(key);
         }
 
         public void Update()

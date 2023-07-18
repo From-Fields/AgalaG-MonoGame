@@ -68,8 +68,12 @@ public class AgalagGame : Game
 
         Prefabs.AddShape(new Texture2D(GraphicsDevice, 80, 30), Shapes.Rectangle);
 		
-        //Player
+        //Weapons
         Prefabs.AddPrefab<Bullet>(Content.Load<Texture2D>("Sprites/bullet_player"));
+        Prefabs.AddSprite("missile", Content.Load<Texture2D>("Sprites/missilePlayer"));
+        Prefabs.AddPrefab<Explosion>(Content.Load<Texture2D>("Sprites/explosion"));
+        
+        //Player
         Texture2D playerSprite = Content.Load<Texture2D>("Sprites/player");
         Prefabs.AddPrefab<Player>(new Player(playerSprite, Vector2.Zero), playerSprite);
 

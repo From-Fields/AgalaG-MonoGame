@@ -19,6 +19,9 @@ namespace agalag.game {
         // private float _speed;
 
         private readonly float _destroyTime = 2f;
+        private readonly bool _explosion;
+
+        private bool isDestroying = false;
 
         /// <summary>
         /// 
@@ -27,18 +30,19 @@ namespace agalag.game {
         /// <param name="damage"></param>
         /// <param name="direction"></param>
         /// <param name="speed"></param>
-        /// <param name="shooter"></param>
         /// <param name="sprite"></param>
+        /// <param name="shooter"></param>
         /// <param name="rotation"></param>
         /// <param name="collider"></param>
-
-        public Bullet(Vector2 position, int damage, Vector2 direction, float speed, Texture2D sprite, EntityTag shooter = 0, float rotation = 0f, iCollider collider = null)
+        /// <param name="life"></param>
+        /// <param name="explosion"></param>
+        public Bullet(Vector2 position, int damage, Vector2 direction, float speed, Texture2D sprite, EntityTag shooter = 0, float rotation = 0f, iCollider collider = null, float life = 2f, bool explosion = false)
             : this(position, Vector2.One, damage, direction, speed, sprite, 
                 shooter, rotation, 
                 collider ?? new RectangleCollider(new Point(32, 60), solid: false, offset: new Point(0, 4))
         ) { }
 
-        public Bullet(Vector2 position, Vector2 scale, int damage, Vector2 direction, float speed, Texture2D sprite, EntityTag shooter = 0, float rotation = 0f, iCollider collider = null) 
+        public Bullet(Vector2 position, Vector2 scale, int damage, Vector2 direction, float speed, Texture2D sprite, EntityTag shooter = 0, float rotation = 0f, iCollider collider = null, float life = 2f, bool explosion = false) 
             : base(sprite, position, scale, rotation, 
                 collider ?? new RectangleCollider(new Point(32, 60), solid: false, offset: new Point(0, 4)), 
                 layer: Layer.Objects
@@ -51,6 +55,8 @@ namespace agalag.game {
             // _direction = direction;
 
             _damage = damage;
+            _destroyTime = life;
+            _explosion = explosion;
             SetTag(shooter);
             
             _transform.drag = 0;
@@ -60,15 +66,15 @@ namespace agalag.game {
             RoutineManager.Instance.CallbackTimer(_destroyTime, DestroySelf);
         }
 
-        // public void Move(Vector2 direction, float speed, float acceleration = 10f)
-        // {
-        //     if (direction != Vector2.Zero)
-        //         direction.Normalize();
-
-        //     _transform.position += direction * speed;
-        // }
-
         private void DestroySelf() {
+            if (isDestroying) return;
+
+            isDestroying = true;
+            if (_explosion)
+            {
+                Vector2 pos = new(_transform.position.X, _transform.position.Y);
+                _ = new Explosion(pos);
+            }
             Dispose();
         }
 

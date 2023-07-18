@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace agalag.engine
 {
@@ -29,17 +30,36 @@ namespace agalag.engine
         }
 
         //Methods
-        public void Draw(Transform transform, SpriteBatch spriteBatch)
+        public void Draw(Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
+        {
+            Draw(transform.position, transform, spriteBatch, area);
+        }
+
+        public void Draw(Vector2 position, Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
+        {
+            Draw(position, transform.scale, transform, spriteBatch, area);
+        }
+
+        public void Draw(Vector2 position, Vector2 scale, Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
+        {
+            Draw(position, scale, transform.rotation, transform, spriteBatch, area);
+        }
+
+        public void Draw(Vector2 position, Vector2 scale, float rotation, Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
+        {
+            Draw(position, scale, rotation, transform.velocity, spriteBatch, area);
+        }
+
+        public void Draw(Vector2 position, Vector2 scale, float rotation, Vector2 velocity_, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
         {
             if(this._sprite == null || !this._visible)
                 return;
 
-            Vector2 position = transform.position;
-            Vector2 dimensions = _Dimensions * transform.scale;
+            Vector2 dimensions = _Dimensions * scale;
             Vector2 positionOffset = offset;
 
             position = position - positionOffset;
-            Vector2 velocity = transform.velocity * FixedUpdater.FixedFrameTime.frameTime;
+            Vector2 velocity = velocity_ * FixedUpdater.FixedFrameTime.frameTime;
 
             Vector2 oldPos = position;
             position = Vector2.Lerp(position - velocity, position, FixedUpdater.FixedFrameTime.frameProgress);
@@ -47,11 +67,11 @@ namespace agalag.engine
             spriteBatch.Draw(
                 _sprite,
                 position,
-                null,
+                area,
                 Color.White,
-                transform.rotation,
+                rotation,
                 new Vector2(_Dimensions.X * anchor.X, _Dimensions.Y * anchor.X),
-                transform.scale,
+                scale,
                 SpriteEffects.None,
                 0
             );

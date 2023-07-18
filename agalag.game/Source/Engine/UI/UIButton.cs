@@ -22,8 +22,6 @@ namespace agalag.engine
         private Color _color = Color.Gray;
         private Color _hoverColor = Color.Aqua;
 
-        private static UIButton _selected;
-
         private bool IsSelected => UIHandler.Instance.Selected == this;
 
         private Vector2 _relativePosition;
@@ -56,23 +54,23 @@ namespace agalag.engine
 
         public override void Update(GameTime gameTime)
         {
-            Vector2 mousePosition = InputHandler.Instance.GetMousePosition();
-            MousePos = InputHandler.Instance.GetMousePosition();
+            Vector2 mousePosition = InputHandler.Instance.ScaledMousePosition;
+            MousePos = InputHandler.Instance.ScaledMousePosition;
 
-            float bbox_left = _relativePosition.X - (_size.X / 2);// - 60;
-            float bbox_right = _relativePosition.X + (_size.X / 2);// - 140;
-            float bbox_top = _relativePosition.Y - 160;// / 2);
-            float bbox_bottom = _relativePosition.Y - 80;// + (_size.Y / 2);
+            float bbox_left = _relativePosition.X - (_size.X / 2);
+            float bbox_right = _relativePosition.X + (_size.X / 2);
+            float bbox_top = _relativePosition.Y - (_size.Y / 2);
+            float bbox_bottom = _relativePosition.Y + (_size.Y / 2);
 
             if (mousePosition.X >= bbox_left && mousePosition.X <= bbox_right 
                 && mousePosition.Y >= bbox_top && mousePosition.Y <= bbox_bottom)
             {
                 UIHandler.Instance.SetSelected(this);
             }
-            else if (UIHandler.Instance.Selected == this)
-            {
-                UIHandler.Instance.SetSelected(null);
-            }
+            //else if (UIHandler.Instance.Selected == this)
+            //{
+            //    UIHandler.Instance.SetSelected(null);
+            //}
 
             if (IsSelected && InputHandler.Instance.GetMouseLeftPressed())
             {
@@ -96,9 +94,9 @@ namespace agalag.engine
             _relativeSize = _size * (IsSelected ? multiplier:1f);
             UpdateRelativePosition();
 
-            spriteBatch.DrawString(Prefabs.StandardFont, "Mouse: (" + MousePos.X + " " + MousePos.Y + ")", new Vector2(50, 50), Color.White);
-            spriteBatch.DrawString(Prefabs.StandardFont, "Button Pos: (" + _relativePosition.X + ", " + _relativePosition.Y + ")", new Vector2(50, 150 + _relativePosition.Y * .2f), Color.White);
-            spriteBatch.DrawString(Prefabs.StandardFont, "top: " + (_relativePosition.Y - 160) + ", bottom: " + (_relativePosition.Y - 80) + " size: (" + _size.X + ", " + _size.Y + ")", new Vector2(350, 150 + _relativePosition.Y * .2f), Color.White);
+            //spriteBatch.DrawString(Prefabs.StandardFont, "Mouse: (" + MousePos.X + " " + MousePos.Y + ")", new Vector2(50, 50), Color.White);
+            //spriteBatch.DrawString(Prefabs.StandardFont, "Button Pos: (" + _relativePosition.X + ", " + _relativePosition.Y + ")", new Vector2(50, 150 + _relativePosition.Y * .2f), Color.White);
+            //spriteBatch.DrawString(Prefabs.StandardFont, "top: " + (_relativePosition.Y - 160) + ", bottom: " + (_relativePosition.Y - 80) + " size: (" + _size.X + ", " + _size.Y + ")", new Vector2(350, 150 + _relativePosition.Y * .2f), Color.White);
 
             var textPos = _relativePosition + new Vector2(_relativeSize.X / 2f, _relativeSize.Y / 4f);
             _text.SetPos(textPos);
