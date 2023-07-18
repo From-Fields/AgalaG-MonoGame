@@ -107,7 +107,7 @@ namespace agalag.test
                     new Queue<iEnemyAction>(new [] {
                         new MoveTowards(new Vector2(450, 500), 1.5f, 1, 0.9f)
                     }),
-                    drop: new ShieldPowerUp()
+                    drop: new TripleMachineGunPowerUp()
                 ),
             //     new WaveUnit<EnemyBumblebee>(
             //         new Vector2(1920 - 700, -64),

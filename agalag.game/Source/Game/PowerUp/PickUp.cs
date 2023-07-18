@@ -22,7 +22,7 @@ namespace agalag.game
 
         public void Initialize(
             iPowerUp powerUp, Vector2 position, Vector2 direction, float speed = 750, 
-            bool rotate = true, float rotationSpeed = 100f, 
+            bool rotate = true, float rotationSpeed = 10f, 
             bool doScale = true, float maximumScale = 1.3f, float scaleSpeed = 5f
         ) {
             SetCollider(new RectangleCollider(new Point(40, 40), solid: false));

@@ -104,6 +104,9 @@ public class AgalagGame : Game
         // Repair
         Texture2D repairSprite = Content.Load<Texture2D>("Sprites/pu_repair");
         Prefabs.AddPrefab<RepairPowerUp>(repairSprite);
+        // Repair
+        Texture2D multishotSprite = Content.Load<Texture2D>("Sprites/pu_multishot");
+        Prefabs.AddPrefab<TripleMachineGunPowerUp>(multishotSprite);
 
 		// UI
 		Prefabs.DefineStandardFont(Content.Load<SpriteFont>("Fonts/Standard"));
