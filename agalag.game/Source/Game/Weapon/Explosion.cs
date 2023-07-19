@@ -62,7 +62,6 @@ namespace agalag.game
                 if (other.Tag == EntityTag.Enemy)
                 {
                     entity.TakeDamage(_damage);
-                    DestroySelf();
                 }
             }
         }
