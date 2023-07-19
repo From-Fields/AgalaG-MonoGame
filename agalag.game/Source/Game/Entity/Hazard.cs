@@ -45,6 +45,11 @@ namespace agalag.game
             this._isWithinBounds = false;
             this._canBounce = (maxBounces != 0);
             this._maxBounces = maxBounces;
+            this._currentBounces = 0;
+
+            System.Diagnostics.Debug.WriteLine(_canBounce);
+            System.Diagnostics.Debug.WriteLine(_isWithinBounds);
+            System.Diagnostics.Debug.WriteLine(_maxBounces);
 
             this._damage = damage;
             this._health = health;
@@ -98,8 +103,13 @@ namespace agalag.game
                 if(other is Wall) {
                     if(WillBounce())
                         ReflectMovement(other);
-                    else if(_isWithinBounds)
+                    else if(_isWithinBounds) {
                         RoutineManager.Instance.CallbackTimer(1.5f, ReserveToPool);
+
+                        System.Diagnostics.Debug.WriteLine(_canBounce);
+                        System.Diagnostics.Debug.WriteLine(_isWithinBounds);
+                        System.Diagnostics.Debug.WriteLine(_maxBounces);
+                    }
                 }
 
                 return;
