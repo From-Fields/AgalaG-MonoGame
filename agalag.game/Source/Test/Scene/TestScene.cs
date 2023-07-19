@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using agalag.game;
 using agalag.game.input;
 using System.Diagnostics;
+using agalag.engine.content;
 
 namespace agalag.test 
 {
@@ -46,11 +47,10 @@ namespace agalag.test
                 new Wall(new Vector2(1920, 100), new Vector2(0, 1079)), // Bottom
             };
 
+            Background background = new Background(Prefabs.GetTextureOfType<Background>(), new Rectangle(0, 0, 1920, 1080));
+
 
             Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540));
-
-            Hazard hazard = EntityPool<Hazard>.Instance.Pool.Get();
-            hazard.Initialize(new Vector2(20, -20), new Vector2(0.2f, 1), new Rectangle(Point.Zero, new Point(1920, 1080)), maxBounces: 3);
 
             // PickUp pickUp = EntityPool<PickUp>.Instance.Pool.Get();
 
@@ -122,7 +122,7 @@ namespace agalag.test
             // WaveController wave = new WaveController(10, new List<iWaveUnit>(new iWaveUnit[] {
                 new WaveUnit<EnemyGemini>(
                     new Vector2(1920 / 2, 100),
-                    new Shoot(1),
+                    new WaitSeconds(1),
                     new MoveTowards(new Vector2(-450, 500), 1.5f),
                     new Queue<iEnemyAction>(new iEnemyAction[] {
                         new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f),

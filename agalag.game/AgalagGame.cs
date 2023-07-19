@@ -69,6 +69,9 @@ public class AgalagGame : Game
 
         Prefabs.AddShape(new Texture2D(GraphicsDevice, 80, 30), Shapes.Rectangle);
 		
+        Texture2D background = Content.Load<Texture2D>("Sprites/bg");
+        Prefabs.AddPrefab<Background>(background);
+
         //Weapons
         Prefabs.AddPrefab<Bullet>(Content.Load<Texture2D>("Sprites/bullet_player"));
         Prefabs.AddSprite("missile", Content.Load<Texture2D>("Sprites/missilePlayer"));
@@ -137,6 +140,7 @@ public class AgalagGame : Game
         GraphicsDevice.Clear(Color.Black);
         _spriteBatch.Begin(
             SpriteSortMode.BackToFront,
+            samplerState: SamplerState.LinearWrap,
             transformMatrix: ResolutionScaler.ResolutionMatrix
         );
 
