@@ -16,7 +16,7 @@ namespace agalag.game
         private Rectangle _levelBounds;
 
         public WaveHazard(
-            Hazard hazard, Vector2 position, Vector2 direction, Rectangle levelBounds,
+            Hazard hazard, Vector2 position, Vector2 direction,
             bool rotate = true, float speed = 750, float rotationSpeed = 1, 
             uint damage = 1, uint health = 1, uint maxBounces = 0, bool waitForTimeout = false,
             Vector2? scale = null, Action<iWaveUnit> onUnitReleased = null)
@@ -32,7 +32,6 @@ namespace agalag.game
             _position = position;
             _direction = direction;
             _scale = (scale.HasValue) ? scale.Value : new Vector2(0.6f, 0.6f);
-            _levelBounds = levelBounds;
             _waitForTimeout = waitForTimeout;
         }
 
@@ -41,9 +40,9 @@ namespace agalag.game
                 onUnitReleased?.Invoke(this);
         }
 
-        public void Initialize() {
+        public void Initialize(Rectangle levelBounds) {
             _hazard.Initialize(
-                _position, _direction, _levelBounds, _speed, _damage, _health, _rotate, _rotationSpeed, _scale, _maxBounces
+                _position, _direction, levelBounds, _speed, _damage, _health, _rotate, _rotationSpeed, _scale, _maxBounces
             );
             
             if(!_waitForTimeout)

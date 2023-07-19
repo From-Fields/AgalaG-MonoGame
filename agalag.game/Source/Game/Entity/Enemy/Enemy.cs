@@ -30,6 +30,8 @@ namespace agalag.game
         protected iEnemyAction _timeoutAction;
         protected iEnemyAction _currentAction;
         
+        protected Rectangle _levelBounds;
+
         protected Enemy(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null) 
         : base(sprite, position, scale, rotation, collider) {
             SetTag(EntityTag.Enemy);
@@ -72,7 +74,7 @@ namespace agalag.game
             if(_currentAction == null)
                 Reserve();
         }
-        public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint, iPowerUp drop = null)
+        public void Initialize(Queue<iEnemyAction> actionQueue, iEnemyAction startingAction, iEnemyAction timeoutAction, Vector2 startingPoint, Rectangle levelBounds, iPowerUp drop = null)
         {
             if(actionQueue == null || timeoutAction == null)
                 throw new System.ArgumentNullException("Action queue and Timeout action may not be null");
@@ -82,6 +84,7 @@ namespace agalag.game
             this._startingAction = startingAction;
             this._timeoutAction = timeoutAction;
             this._transform.position = startingPoint;
+            this._levelBounds = levelBounds;
 
             this._droppedItem = drop;
 
@@ -168,7 +171,7 @@ namespace agalag.game
                 Vector2 randomDirection = new Vector2((float) randomX, (float) randomY);
                 randomDirection.Normalize();
 
-                EntityPool<PickUp>.Instance.Pool.Get().Initialize(_droppedItem, _transform.position, randomDirection);
+                EntityPool<PickUp>.Instance.Pool.Get().Initialize(_droppedItem, _transform.position, randomDirection, _levelBounds);
             }
 
             Reserve();

@@ -8,6 +8,7 @@ namespace agalag.engine
     {
         //Attributes
         public Vector2 Origin { get; }
+        public Vector2 Dimensions { get; }
         public Transform Parent { get; set; }
         
         public FlattenedPolygon FlattenedPolygon { get; }

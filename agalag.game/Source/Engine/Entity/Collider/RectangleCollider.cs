@@ -37,6 +37,7 @@ namespace agalag.engine
         public Vector2 Origin { 
             get => _parent.position + offset.ToVector2() - (anchor * _dimensions.ToVector2() * Parent.scale);
         }
+        public Vector2 Dimensions => _dimensions.ToVector2();
 
         public FlattenedPolygon FlattenedPolygon 
         {

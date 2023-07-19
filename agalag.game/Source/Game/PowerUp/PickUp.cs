@@ -21,7 +21,7 @@ namespace agalag.game
         public PickUp(Layer layer = Layer.Default) : base(layer: layer, active: false) { } 
 
         public void Initialize(
-            iPowerUp powerUp, Vector2 position, Vector2 direction, float speed = 750, 
+            iPowerUp powerUp, Vector2 position, Vector2 direction, Rectangle levelBounds, float speed = 750, 
             bool rotate = true, float rotationSpeed = 10f, 
             bool doScale = true, float maximumScale = 1.3f, float scaleSpeed = 5f
         ) {
@@ -36,12 +36,27 @@ namespace agalag.game
             this._tag = EntityTag.PickUp;
             this._sprite = new Sprite(powerUp.Sprite);
             
-            _transform.position = position;
+            _transform.position = SetStartingPosition(position, levelBounds);
             _transform.simulate = true;
             _transform.drag = 0;
             SetActive(true);
             
             ApplyMovement(direction, speed);
+        }
+
+        private Vector2 SetStartingPosition(Vector2 desiredPosition, Rectangle bounds)
+        {
+            Vector2 position = desiredPosition;
+
+            position.X = (desiredPosition.X < Collider.Dimensions.X) ? Collider.Dimensions.X 
+                : (desiredPosition.X > bounds.Width - Collider.Dimensions.X) ? bounds.Width - Collider.Dimensions.X
+                : position.X;
+
+            position.Y = (desiredPosition.Y < Collider.Dimensions.Y) ? Collider.Dimensions.Y
+                : (desiredPosition.Y > bounds.Height - Collider.Dimensions.Y) ? bounds.Height - Collider.Dimensions.Y
+                : position.Y;
+
+            return position;
         }
 
         // Movement Methods

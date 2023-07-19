@@ -11,7 +11,7 @@ namespace agalag.test
 {
     public class TestEnemy : Enemy<TestEnemy>
     {
-        public TestEnemy(Texture2D sprite, Vector2 position, Vector2 scale, Entity target, float rotation = 0, iCollider collider = null) : 
+        public TestEnemy(Texture2D sprite, Vector2 position, Vector2 scale, Entity target, Rectangle levelBounds, float rotation = 0, iCollider collider = null) : 
         base(sprite, position, scale, rotation, collider)
         {
             _defaultSpeed = 10f;
@@ -25,10 +25,10 @@ namespace agalag.test
             queue.Enqueue(new Shoot(2));
             queue.Enqueue(new MoveTowards(target, 5, trackingSpeed: 0.5f));
 
-            Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), this.Position);
+            Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), this.Position, levelBounds);
         }
         public TestEnemy(TestEnemy prefab):
-        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, null, prefab.Transform.rotation, prefab.Collider)
+        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, null, new Rectangle(0 ,0, 1920, 1080), prefab.Transform.rotation, prefab.Collider)
         {}
 
         public override int Health => 0;
