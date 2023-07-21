@@ -31,14 +31,18 @@ namespace agalag.game
         private static Matrix? _rotationMatrix;
 
         //Constructors
-        public EnemyGeminiChild(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, Texture2D bulletTexture = null) : 
-        base(sprite, position, scale, rotation, collider) 
+        public EnemyGeminiChild(
+            Texture2D sprite, Vector2 position, Vector2 scale, 
+            float rotation = 0, iCollider collider = null, 
+            Texture2D bulletTexture = null, EntityAudioManager audioManager = null
+        ): 
+            base(sprite, position, scale, rotation, collider, audioManager) 
         {
             _weapon = new DefaultWeapon(_transform, EntityTag.Enemy);
             _bulletTexture = bulletTexture;
         }
         public EnemyGeminiChild(EnemyGeminiChild prefab, bool active = false) : 
-        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._bulletTexture) 
+        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._bulletTexture, prefab._audioManager) 
         {
             SetActive(active);
         }
@@ -110,11 +114,16 @@ namespace agalag.game
 
             if(!_rotationMatrix.HasValue)
                 _rotationMatrix = Matrix.CreateRotationZ(MathHelper.ToRadians(90));
+
+            _weapon.onShoot += PlayShotSound;
         }
         protected override void ReserveToPool() => Pool.Release(this);
 
         protected override void SubReserve() {
             base.SubReserve();
+
+            _weapon.onShoot = null;
+            
             if(_wasKilled)
                 this._parent.TakeDamage(1);
         }

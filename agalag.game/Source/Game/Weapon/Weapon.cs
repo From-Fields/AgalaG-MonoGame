@@ -22,7 +22,11 @@ namespace agalag.game {
         protected readonly Transform _spawnerTransform;
         protected Texture2D _bulletPrefab;
 
-        protected Weapon(Vector2[] spawnPoints, int maxAmmunition, Transform spawnerTransform, EntityTag shooter = 0, float speed = 2f) : base() {
+        public Action onShoot;
+
+        protected Weapon(Vector2[] spawnPoints, int maxAmmunition, Transform spawnerTransform, EntityTag shooter = 0, float speed = 2f) 
+            : base() 
+        {
             _spawnPoints = spawnPoints;
             _speed = speed;
             _maxAmmunition = maxAmmunition;

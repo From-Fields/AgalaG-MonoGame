@@ -18,12 +18,16 @@ namespace agalag.game
         private int timePassed = 0;
         private int _currentFrame = 0;
 
+        private EntityAudioManager _audioManager;
+
         private static readonly Texture2D _texture = Prefabs.GetTextureOfType<Explosion>();
 
         public Explosion(Vector2 position) : base (_texture, position, scale: Vector2.One * .75f, 
             new RectangleCollider(new Point(284, 284)), layer: Layer.Objects)
         {
             //Debug.WriteLine("EXPLOOOOOOOOOSIOOOOOOOOOOON!");
+            _audioManager = new EntityAudioManager(deathSound: Prefabs.GetSoundOfType<Explosion>());
+            _audioManager.PlaySound(EntitySoundType.Death);
         }
 
         private void DestroySelf()

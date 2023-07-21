@@ -34,6 +34,90 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Title.spritefont
 
+#begin Sounds/Damage/sfx_dmg_player.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Damage/sfx_dmg_player.ogg
+
+#begin Sounds/Damage/sfx_dmg_shield.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Damage/sfx_dmg_shield.ogg
+
+#begin Sounds/Death/sfx_death_enemy.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/sfx_death_enemy.ogg
+
+#begin Sounds/Death/sfx_death_player.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/sfx_death_player.ogg
+
+#begin Sounds/Movement/sfx_move_bumble.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Movement/sfx_move_bumble.ogg
+
+#begin Sounds/Movement/sfx_move_gemini.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Movement/sfx_move_gemini.ogg
+
+#begin Sounds/Movement/sfx_move_kamikaze.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Movement/sfx_move_kamikaze.ogg
+
+#begin Sounds/Movement/sfx_move_player.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Movement/sfx_move_player.ogg
+
+#begin Sounds/PickUp/sfx_bounce.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/PickUp/sfx_bounce.ogg
+
+#begin Sounds/PickUp/sfx_powerup.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/PickUp/sfx_powerup.ogg
+
+#begin Sounds/Shot/sfx_explosion.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Shot/sfx_explosion.ogg
+
+#begin Sounds/Shot/sfx_shot_bumble.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Shot/sfx_shot_bumble.ogg
+
+#begin Sounds/Shot/sfx_shot_gemini.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Shot/sfx_shot_gemini.ogg
+
+#begin Sounds/Shot/sfx_shot_player.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Shot/sfx_shot_player.ogg
+
 #begin Sprites/back.png
 /importer:TextureImporter
 /processor:TextureProcessor

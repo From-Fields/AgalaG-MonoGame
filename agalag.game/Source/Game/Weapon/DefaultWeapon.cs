@@ -37,6 +37,7 @@ namespace agalag.game
             Vector2 direction = (_shooter == EntityTag.PlayerBullet) ? _direction : new Vector2(0, 1);
             float rotation = (direction == new Vector2(0, -1)) ? 0 : MathHelper.ToRadians(180);
             _ = new Bullet(_spawnPoints[0] + _spawnerTransform.position, _damage, direction, _speed, _bulletPrefab, _shooter, rotation);
+            onShoot?.Invoke();
         }
 
         public void SetAttributes(Vector2? direction = null, int maxAmmunition = -1, float speed = -1, float cooldown = -1, int damage = -1, Texture2D bulletTexture = null) {
@@ -46,9 +47,6 @@ namespace agalag.game
             this._cooldown = (cooldown != -1) ? cooldown : _cooldown;
             this._damage = (damage != -1)? damage : _damage;
             this._bulletPrefab = (bulletTexture != null) ? bulletTexture : _bulletPrefab;
-
-            
-            System.Diagnostics.Debug.WriteLine(bulletTexture);
         }
     }
 }

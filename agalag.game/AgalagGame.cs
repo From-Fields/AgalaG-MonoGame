@@ -7,6 +7,7 @@ using System.Diagnostics;
 using agalag.engine.content;
 using Microsoft.Xna.Framework.Content;
 using agalag.game.Source.Game.Scenes;
+using Microsoft.Xna.Framework.Audio;
 
 namespace agalag.game;
 
@@ -67,57 +68,136 @@ public class AgalagGame : Game
 
         Utils.ScreenManager = _graphics;
 
+        LoadPlayer();
+        LoadEnemies();
+        LoadPickUps();
+        LoadUI();
+
         Prefabs.AddShape(new Texture2D(GraphicsDevice, 80, 30), Shapes.Rectangle);
 		
         Texture2D background = Content.Load<Texture2D>("Sprites/bg");
-        Prefabs.AddPrefab<Background>(background);
+        Prefabs.AddTexture<Background>(background);
+
+        _sceneManager.SetDefaultScene(new MainMenuScene());
+        _sceneManager.SwitchToDefaultScene(Content);
+    }
+    private void LoadPlayer() 
+    {
 
         //Weapons
-        Prefabs.AddPrefab<Bullet>(Content.Load<Texture2D>("Sprites/bullet_player"));
+        Prefabs.AddTexture<Bullet>(Content.Load<Texture2D>("Sprites/bullet_player"));
         Prefabs.AddSprite("missile", Content.Load<Texture2D>("Sprites/missilePlayer"));
-        Prefabs.AddPrefab<Explosion>(Content.Load<Texture2D>("Sprites/explosion"));
+
+        
+        SoundEffect explosionSound = Content.Load<SoundEffect>("Sounds/Shot/sfx_explosion"); 
+        Prefabs.AddTexture<Explosion>(Content.Load<Texture2D>("Sprites/explosion"));
+        Prefabs.AddSound<Explosion>(explosionSound);
         
         //Player
+        SoundEffect playerDmgSound = Content.Load<SoundEffect>("Sounds/Damage/sfx_dmg_player"); 
+        SoundEffect playerDeathSound = Content.Load<SoundEffect>("Sounds/Death/sfx_death_player"); 
+        SoundEffect playerMoveSound = Content.Load<SoundEffect>("Sounds/Movement/sfx_move_player"); 
+        SoundEffect playerShotSound = Content.Load<SoundEffect>("Sounds/Shot/sfx_shot_player"); 
+        SoundEffect powerUpSound = Content.Load<SoundEffect>("Sounds/PickUp/sfx_powerup");
         Texture2D playerSprite = Content.Load<Texture2D>("Sprites/player");
-        Prefabs.AddPrefab<Player>(new Player(playerSprite, Vector2.Zero), playerSprite);
+        Prefabs.AddPrefab<Player>(
+            new Player(
+                playerSprite, Vector2.Zero,
+                audioManager: new EntityAudioManager(
+                    dmgSound: playerDmgSound,
+                    deathSound: playerDeathSound,
+                    moveSound: playerMoveSound, 
+                    shotSound: playerShotSound,
+                    powerUpSound: powerUpSound
+                )
+            ),
+            playerSprite
+        );
+
+    }
+    private void LoadEnemies() 
+    {
+        SoundEffect deathSound = Content.Load<SoundEffect>("Sounds/Death/sfx_death_enemy");
 
         // Kamikaze
         Texture2D kamikazeSprite = Content.Load<Texture2D>("Sprites/enemy_kamikaze");
-        Prefabs.AddPrefab<EnemyKamikaze>(new EnemyKamikaze(kamikazeSprite, Vector2.Zero, Vector2.One), kamikazeSprite);
+        SoundEffect kamiMoveSound = Content.Load<SoundEffect>("Sounds/Movement/sfx_move_kamikaze"); 
+        Prefabs.AddPrefab<EnemyKamikaze>(
+            new EnemyKamikaze(
+                kamikazeSprite, Vector2.Zero, Vector2.One, 
+                audioManager: new EntityAudioManager(deathSound: deathSound, moveSound: kamiMoveSound)
+            ),
+            kamikazeSprite
+        );
         // Gemini
-        Prefabs.AddPrefab<EnemyGemini>(new EnemyGemini(null, Vector2.Zero, Vector2.One));
+        SoundEffect geminiMoveSound = Content.Load<SoundEffect>("Sounds/Movement/sfx_move_gemini"); 
+        Prefabs.AddPrefab<EnemyGemini>(
+            new EnemyGemini(
+                null, Vector2.Zero, Vector2.One,
+                audioManager: new EntityAudioManager(moveSound: geminiMoveSound)
+            )
+        );
         // GeminiChild
         Texture2D geminiBullet = Content.Load<Texture2D>("Sprites/bullet_gemini");
         Texture2D geminiChildSprite = Content.Load<Texture2D>("Sprites/enemy_gemini");
-        Prefabs.AddPrefab<EnemyGeminiChild>(new EnemyGeminiChild(geminiChildSprite, Vector2.Zero, Vector2.One, bulletTexture: geminiBullet), geminiChildSprite);
+        SoundEffect geminiShotSound = Content.Load<SoundEffect>("Sounds/Shot/sfx_shot_gemini"); 
+        Prefabs.AddPrefab<EnemyGeminiChild>(
+            new EnemyGeminiChild(
+                geminiChildSprite, Vector2.Zero, Vector2.One, bulletTexture: geminiBullet,
+                audioManager: new EntityAudioManager(deathSound: deathSound, shotSound: geminiShotSound)
+            ), 
+            geminiChildSprite
+        );
         // Bumblebee
         Texture2D bumblebeeBullet = Content.Load<Texture2D>("Sprites/bullet_bumblebee");
         Texture2D bumblebeeSprite = Content.Load<Texture2D>("Sprites/enemy_bumblebee");
-        Prefabs.AddPrefab<EnemyBumblebee>(new EnemyBumblebee(bumblebeeSprite, Vector2.Zero, Vector2.One, bulletTexture: bumblebeeBullet), bumblebeeSprite);
+        SoundEffect bumbleMoveSound = Content.Load<SoundEffect>("Sounds/Movement/sfx_move_bumble"); 
+        SoundEffect bumbleShotSound = Content.Load<SoundEffect>("Sounds/Shot/sfx_shot_bumble"); 
+        Prefabs.AddPrefab<EnemyBumblebee>(
+            new EnemyBumblebee(
+                bumblebeeSprite, Vector2.Zero, Vector2.One, bulletTexture: bumblebeeBullet,
+                audioManager: new EntityAudioManager(deathSound: deathSound, moveSound: bumbleMoveSound, shotSound: bumbleShotSound)
+            ), 
+            bumblebeeSprite
+        );
 
         //Hazard
         Texture2D hazardSprite = Content.Load<Texture2D>("Sprites/hazard_a");
-        Prefabs.AddPrefab<Hazard>(new Hazard(hazardSprite), hazardSprite);
+        SoundEffect hazardBounceSound = Content.Load<SoundEffect>("Sounds/PickUp/sfx_bounce"); 
+        Prefabs.AddPrefab<Hazard>(
+            new Hazard(
+                hazardSprite,
+                audioManager: new EntityAudioManager(deathSound: deathSound, bounceSound: hazardBounceSound)
+            ), 
+            hazardSprite
+        );
+    }
+    private void LoadPickUps() 
+    {
+        // Sounds
+        SoundEffect pickupSound = Content.Load<SoundEffect>("Sounds/PickUp/sfx_bounce"); 
+        Prefabs.AddSound<PickUp>(pickupSound);
+        SoundEffect shieldSound = Content.Load<SoundEffect>("Sounds/Damage/sfx_dmg_shield");
+        Prefabs.AddSound<ShieldPowerUp>(shieldSound);
 
         // PickUp
-        Prefabs.AddPrefab<PickUp>(new PickUp());
+        Prefabs.AddPrefab<PickUp>(new PickUp(audioManager: new EntityAudioManager(bounceSound: pickupSound)));
         // Shield
         Texture2D shieldSprite = Content.Load<Texture2D>("Sprites/pu_shield");
-        Prefabs.AddPrefab<ShieldPowerUp>(shieldSprite);
+        Prefabs.AddTexture<ShieldPowerUp>(shieldSprite);
         // Repair
         Texture2D repairSprite = Content.Load<Texture2D>("Sprites/pu_repair");
-        Prefabs.AddPrefab<RepairPowerUp>(repairSprite);
+        Prefabs.AddTexture<RepairPowerUp>(repairSprite);
         // Repair
         Texture2D multishotSprite = Content.Load<Texture2D>("Sprites/pu_multishot");
-        Prefabs.AddPrefab<TripleMachineGunPowerUp>(multishotSprite);
-
+        Prefabs.AddTexture<TripleMachineGunPowerUp>(multishotSprite);
+    }
+    private void LoadUI()
+    {
 		// UI
 		Prefabs.DefineStandardFont(Content.Load<SpriteFont>("Fonts/Standard"));
 		Prefabs.AddFont("Title", Content.Load<SpriteFont>("Fonts/Title"));
         Prefabs.AddFont("Button", Content.Load<SpriteFont>("Fonts/ButtonText"));
-
-        _sceneManager.SetDefaultScene(new MainMenuScene());
-        _sceneManager.SwitchToDefaultScene(Content);
     }
 
     protected override void Update(GameTime gameTime)

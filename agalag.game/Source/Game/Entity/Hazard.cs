@@ -17,9 +17,13 @@ namespace agalag.game
         private float _rotationSpeed;
         private Vector2 _initialDirection = Vector2.Zero;
         private Rectangle _levelBounds;
+        private EntityAudioManager _audioManager;
 
-        public Hazard(Hazard original) : this(original._sprite.Texture) { } 
-        public Hazard(Texture2D sprite) : base(sprite: sprite, Vector2.Zero, Vector2.One) { } 
+        public Hazard(Hazard original) : this(original._sprite.Texture, original._audioManager) { } 
+        public Hazard(Texture2D sprite, EntityAudioManager audioManager = null) : base(sprite: sprite, Vector2.Zero, Vector2.One) 
+        {
+            this._audioManager = audioManager;
+        } 
 
         public void Initialize(
             Vector2 position, Vector2 direction, Rectangle levelBounds,
@@ -47,10 +51,6 @@ namespace agalag.game
             this._maxBounces = maxBounces;
             this._currentBounces = 0;
 
-            System.Diagnostics.Debug.WriteLine(_canBounce);
-            System.Diagnostics.Debug.WriteLine(_isWithinBounds);
-            System.Diagnostics.Debug.WriteLine(_maxBounces);
-
             this._damage = damage;
             this._health = health;
             
@@ -69,6 +69,7 @@ namespace agalag.game
 
             _transform.velocity = targetVelocity;         
             this._currentBounces++;
+            _audioManager?.PlaySound(EntitySoundType.Bounce);
         }
         private void DoRotation(FixedFrameTime time) 
         {
@@ -105,10 +106,6 @@ namespace agalag.game
                         ReflectMovement(other);
                     else if(_isWithinBounds) {
                         RoutineManager.Instance.CallbackTimer(1.5f, ReserveToPool);
-
-                        System.Diagnostics.Debug.WriteLine(_canBounce);
-                        System.Diagnostics.Debug.WriteLine(_isWithinBounds);
-                        System.Diagnostics.Debug.WriteLine(_maxBounces);
                     }
                 }
 
@@ -131,8 +128,6 @@ namespace agalag.game
 
             SetActive(false);
             Pool.Release(this);
-            
-            System.Diagnostics.Debug.WriteLine("meep");
         }
 
         public override int Health => (int) this._health;
@@ -149,6 +144,9 @@ namespace agalag.game
             if(_health <= 0)
                 Die();
         }
-        public override void Die() => ReserveToPool();
+        public override void Die(){
+            _audioManager?.PlaySound(EntitySoundType.Death);
+            ReserveToPool();
+        } 
     }
 }

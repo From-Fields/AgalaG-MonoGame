@@ -35,6 +35,8 @@ namespace agalag.game
             _ = new Bullet(_spawnPoints[0] + _spawnerTransform.position, Vector2.One * 1.8f, _damage, direction, 
                 _speed, _bulletPrefab, _shooter, rotation, explosion: true, life: 1.2f);
             _currentAmmunition--;
+
+            onShoot?.Invoke();
         }
 
         public override bool isEmpty()

@@ -17,10 +17,10 @@ namespace agalag.game
         private int _currentHealth;
 
         //Constructors
-        public EnemyKamikaze(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null) : 
-        base(sprite, position, scale, rotation, collider) { }
+        public EnemyKamikaze(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, EntityAudioManager audioManager = null) : 
+        base(sprite, position, scale, rotation, collider, audioManager) { }
         public EnemyKamikaze(EnemyKamikaze prefab, bool active = false) : 
-        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider) 
+        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._audioManager) 
         {
             SetActive(active);
         }
@@ -74,8 +74,8 @@ namespace agalag.game
             currentAcceleration = _defaultAcceleration;
 
             _collisionDamage = _defaultCollisionDamage;
-
-            System.Diagnostics.Debug.WriteLine(this + ": " + Tag);
+            
+            _audioManager.PlaySound(EntitySoundType.Movement, looping: true);
         }
         protected override void ReserveToPool() => Pool.Release(this);
         #endregion    

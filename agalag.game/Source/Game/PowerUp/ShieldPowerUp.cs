@@ -19,6 +19,7 @@ namespace agalag.game
             return damage - 1;
         }
         public override void OnEnd() {
+            _player.PlaySoundOneShot(Prefabs.GetSoundOfType<ShieldPowerUp>().CreateInstance(), AudioGroup.SFX);
             _player.RemovePowerUp(this);
         }
     }

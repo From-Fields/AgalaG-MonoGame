@@ -50,7 +50,7 @@ namespace agalag.test
             Background background = new Background(Prefabs.GetTextureOfType<Background>(), new Rectangle(0, 0, 1920, 1080));
 
 
-            Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540));
+            Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540), active: true);
 
             // PickUp pickUp = EntityPool<PickUp>.Instance.Pool.Get();
 
@@ -110,7 +110,7 @@ namespace agalag.test
                         new Queue<iEnemyAction>(new [] {
                             new MoveTowards(new Vector2(450, 500), 1.5f, 1, 0.9f)
                         }),
-                        drop: new TripleMachineGunPowerUp()
+                        drop: new ShieldPowerUp()
                     ),
                     //     new WaveUnit<EnemyBumblebee>(
                     //         new Vector2(1920 - 700, -64),

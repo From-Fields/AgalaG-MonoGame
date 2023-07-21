@@ -42,6 +42,7 @@ namespace agalag.game
             }
 
             _currentAmmunition--;
+            onShoot?.Invoke();
         }
 
         public override bool isEmpty()

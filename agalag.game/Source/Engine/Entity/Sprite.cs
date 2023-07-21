@@ -71,8 +71,6 @@ namespace agalag.engine
 
             tint = (tint.HasValue) ? tint.Value : Color.White;
 
-            System.Diagnostics.Debug.WriteLine(opacity);
-
             spriteBatch.Draw(
                 _sprite,
                 position,

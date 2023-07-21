@@ -32,11 +32,14 @@ namespace agalag.game
         
         protected Rectangle _levelBounds;
 
-        protected Enemy(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null) 
+        protected EntityAudioManager _audioManager;
+
+        protected Enemy(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, EntityAudioManager audioManager = null) 
         : base(sprite, position, scale, rotation, collider) {
             SetTag(EntityTag.Enemy);
             _transform.drag = 10f;
             _transform.simulate = true;
+            _audioManager = audioManager;
         }
         
         public float DesiredSpeed => currentSpeed;
@@ -137,6 +140,9 @@ namespace agalag.game
             SubFixedUpdate(gameTime, fixedGameTime);
         }
 
+        // Sound
+        protected void PlayShotSound() => _audioManager.PlaySound(EntitySoundType.Shot);
+
         //Abstract Methods
         protected abstract void SubInitialize();
         protected abstract void ReserveToPool();
@@ -173,6 +179,9 @@ namespace agalag.game
 
                 EntityPool<PickUp>.Instance.Pool.Get().Initialize(_droppedItem, _transform.position, randomDirection, _levelBounds);
             }
+
+            _audioManager.PlaySound(EntitySoundType.Death);
+            _audioManager.StopSound(EntitySoundType.Movement);
 
             Reserve();
         }
