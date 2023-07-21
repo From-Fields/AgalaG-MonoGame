@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using agalag.engine;
+using agalag.engine.routines;
 using agalag.game.input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,6 +15,8 @@ namespace agalag.game
         public bool isDead { get; private set; } = false;
         private int _maxHealth = 3;
         private int _currentHealth;
+        private bool _isInvulnerable = false;
+        private float _frameAccumulator;
         
         public Weapon _currentWeapon;
         private Weapon _defaultWeapon = null;
@@ -51,6 +54,9 @@ namespace agalag.game
             _transform.simulate = true;
             _movement = Vector2.Zero;
             _defaultWeapon = new DefaultWeapon(_transform, EntityTag.PlayerBullet);
+
+            _isInvulnerable = false;
+            _frameAccumulator = 0;
 
             //Updating Current Stuff
             currentAcceleration = _defaultAcceleration;
@@ -92,6 +98,13 @@ namespace agalag.game
         {
             this._currentHealth = Math.Clamp(_currentHealth + amount, 0, _maxHealth);
         }
+        private void SetInvulnerability(bool invulnerable)
+        {
+            _isInvulnerable = invulnerable;
+
+            if(invulnerable)
+                RoutineManager.Instance.CallbackTimer(1.5f, () => SetInvulnerability(false));
+        }
         
         #region InterfaceImplementation
         //Entity
@@ -125,6 +138,9 @@ namespace agalag.game
         
         public override void TakeDamage(int damage)
         {
+            if(_isInvulnerable)
+                return;
+
             int _damage = damage;
 
             for (int i = 0; i < powerUps.Count; i++) {
@@ -136,6 +152,7 @@ namespace agalag.game
             //Debug.WriteLine((_currentHealth + damage) + "-" + damage + "=" + _currentHealth);
             if(_currentHealth == 0)
                 Die();
+            SetInvulnerability(true);
         }        
         
         public override void Die()
@@ -158,7 +175,19 @@ namespace agalag.game
         public override void Draw(SpriteBatch spriteBatch)
         {
             if(this._sprite != null) {
-                this._sprite.Draw(Transform, spriteBatch);
+                float alpha = _sprite.Opacity;
+
+                if(_isInvulnerable) {
+                    if(_frameAccumulator >= 5) {
+                        _frameAccumulator = 0;
+                        alpha = (alpha == 1) ? 0.5f : 1;
+                    }
+                    _frameAccumulator++;
+                }
+                else
+                    alpha = 1;
+
+                this._sprite.Draw(Transform, spriteBatch, opacity: alpha);
             }
         }
         
