@@ -22,10 +22,11 @@ namespace agalag.game
 
         private static readonly Texture2D _texture = Prefabs.GetTextureOfType<Explosion>();
 
+        private Vector2 _offset = new Vector2(852, 0);
+
         public Explosion(Vector2 position) : base (_texture, position, scale: Vector2.One * .75f, 
             new RectangleCollider(new Point(284, 284)), layer: Layer.Objects)
         {
-            //Debug.WriteLine("EXPLOOOOOOOOOSIOOOOOOOOOOON!");
             _audioManager = new EntityAudioManager(deathSound: Prefabs.GetSoundOfType<Explosion>());
             _audioManager.PlaySound(EntitySoundType.Death);
         }
@@ -40,12 +41,13 @@ namespace agalag.game
         {
             if (_sprite == null) return;
 
-            _sprite.Draw(_transform.position + new Vector2(852, 0) ,_transform, spriteBatch, new Rectangle(_currentFrame * 284, 0, 284, 284));
+            _sprite.Draw(_transform.position + _offset ,_transform, spriteBatch, new Rectangle(_currentFrame * 284, 0, 284, 284));
         }
 
         public override void Update(GameTime gameTime)
         {
-            //_transform.scale += Vector2.One * .03f;
+            _transform.scale += Vector2.One * .03f;
+            _offset.X += 34f;
 
             timePassed++;
             if (timePassed > _animationSpeed)
