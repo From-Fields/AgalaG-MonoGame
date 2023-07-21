@@ -26,14 +26,18 @@ namespace agalag.game
         private Texture2D _bulletTexture;
 
         //Constructors
-        public EnemyBumblebee(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, Texture2D bulletTexture = null) : 
-        base(sprite, position, scale, rotation, collider) 
+        public EnemyBumblebee(
+            Texture2D sprite, Vector2 position, Vector2 scale, 
+            float rotation = 0, iCollider collider = null, 
+            Texture2D bulletTexture = null, EntityAudioManager audioManager = null
+        ) : 
+            base(sprite, position, scale, rotation, collider, audioManager) 
         { 
             _weapon = new DefaultWeapon(_transform, EntityTag.Enemy);
             _bulletTexture = bulletTexture;
         }
         public EnemyBumblebee(EnemyBumblebee prefab, bool active = false) : 
-        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._bulletTexture) 
+        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._bulletTexture, prefab._audioManager) 
         {
             SetActive(active);
         }
@@ -94,8 +98,14 @@ namespace agalag.game
             _collisionDamage = _defaultCollisionDamage;
 
             this.SetWeapon(_weaponCooldown, _weaponDamage, _missileSpeed);
+
+            _weapon.onShoot += PlayShotSound;
+            _audioManager.PlaySound(EntitySoundType.Movement, looping: true);
         }
-        protected override void ReserveToPool() => Pool.Release(this);
+        protected override void ReserveToPool() {
+            _weapon.onShoot = null;
+            Pool.Release(this);
+        } 
         #endregion    
     }
 }

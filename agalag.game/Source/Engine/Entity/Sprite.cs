@@ -8,6 +8,7 @@ namespace agalag.engine
     {
         //Attributes
         private bool _visible;
+        private float _opacity;
         private Texture2D _sprite;
         public Vector2 anchor;
         public Vector2 offset;
@@ -16,6 +17,7 @@ namespace agalag.engine
         public bool IsVisible => this._visible;
         private Vector2 _Dimensions => new Vector2(_sprite.Width, _sprite.Height);
         public Texture2D Texture => this._sprite;
+        public float Opacity => _opacity;
 
         //Constructors
         public Sprite(Texture2D sprite, bool visibility = true, Vector2? _anchor = null, Vector2? _offset = null)
@@ -30,27 +32,27 @@ namespace agalag.engine
         }
 
         //Methods
-        public void Draw(Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
+        public void Draw(Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null, float opacity = 1f, Color? tint = null)
         {
-            Draw(transform.position, transform, spriteBatch, area);
+            Draw(transform.position, transform, spriteBatch, area, opacity, tint);
         }
 
-        public void Draw(Vector2 position, Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
+        public void Draw(Vector2 position, Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null, float opacity = 1f, Color? tint = null)
         {
-            Draw(position, transform.scale, transform, spriteBatch, area);
+            Draw(position, transform.scale, transform, spriteBatch, area, opacity, tint);
         }
 
-        public void Draw(Vector2 position, Vector2 scale, Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
+        public void Draw(Vector2 position, Vector2 scale, Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null, float opacity = 1f, Color? tint = null)
         {
-            Draw(position, scale, transform.rotation, transform, spriteBatch, area);
+            Draw(position, scale, transform.rotation, transform, spriteBatch, area, opacity, tint);
         }
 
-        public void Draw(Vector2 position, Vector2 scale, float rotation, Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
+        public void Draw(Vector2 position, Vector2 scale, float rotation, Transform transform, SpriteBatch spriteBatch, Nullable<Rectangle> area = null, float opacity = 1f, Color? tint = null)
         {
-            Draw(position, scale, rotation, transform.velocity, spriteBatch, area);
+            Draw(position, scale, rotation, transform.velocity, spriteBatch, area, opacity, tint);
         }
 
-        public void Draw(Vector2 position, Vector2 scale, float rotation, Vector2 velocity_, SpriteBatch spriteBatch, Nullable<Rectangle> area = null)
+        public void Draw(Vector2 position, Vector2 scale, float rotation, Vector2 velocity_, SpriteBatch spriteBatch, Nullable<Rectangle> area = null, float opacity = -1f, Color? tint = null)
         {
             if(this._sprite == null || !this._visible)
                 return;
@@ -64,11 +66,16 @@ namespace agalag.engine
             Vector2 oldPos = position;
             position = Vector2.Lerp(position - velocity, position, FixedUpdater.FixedFrameTime.frameProgress);
 
+            opacity = (opacity != -1) ? opacity : _opacity;
+            _opacity = opacity;
+
+            tint = (tint.HasValue) ? tint.Value : Color.White;
+
             spriteBatch.Draw(
                 _sprite,
                 position,
                 area,
-                Color.White,
+                tint.Value * _opacity,
                 rotation,
                 new Vector2(_Dimensions.X * anchor.X, _Dimensions.Y * anchor.X),
                 scale,

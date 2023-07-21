@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using agalag.engine;
+using agalag.engine.routines;
 using agalag.game.input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace agalag.game
@@ -14,6 +16,8 @@ namespace agalag.game
         public bool isDead { get; private set; } = false;
         private int _maxHealth = 3;
         private int _currentHealth;
+        private bool _isInvulnerable = false;
+        private float _frameAccumulator;
         
         public Weapon _currentWeapon;
         private Weapon _defaultWeapon = null;
@@ -35,22 +39,30 @@ namespace agalag.game
 
         //Input Variables
         private Vector2 _movement;
+        private EntityAudioManager _audioManager;
 
         public int MaxHealth => _maxHealth;
         
         //Constructors
-        public Player(Player player, Vector2 position):
-            this(player._sprite.Texture, position, player.Transform.scale, player.Transform.rotation, player.Collider) { }
-        public Player(Texture2D sprite, Vector2 position): 
-            this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(72, 64), offset: new Point(0, 4))) { }
+        public Player(Player player, Vector2 position, EntityAudioManager audioManager = null, bool active = false):
+            this(player._sprite.Texture, position, player.Transform.scale, player.Transform.rotation, player.Collider, player._audioManager, active) { }
+        public Player(Texture2D sprite, Vector2 position, EntityAudioManager audioManager = null, bool active = false): 
+            this(sprite, position, Vector2.One, 0, new RectangleCollider(new Point(72, 64), offset: new Point(0, 4)), audioManager, active) { }
         
-        public Player(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0f, iCollider collider = null) 
+        public Player(
+            Texture2D sprite, Vector2 position, Vector2 scale, 
+            float rotation = 0f, iCollider collider = null, EntityAudioManager audioManager = null, bool active = false
+        ) 
             : base(sprite, position, scale, rotation, collider) 
         {
             SetTag(EntityTag.Player);
             _transform.simulate = true;
             _movement = Vector2.Zero;
             _defaultWeapon = new DefaultWeapon(_transform, EntityTag.PlayerBullet);
+            SwitchToDefaultWeapon();
+
+            _isInvulnerable = false;
+            _frameAccumulator = 0;
 
             //Updating Current Stuff
             currentAcceleration = _defaultAcceleration;
@@ -59,12 +71,20 @@ namespace agalag.game
             _currentHealth = _maxHealth;
             //Controls
             _inputHandler = InputHandler.Instance;
+
+            _audioManager = audioManager;
+            
+            if(active)
+                PlaySound(EntitySoundType.Movement, looping: true);
+
+            this.SetActive(active);
         }
 
         //Methods
         public void SwitchWeapon(Weapon newWeapon) 
         {
             this._currentWeapon = newWeapon;
+            this._currentWeapon.onShoot += PlayShotSound;
         }
 
         public void SwitchToDefaultWeapon()
@@ -76,12 +96,15 @@ namespace agalag.game
         {
             newPowerUp.OnPickup(this);
 
-            if(newPowerUp.IsInstant)
+            if(newPowerUp.IsInstant) {
+                PlaySound(EntitySoundType.PowerUp);
                 return;
+            }
 
             if(!this.powerUps.Contains(newPowerUp)) 
             {
                 this.powerUps.Add(newPowerUp);
+                PlaySound(EntitySoundType.PowerUp);
             }
         }
         public void RemovePowerUp(iPowerUp powerUp) 
@@ -92,6 +115,21 @@ namespace agalag.game
         {
             this._currentHealth = Math.Clamp(_currentHealth + amount, 0, _maxHealth);
         }
+        private void SetInvulnerability(bool invulnerable)
+        {
+            _isInvulnerable = invulnerable;
+
+            if(invulnerable)
+                RoutineManager.Instance.CallbackTimer(1.5f, () => SetInvulnerability(false));
+        }
+
+        // Sound
+        private void PlaySound(EntitySoundType soundType, Vector2? position = null, AudioListener listener = null, bool looping = false) 
+            => _audioManager.PlaySound(soundType, position, listener, looping);
+        private void PlayShotSound() => _audioManager.PlaySound(EntitySoundType.Shot);
+        private void StopSound(EntitySoundType soundType) => _audioManager.StopSound(soundType);
+        public void PlaySoundOneShot(SoundEffectInstance instance, AudioGroup audioGroup, Vector2? position = null, AudioListener listener = null) 
+            => _audioManager.PlaySoundOneShot(instance, audioGroup, position, listener);
         
         #region InterfaceImplementation
         //Entity
@@ -125,17 +163,26 @@ namespace agalag.game
         
         public override void TakeDamage(int damage)
         {
+            if(_isInvulnerable)
+                return;
+
             int _damage = damage;
 
             for (int i = 0; i < powerUps.Count; i++) {
                 _damage = powerUps[i].OnTakeDamage(_damage, _currentHealth); 
             }
 
+            if(_damage == 0)
+                return;
+
+            PlaySound(EntitySoundType.Damage);
+
             this._currentHealth = Math.Clamp(_currentHealth - _damage, 0, _maxHealth);
 
             //Debug.WriteLine((_currentHealth + damage) + "-" + damage + "=" + _currentHealth);
             if(_currentHealth == 0)
                 Die();
+            SetInvulnerability(true);
         }        
         
         public override void Die()
@@ -149,6 +196,9 @@ namespace agalag.game
             if(!die)
                 return;
 
+            PlaySound(EntitySoundType.Death);
+            StopSound(EntitySoundType.Movement);
+
             this.SetActive(false);
             this.isDead = true;
             this.onDeath?.Invoke();
@@ -158,7 +208,19 @@ namespace agalag.game
         public override void Draw(SpriteBatch spriteBatch)
         {
             if(this._sprite != null) {
-                this._sprite.Draw(Transform, spriteBatch);
+                float alpha = _sprite.Opacity;
+
+                if(_isInvulnerable) {
+                    if(_frameAccumulator >= 5) {
+                        _frameAccumulator = 0;
+                        alpha = (alpha == 1) ? 0.5f : 1;
+                    }
+                    _frameAccumulator++;
+                }
+                else
+                    alpha = 1;
+
+                this._sprite.Draw(Transform, spriteBatch, opacity: alpha);
             }
         }
         

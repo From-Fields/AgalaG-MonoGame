@@ -80,6 +80,9 @@ namespace agalag.engine
                 if(_collisions[i].Other == null || !_collisions[i].Other.entity.IsActive)
                     continue;
 
+                if(Collider == null || Transform == null)
+                    return;
+
                 if(_transform.simulate && _collisions[i].IsSolid && _collider.IsSolid) {
                     Vector2 normal = _collisions[i].Normal;
                     Vector2 opposingForce = _transform.velocity;

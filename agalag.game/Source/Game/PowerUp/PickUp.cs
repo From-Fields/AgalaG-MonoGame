@@ -1,6 +1,7 @@
 
 using System;
 using agalag.engine;
+using agalag.engine.content;
 using agalag.engine.pool;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,12 +18,16 @@ namespace agalag.game
 
         // References
         private iPowerUp _powerUp;
+        private EntityAudioManager _audioManager;
 
-        public PickUp(Layer layer = Layer.Default) : base(layer: layer, active: false) { } 
+        public PickUp(Layer layer = Layer.Default, EntityAudioManager audioManager = null) : base(layer: layer, active: false) 
+        { 
+            _audioManager = audioManager;
+        } 
 
         public void Initialize(
-            iPowerUp powerUp, Vector2 position, Vector2 direction, float speed = 750, 
-            bool rotate = true, float rotationSpeed = 100f, 
+            iPowerUp powerUp, Vector2 position, Vector2 direction, Rectangle levelBounds, float speed = 750, 
+            bool rotate = true, float rotationSpeed = 10f, 
             bool doScale = true, float maximumScale = 1.3f, float scaleSpeed = 5f
         ) {
             SetCollider(new RectangleCollider(new Point(40, 40), solid: false));
@@ -36,12 +41,27 @@ namespace agalag.game
             this._tag = EntityTag.PickUp;
             this._sprite = new Sprite(powerUp.Sprite);
             
-            _transform.position = position;
+            _transform.position = SetStartingPosition(position, levelBounds);
             _transform.simulate = true;
             _transform.drag = 0;
             SetActive(true);
             
             ApplyMovement(direction, speed);
+        }
+
+        private Vector2 SetStartingPosition(Vector2 desiredPosition, Rectangle bounds)
+        {
+            Vector2 position = desiredPosition;
+
+            position.X = (desiredPosition.X < Collider.Dimensions.X) ? Collider.Dimensions.X 
+                : (desiredPosition.X > bounds.Width - Collider.Dimensions.X) ? bounds.Width - Collider.Dimensions.X
+                : position.X;
+
+            position.Y = (desiredPosition.Y < Collider.Dimensions.Y) ? Collider.Dimensions.Y
+                : (desiredPosition.Y > bounds.Height - Collider.Dimensions.Y) ? bounds.Height - Collider.Dimensions.Y
+                : position.Y;
+
+            return position;
         }
 
         // Movement Methods
@@ -54,6 +74,7 @@ namespace agalag.game
             Vector2 targetVelocity = velocity.Reflect(normal.normalized());
 
             _transform.velocity = targetVelocity;
+            _audioManager?.PlaySound(EntitySoundType.Bounce);
         }
         private void DoScale(FixedFrameTime time) {
             if(!_doScale)
@@ -98,7 +119,7 @@ namespace agalag.game
         }
 
         // PoolableObject Implementation
-        public PickUp OnCreate() => new PickUp();
+        public PickUp OnCreate() => new PickUp(audioManager: Prefabs.GetPrefabOfType<PickUp>()._audioManager);
         public Action<PickUp> onGetFromPool => null;
         public Action<PickUp> onReleaseToPool => null;
         public iObjectPool<PickUp> Pool => EntityPool<PickUp>.Instance.Pool;

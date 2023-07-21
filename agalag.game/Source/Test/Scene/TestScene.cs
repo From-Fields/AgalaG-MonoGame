@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using agalag.game;
 using agalag.game.input;
 using System.Diagnostics;
+using agalag.engine.content;
 
 namespace agalag.test 
 {
@@ -46,8 +47,10 @@ namespace agalag.test
                 new Wall(new Vector2(1920, 100), new Vector2(0, 1079)), // Bottom
             };
 
+            Background background = new Background(Prefabs.GetTextureOfType<Background>(), new Rectangle(0, 0, 1920, 1080));
 
-            Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540));
+
+            Player player = new Player(GetPrefab<Player>(), new Vector2(960, 540), active: true);
 
             // PickUp pickUp = EntityPool<PickUp>.Instance.Pool.Get();
 
@@ -96,38 +99,48 @@ namespace agalag.test
 
         private void CreateWave()
         {
-            WaveController wave = new WaveController(10, new List<iWaveUnit>(new iWaveUnit[] {
-                new WaveUnit<EnemyBumblebee>(
-                    new Vector2(700, -64),
-                    new MoveAndShoot(new Vector2(700, 180), 0.7f, 1, 0.9f),
-                    new MoveTowards(new Vector2(-450, 500), 1.5f),
-                    new Queue<iEnemyAction>(new [] {
-                        new MoveTowards(new Vector2(450, 500), 1.5f, 1, 0.9f)
-                    }),
-                    drop: new ShieldPowerUp()
-                ),
-            //     new WaveUnit<EnemyBumblebee>(
-            //         new Vector2(1920 - 700, -64),
-            //         new MoveAndShoot(new Vector2(1920 - 700, 180), 1, 1, 0.9f),
-            //         new MoveTowards(new Vector2(1920 + 450, 500)),
-            //         new Queue<iEnemyAction>(new[] {
-            //             new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f)
-            //         })
-            //     )
-            // }));
+            WaveController wave = new WaveController(
+                10  ,  
+                new Rectangle(Point.Zero, new Point(1920, 1080)), 
+                new List<iWaveUnit>(new iWaveUnit[] {
+                    new WaveUnit<EnemyBumblebee>(
+                        new Vector2(700, -64),
+                        new MoveAndShoot(new Vector2(700, 180), 0.7f, 1, 0.9f),
+                        new MoveTowards(new Vector2(-450, 500), 1.5f),
+                        new Queue<iEnemyAction>(new [] {
+                            new MoveTowards(new Vector2(450, 500), 1.5f, 1, 0.9f)
+                        }),
+                        drop: new ShieldPowerUp()
+                    ),
+                    //     new WaveUnit<EnemyBumblebee>(
+                    //         new Vector2(1920 - 700, -64),
+                    //         new MoveAndShoot(new Vector2(1920 - 700, 180), 1, 1, 0.9f),
+                    //         new MoveTowards(new Vector2(1920 + 450, 500)),
+                    //         new Queue<iEnemyAction>(new[] {
+                    //             new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f)
+                    //         })
+                    //     )
+                    // }));
 
-            // WaveController wave = new WaveController(10, new List<iWaveUnit>(new iWaveUnit[] {
-                new WaveUnit<EnemyGemini>(
-                    new Vector2(1920 / 2, 100),
-                    new Shoot(1),
-                    new MoveTowards(new Vector2(-450, 500), 1.5f),
-                    new Queue<iEnemyAction>(new iEnemyAction[] {
-                        new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f),
-                        new WaitSeconds(1)
-                    }),
-                    drop: new RepairPowerUp()
-                )
-            }));
+                    // WaveController wave = new WaveController(10, new List<iWaveUnit>(new iWaveUnit[] {
+                    new WaveUnit<EnemyGemini>(
+                        new Vector2(1920 / 2, 100),
+                        new WaitSeconds(1),
+                        new MoveTowards(new Vector2(-450, 500), 1.5f),
+                        new Queue<iEnemyAction>(new iEnemyAction[] {
+                            new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f),
+                            new WaitSeconds(1)
+                        }),
+                        drop: new RepairPowerUp()
+                    ),
+                    new WaveHazard(
+                        EntityPool<Hazard>.Instance.Pool.Get(),
+                        new Vector2(20, -20), 
+                        new Vector2(0.2f, 1), 
+                        maxBounces: 3
+                    )
+                })
+            );
 
             wave.onWaveDone += CreateWave;
 

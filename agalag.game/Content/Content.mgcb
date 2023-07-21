@@ -34,6 +34,102 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Title.spritefont
 
+#begin Sounds/Damage/sfx_dmg_player.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Damage/sfx_dmg_player.ogg
+
+#begin Sounds/Damage/sfx_dmg_shield.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Damage/sfx_dmg_shield.ogg
+
+#begin Sounds/Death/sfx_death_enemy.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/sfx_death_enemy.ogg
+
+#begin Sounds/Death/sfx_death_player.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death/sfx_death_player.ogg
+
+#begin Sounds/Movement/sfx_move_bumble.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Movement/sfx_move_bumble.ogg
+
+#begin Sounds/Movement/sfx_move_gemini.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Movement/sfx_move_gemini.ogg
+
+#begin Sounds/Movement/sfx_move_kamikaze.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Movement/sfx_move_kamikaze.ogg
+
+#begin Sounds/Movement/sfx_move_player.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Movement/sfx_move_player.ogg
+
+#begin Sounds/PickUp/sfx_bounce.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/PickUp/sfx_bounce.ogg
+
+#begin Sounds/PickUp/sfx_powerup.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/PickUp/sfx_powerup.ogg
+
+#begin Sounds/Shot/sfx_explosion.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Shot/sfx_explosion.ogg
+
+#begin Sounds/Shot/sfx_shot_bumble.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Shot/sfx_shot_bumble.ogg
+
+#begin Sounds/Shot/sfx_shot_gemini.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Shot/sfx_shot_gemini.ogg
+
+#begin Sounds/Shot/sfx_shot_player.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Shot/sfx_shot_player.ogg
+
+#begin Sprites/back.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/back.png;Sprites/bg.png
+
 #begin Sprites/Bullet_Enemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -106,6 +202,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/laserRed06.png;Sprites/bullet_player.png
 
+#begin Sprites/meteorBrown_big1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/meteorBrown_big1.png;Sprites/hazard_a.png
+
 #begin Sprites/Missile_Player.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -130,6 +238,42 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/playerShip2_red.png;Sprites/player.png
 
+#begin Sprites/powerUp_repair.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/powerUp_repair.png;Sprites/pu_repair.png
+
+#begin Sprites/powerUp_shield.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/powerUp_shield.png;Sprites/pu_shield.png
+
+#begin Sprites/poweUp_multishot.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/poweUp_multishot.png;Sprites/pu_multishot.png
+
 #begin Sprites/sonicExplosion_sheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -141,28 +285,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/sonicExplosion_sheet.png;Sprites/explosion.png
-
-#begin Sprites/spaceBuilding_006.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/spaceBuilding_006.png;Sprites/pu_shield.png
-
-#begin Sprites/spaceBuilding_025.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/spaceBuilding_025.png;Sprites/pu_repair.png
 

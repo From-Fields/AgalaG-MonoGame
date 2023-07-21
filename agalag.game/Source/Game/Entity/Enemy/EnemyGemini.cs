@@ -28,10 +28,10 @@ namespace agalag.game
         public iObjectPool<EnemyGeminiChild> _childPool => EntityPool<EnemyGeminiChild>.Instance.Pool;
 
         //Constructors
-        public EnemyGemini(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null) : 
-        base(sprite, position, scale, rotation, collider) { }
+        public EnemyGemini(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, EntityAudioManager audioManager = null) : 
+        base(sprite, position, scale, rotation, collider, audioManager) { }
         public EnemyGemini(EnemyGemini prefab, bool active = false) : 
-        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider) 
+        this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._audioManager) 
         {
             SetActive(active);
         }
@@ -100,10 +100,12 @@ namespace agalag.game
                 float yOffset = (i < 1) ? -1 * this._geminiPositionOffset : this._geminiPositionOffset;
                 Vector2 position = new Vector2(this.Position.X, this.Position.Y + yOffset);
 
-                child.Initialize(new Queue<iEnemyAction>(), null, new WaitSeconds(200), position);
+                child.Initialize(new Queue<iEnemyAction>(), null, new WaitSeconds(200), position, _levelBounds);
                 child.SetParent(this, _geminiPositionOffset, _orbitingVelocity);
                 child.SetWeapon(_weaponCooldown, _geminiMissileDamage, _missileSpeed);
             }
+            
+            _audioManager.PlaySound(EntitySoundType.Movement, looping: true);
         }
         protected override void ReserveToPool() => Pool.Release(this);
 
