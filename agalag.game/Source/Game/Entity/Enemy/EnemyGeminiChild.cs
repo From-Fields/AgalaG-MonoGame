@@ -159,8 +159,6 @@ namespace agalag.game
                     _desiredVelocity = Vector2.Zero;
                 }
             }
-            // Debug.WriteLine("Tangent: " + _tangent);
-            // Debug.WriteLine("ToChild: " + _tangent);
         }
         #endregion    
     }

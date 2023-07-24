@@ -9,6 +9,7 @@ namespace agalag.engine
     public abstract class MonoEntity: iObject, IDisposable
     {
         //Attributes
+        protected bool _executeOnPause;
         protected bool _active;
         protected Sprite _sprite;
         protected iCollider _collider;
@@ -25,27 +26,31 @@ namespace agalag.engine
         public EntityTag Tag => _tag;
         protected EntityTag SetTag(EntityTag tag) => _tag = tag;
 
+        public bool ExecuteOnPause => _executeOnPause;
+
         //Constructors
         #region Constructors
 
-        public MonoEntity(Texture2D sprite = null, Layer layer = Layer.Default, Vector2? offset = null, bool active = false) : 
-            this(sprite, Vector2.Zero, Vector2.One, 0f, layer, offset, active) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Layer layer = Layer.Default, Vector2? offset = null, bool active = false): 
-            this(sprite, position, Vector2.One, 0f, layer, offset, active) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, Layer layer = Layer.Default, Vector2? offset = null, bool active = false): 
-            this(sprite, position, scale, 0f, layer, offset, active) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, Layer layer = Layer.Default, Vector2? offset = null, bool active = false) 
+        public MonoEntity(Texture2D sprite = null, Layer layer = Layer.Default, Vector2? offset = null, bool active = false, bool executeOnPause = false) : 
+            this(sprite, Vector2.Zero, Vector2.One, 0f, layer, offset, active, executeOnPause) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Layer layer = Layer.Default, Vector2? offset = null, bool active = false, bool executeOnPause = false): 
+            this(sprite, position, Vector2.One, 0f, layer, offset, active, executeOnPause) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, Layer layer = Layer.Default, Vector2? offset = null, bool active = false, bool executeOnPause = false): 
+            this(sprite, position, scale, 0f, layer, offset, active, executeOnPause) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, Layer layer = Layer.Default, Vector2? offset = null, bool active = false, bool executeOnPause = false) 
         {
+            this._executeOnPause = executeOnPause;
             this._sprite = new Sprite(sprite, _offset: offset);
             _transform = new Transform(position, scale, rotation);
             SetActive(active);
             SceneManager.AddToMainScene(this, layer);
         }
 
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, iCollider collider, Layer layer = Layer.Default, Vector2? offset = null): 
-            this(sprite, position, scale, 0f, collider, layer) { }
-        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, iCollider collider, Layer layer = Layer.Default, Vector2? offset = null) 
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, iCollider collider, Layer layer = Layer.Default, Vector2? offset = null, bool executeOnPause = false): 
+            this(sprite, position, scale, 0f, collider, layer, offset, executeOnPause) { }
+        public MonoEntity(Texture2D sprite, Vector2 position, Vector2 scale, float rotation, iCollider collider, Layer layer = Layer.Default, Vector2? offset = null, bool executeOnPause = false) 
         {
+            this._executeOnPause = executeOnPause;
             _collisions = new List<Collision>();
             this._sprite = new Sprite(sprite);
             _transform = new Transform(position, scale, rotation);
@@ -107,7 +112,10 @@ namespace agalag.engine
         }
         internal void ClearCollisions() => _collisions.Clear();
         
-        public void ApplyVelocity() => _transform?.ApplyVelocity();
+        public void ApplyVelocity() {
+            if(!SceneManager.Instance.IsPaused || _executeOnPause)
+                _transform?.ApplyVelocity();
+        } 
 
         public void Dispose()
         {
@@ -121,6 +129,19 @@ namespace agalag.engine
         #region Interface Implementation
 
         //iObject
+        public void DoFixedUpdate(GameTime gameTime, FixedFrameTime fixedFrameTime) {
+            if(SceneManager.Instance.IsPaused && !_executeOnPause)
+                return;
+            
+            FixedUpdate(gameTime, fixedFrameTime);
+        }
+        public void DoUpdate(GameTime gameTime) {
+            if(SceneManager.Instance.IsPaused && !_executeOnPause)
+                return;
+            
+            Update(gameTime);
+        }
+
         public abstract void Draw(SpriteBatch spriteBatch);
         public virtual void FixedUpdate(GameTime gameTime, FixedFrameTime fixedFrameTime) { }
         public virtual void Update(GameTime gameTime) { }

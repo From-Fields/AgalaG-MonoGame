@@ -12,6 +12,7 @@ namespace agalag.test
 {
     public class TestScene : Scene
     {
+        bool paused = false;
         List<MonoEntity> entities;
 
         public TestScene(List<SceneLayer> layers = null) : base(layers)
@@ -93,8 +94,10 @@ namespace agalag.test
 
         public override void Update(GameTime gameTime)
         {
-            if(InputHandler.Instance.GetPause())
-                Debug.WriteLine("pause");
+            if(InputHandler.Instance.GetPause()) {
+                SceneManager.Instance.SwitchPause(!paused);
+                paused = !paused;
+            }
         }
 
         private void CreateWave()

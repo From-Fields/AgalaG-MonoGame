@@ -51,6 +51,9 @@ namespace agalag.engine.routines
         {
             Routine routine = _enumerator.Current as Routine;
 
+            if(SceneManager.Instance.IsPaused && !routine.ExecuteOnPause)
+                return;
+
             if (routine == null || routine.IsDone)
                 Step();
             else 
@@ -76,6 +79,7 @@ namespace agalag.engine.routines
     public abstract class Routine
     {
         public bool IsDone { get; protected set; }
+        public bool ExecuteOnPause { get; protected set; }
 
         public virtual void Update(GameTime gameTime) { }
         public abstract void Run();

@@ -16,13 +16,16 @@ namespace agalag.engine
         private FixedUpdater _updater = new FixedUpdater();
         private RoutineManager _routineManager = RoutineManager.Instance;
 		private ContentManager _content = null;
+        private GameState _gameState = GameState.PLAYING;
 
+        public GameState GameState => _gameState;
+        public bool IsPaused => _gameState == GameState.PAUSED;
+
+        //Methods
         public void SwitchScene(Scene newScene)
         {
             SwitchScene(newScene, _content);
         }
-
-        //Methods
         public void SwitchScene(Scene newScene, ContentManager content)
         {
             if(newScene == null)
@@ -87,6 +90,10 @@ namespace agalag.engine
 
         #region Interface Implementation
 
+        public void SwitchPause(bool paused) {
+            this._gameState = (paused) ? GameState.PAUSED : GameState.PLAYING;
+        }
+
         //iParent
         public void DrawChildren(SpriteBatch spriteBatch)
         {
@@ -117,5 +124,10 @@ namespace agalag.engine
         }
 
         #endregion
+    }
+    public enum GameState 
+    {
+        PAUSED,
+        PLAYING
     }
 }

@@ -13,7 +13,6 @@ namespace agalag.game
         private float _speed, _rotationSpeed;
         private uint _damage, _health, _maxBounces;
         private Vector2 _position, _direction, _scale;
-        private Rectangle _levelBounds;
 
         public WaveHazard(
             Hazard hazard, Vector2 position, Vector2 direction,
