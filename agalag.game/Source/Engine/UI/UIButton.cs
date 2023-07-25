@@ -42,6 +42,8 @@ namespace agalag.engine
             _text = new UIText(text, textPos, Prefabs.GetFont("Button"));
             _text.SetAlign(TextAlign.Center);
 
+            _children.Add(_text);
+
             UIHandler.Instance.AddToInteractable(this);
         }
 
@@ -57,10 +59,10 @@ namespace agalag.engine
             Vector2 mousePosition = InputHandler.Instance.ScaledMousePosition;
             MousePos = InputHandler.Instance.ScaledMousePosition;
 
-            float bbox_left = _relativePosition.X - (_size.X / 2);
-            float bbox_right = _relativePosition.X + (_size.X / 2);
-            float bbox_top = _relativePosition.Y - (_size.Y / 2);
-            float bbox_bottom = _relativePosition.Y + (_size.Y / 2);
+            float bbox_left = _relativePosition.X;
+            float bbox_right = _relativePosition.X + (_size.X);
+            float bbox_top = _relativePosition.Y;
+            float bbox_bottom = _relativePosition.Y + (_size.Y);
 
             if (mousePosition.X >= bbox_left && mousePosition.X <= bbox_right 
                 && mousePosition.Y >= bbox_top && mousePosition.Y <= bbox_bottom)
@@ -104,7 +106,6 @@ namespace agalag.engine
 
             _rect = new Rectangle((int)(_relativePosition.X), (int)(_relativePosition.Y), (int)(_relativeSize.X), (int)(_relativeSize.Y * multiplier));
             spriteBatch.Draw(_buttonRect, _rect, Color.White);
-
         }
     }
 }

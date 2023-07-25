@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace agalag.engine
 {
@@ -8,6 +9,7 @@ namespace agalag.engine
     {
         protected bool _active;
         protected Transform _transform;
+        protected List<UIElement> _children;
 
         public Transform Transform => this._transform;
         public bool IsActive => this._active;
@@ -18,9 +20,16 @@ namespace agalag.engine
             _active = true;
 
             UIHandler.Instance.AddElement(this);
+            _children = new List<UIElement>();
         }
 
-        public void SetActive(bool active) => this._active = active;
+        public void SetActive(bool active) 
+        {
+            foreach (UIElement child in _children)
+                child.SetActive(active);
+
+            this._active = active;
+        }
 
         #region Interface Implementation
 
