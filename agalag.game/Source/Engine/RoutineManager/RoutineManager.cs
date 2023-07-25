@@ -9,17 +9,17 @@ namespace agalag.engine.routines
 {
     public class RoutineManager: Singleton<RoutineManager>
     {
-        private readonly List<RoutineRunner> _routines = new List<RoutineRunner>();
+        private readonly Dictionary<string, RoutineRunner> _routines = new Dictionary<string, RoutineRunner>();
 
         public void Update(GameTime gameTime) 
         {
-            _routines.ToList().ForEach((routine) => routine.Update(gameTime));
+            _routines.Values.ToList().ForEach((routine) => routine.Update(gameTime));
 
-            foreach(var runner in _routines.Where((runner) => runner.IsDone).ToList())
-                _routines.Remove(runner);
+            foreach(string runnerId in _routines.Where((runner) => runner.Value.IsDone).Select((runner) => runner.Key).ToList())
+                _routines.Remove(runnerId);
         }
 
-        public void CallbackTimer(float timeout, Action callback = null) => Run(SetTimer(timeout, callback));
+        public string CallbackTimer(float timeout, Action callback = null) => Run(SetTimer(timeout, callback));
         private IEnumerable SetTimer(float timeout, Action callback = null)
         {
             yield return new WaitForSeconds(timeout);
@@ -27,11 +27,21 @@ namespace agalag.engine.routines
             callback?.Invoke();
         }
 
-        public void Run(IEnumerable routine)
+        public string Run(IEnumerable routine)
         {
             RoutineRunner handler = new RoutineRunner(routine);
-            _routines.Add(handler);
+            _routines.Add(handler.GetHashCode().ToString(), handler);
             handler.Step();
+
+            return handler.GetHashCode().ToString();
+        }
+        public bool Interrupt(string id)
+        {
+            if(!_routines.ContainsKey(id))
+                return false;
+
+            _routines[id].Interrupt();
+            return true;
         }
     }
 
@@ -59,6 +69,8 @@ namespace agalag.engine.routines
             else 
                 routine.Update(gameTime);
         }
+
+        internal void Interrupt() => IsDone = true;
 
         internal void Step()
         {
