@@ -4,6 +4,7 @@ using agalag.engine.routines;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace agalag.engine
 {
@@ -17,6 +18,7 @@ namespace agalag.engine
         private RoutineManager _routineManager = RoutineManager.Instance;
 		private ContentManager _content = null;
         private GameState _gameState = GameState.PLAYING;
+        internal Action<bool> onPause;
 
         public GameState GameState => _gameState;
         public bool IsPaused => _gameState == GameState.PAUSED;
@@ -36,7 +38,7 @@ namespace agalag.engine
 
             if (_content == null) _content = content;
 			
-            if(_currentScene != null)
+            if(_currentScene != null) 
                 ClearScene(_currentScene, content);
 
             _currentScene = newScene;
@@ -47,6 +49,7 @@ namespace agalag.engine
             if(!newScene.isInitialized)
                 throw new System.Exception("Scene failed to Initialize");
         }
+        public void SwitchToDefaultScene() => SwitchScene(_defaultScene);
         public void SwitchToDefaultScene(ContentManager content) => SwitchScene(_defaultScene, content);
 
         public void SetDefaultScene(Scene scene) 
@@ -63,7 +66,9 @@ namespace agalag.engine
                 return;
 
             _currentScene.Clear();
-            _currentScene.UnloadContent(content);
+
+            if(_currentScene.isInitialized)
+                throw new System.Exception("Scene failed to Clear");
         }
         private void InitializeScene(Scene scene, ContentManager content) 
         {
@@ -92,6 +97,8 @@ namespace agalag.engine
 
         public void SwitchPause(bool paused) {
             this._gameState = (paused) ? GameState.PAUSED : GameState.PLAYING;
+
+            onPause?.Invoke(paused);
         }
 
         //iParent

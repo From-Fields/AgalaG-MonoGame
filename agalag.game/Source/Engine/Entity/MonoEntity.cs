@@ -119,6 +119,10 @@ namespace agalag.engine
 
         public void Dispose()
         {
+            SubDispose();
+        }
+        protected virtual void SubDispose() 
+        {
             RemoveCollider();
             SetActive(false);
             _sprite = null;

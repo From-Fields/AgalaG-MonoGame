@@ -31,6 +31,14 @@ namespace agalag.engine
         }
 
         public bool RemoveEntity(MonoEntity entity) => _entities.Remove(entity);
+        public void Clear()
+        {
+            for (int i = 0; i < _entities.Count; i++)
+            {
+                MonoEntity entity = _entities[i];
+                entity.Dispose();
+            }
+        }
 
         #region Interface Implementation
 
