@@ -52,7 +52,7 @@ namespace agalag.game
         //Events
         public Action<int> onDeath;
         public Action onRelease;
-        private iPowerUp _droppedItem;
+        protected iPowerUp _droppedItem;
 
         //Methods
         public void ExecuteNextAction()
@@ -91,7 +91,13 @@ namespace agalag.game
             this._transform.position = startingPoint;
             this._levelBounds = levelBounds;
 
-            this._droppedItem = drop;
+            if(drop != null)
+                this._droppedItem = drop;
+            else{
+                this._droppedItem = PowerUpManager.GetRandomPowerup();
+                if(!(this is EnemyGeminiChild))
+                    System.Diagnostics.Debug.WriteLine(this._droppedItem);
+            }
 
             SubInitialize();
 

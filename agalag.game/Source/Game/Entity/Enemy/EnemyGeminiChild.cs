@@ -116,6 +116,7 @@ namespace agalag.game
                 _rotationMatrix = Matrix.CreateRotationZ(MathHelper.ToRadians(90));
 
             _weapon.onShoot += PlayShotSound;
+            _droppedItem = null;
         }
         protected override void ReserveToPool() => Pool.Release(this);
 

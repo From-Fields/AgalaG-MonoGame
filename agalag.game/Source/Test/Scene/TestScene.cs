@@ -123,8 +123,7 @@ namespace agalag.test
                         new MoveTowards(new Vector2(-450, 500), 1.5f),
                         new Queue<iEnemyAction>(new [] {
                             new MoveTowards(new Vector2(450, 500), 1.5f, 1, 0.9f)
-                        }),
-                        drop: new ShieldPowerUp()
+                        })
                     ),
                     //     new WaveUnit<EnemyBumblebee>(
                     //         new Vector2(1920 - 700, -64),
@@ -144,8 +143,7 @@ namespace agalag.test
                         new Queue<iEnemyAction>(new iEnemyAction[] {
                             new MoveTowards(new Vector2(1920 - 450, 500), 1, 1, 0.9f),
                             new WaitSeconds(1)
-                        }),
-                        drop: new RepairPowerUp()
+                        })
                     ),
                     new WaveHazard(
                         EntityPool<Hazard>.Instance.Pool.Get(),
