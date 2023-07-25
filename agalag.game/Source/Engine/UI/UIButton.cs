@@ -69,10 +69,10 @@ namespace agalag.engine
             {
                 UIHandler.Instance.SetSelected(this);
             }
-            //else if (UIHandler.Instance.Selected == this)
-            //{
-            //    UIHandler.Instance.SetSelected(null);
-            //}
+            else if (UIHandler.Instance.Selected == this)
+            {
+               UIHandler.Instance.SetSelected(null);
+            }
 
             if (IsSelected && InputHandler.Instance.GetMouseLeftPressed())
             {

@@ -14,7 +14,7 @@ namespace agalag.game
 
         public void Initialize()
         {
-            this._background = new UISprite(new Sprite(Prefabs.GetShape(Shapes.Rectangle)), Vector2.Zero, Color.Black, 0.6f, ResolutionScaler.InternalResolution.Rectangle);
+            this._background = new UISprite(null, Vector2.Zero, Color.Black, 0.6f, ResolutionScaler.InternalResolution.Rectangle);
             this._title = new UIText("Paused", new Vector2(Utils.ScreenWidth/2, 50f), Prefabs.GetFont("Title"));
             _title.SetColor(Color.OrangeRed);
             _title.SetAlign(TextAlign.Center);
