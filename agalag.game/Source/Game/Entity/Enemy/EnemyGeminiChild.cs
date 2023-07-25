@@ -120,8 +120,6 @@ namespace agalag.game
         protected override void ReserveToPool() => Pool.Release(this);
 
         protected override void SubReserve() {
-            base.SubReserve();
-
             _weapon.onShoot = null;
             
             if(_wasKilled)

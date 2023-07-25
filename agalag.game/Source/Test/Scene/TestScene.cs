@@ -14,10 +14,12 @@ namespace agalag.test
     {
         bool paused = false;
         List<MonoEntity> entities;
+        List<WaveController> _waves;
 
         public TestScene(List<SceneLayer> layers = null) : base(layers)
         {
             entities = new List<MonoEntity>();
+            _waves = new List<WaveController>();
             AddLayer(new SceneLayer((int)Layer.Default, null));
             AddLayer(new SceneLayer((int)Layer.Objects, null));
             AddLayer(new SceneLayer((int)Layer.Entities, null));
@@ -25,6 +27,12 @@ namespace agalag.test
 
         public override void Clear()
         {
+            foreach (WaveController wave in _waves)
+                wave.Clear();
+                
+            foreach (SceneLayer layer in _layers.Values)
+                layer.Clear();
+
             isInitialized = false;
         }
 
@@ -59,14 +67,15 @@ namespace agalag.test
 
             CreateWave();
 
-            // EnemyKamikaze enemyK = new EnemyKamikaze(GetPrefab<EnemyKamikaze>(), true);
+            // EnemyKamikaze enemyK = EntityPool<EnemyKamikaze>.Instance.Pool.Get();
+            // EnemyGemini enemyK = EntityPool<EnemyGemini>.Instance.Pool.Get();
             // Bullet bullet = new Bullet(new Vector2(900, 100), 0, new Vector2(0, 1), 0f);
 
             // Queue<iEnemyAction> queue = new Queue<iEnemyAction>();
             // queue.Enqueue(new MoveTowards(new Vector2(350, 180)));
             // queue.Enqueue(new Shoot(2));
             // queue.Enqueue(new MoveTowards(player));
-            // enemyK.Initialize(queue, new WaitSeconds(2), new MoveTowards(player),  new Vector2(960, 120));
+            // enemyK.Initialize(queue, new WaitSeconds(2), new MoveTowards(player),  new Vector2(960, 120), new Rectangle(Point.Zero, new Point(1920, 1080)));
 
             
             // enemyK = new EnemyKamikaze(kamikazeSprite, new Vector2(1260, 120), Vector2.One, player);
@@ -75,6 +84,8 @@ namespace agalag.test
             // enemyK.Initialize(queue, new WaitSeconds(4), new WaitSeconds(1), enemyK.Transform.position);
 
             // System.Diagnostics.Debug.WriteLine(this._layers[(int)Layer.Entities].Entities.Count);
+
+            PauseMenu.Instance.Initialize();
 
             this.isInitialized = true;
         }
@@ -148,6 +159,7 @@ namespace agalag.test
             wave.onWaveDone += CreateWave;
 
             wave.Initialize();
+            _waves.Add(wave);
         }
     }
 }

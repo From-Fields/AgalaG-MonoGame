@@ -1,4 +1,5 @@
 using System;
+using agalag.engine;
 using agalag.engine.routines;
 using Microsoft.Xna.Framework;
 
@@ -39,15 +40,17 @@ namespace agalag.game
                 onUnitReleased?.Invoke(this);
         }
 
-        public void Initialize(Rectangle levelBounds) {
+        public void Initialize(Rectangle levelBounds, Layer layer = Layer.Entities) {
             _hazard.Initialize(
                 _position, _direction, levelBounds, _speed, _damage, _health, _rotate, _rotationSpeed, _scale, _maxBounces
             );
-            
+            SceneManager.AddToMainScene(_hazard, layer);
+
             if(!_waitForTimeout)
                 RoutineManager.Instance.CallbackTimer(0.5f, () => onUnitReleased?.Invoke(this));
         } 
 
         public void Reserve() => _hazard.ReserveToPool();
+        public void Clear() => _hazard.ReserveToPool();
     }
 }

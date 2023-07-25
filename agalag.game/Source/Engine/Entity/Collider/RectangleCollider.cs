@@ -62,9 +62,9 @@ namespace agalag.engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-//#if !DEBUG
+#if !DEBUG
             return;
-//#endif
+#endif
 
             Texture2D whiteRectangle = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
             whiteRectangle.SetData(new[] { Color.White });
