@@ -27,6 +27,8 @@ namespace agalag.game.input
         public bool usingGamepad = false;
         private iInputHandler _inputMethod = new KeyboardHandler();
 
+        private MouseState previousMouseState = Mouse.GetState();
+
         public bool HasMovement => (GetMovement() != Vector2.Zero);
         public Vector2 GetMovement() => _inputMethod.GetMovement();
 
@@ -46,10 +48,25 @@ namespace agalag.game.input
             return new Vector2(mouseState.Position.X, mouseState.Position.Y);
         }
 
-        public bool GetMouseLeftPressed()
+        public bool GetMouseLeft()
         {
             MouseState mouseState = Mouse.GetState();
             return mouseState.LeftButton == ButtonState.Pressed;
+        }
+
+        public bool GetMouseLeftPressed()
+        {
+            MouseState mouseState = Mouse.GetState();
+            bool pressed = false;
+
+            if (mouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released)
+            {
+                pressed = true;
+            }
+
+            previousMouseState = mouseState;
+
+            return pressed;
         }
 
         public bool SwitchInputMethod(InputMethods method)

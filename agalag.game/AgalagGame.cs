@@ -25,21 +25,37 @@ public class AgalagGame : Game
     private int _finalResolutionHeight = 720, _finalResolutionWidth = 1280;
     private bool _isFullscreen = false;
 
+    private Effect _squareOutlineShader;
+    public static AgalagGame Instance { get; private set; }
+
     public AgalagGame()
     {
         _graphics = new GraphicsDeviceManager(this);
-        
-        ResolutionScaler.SetResolution(
-            _graphics,
-            _internalResolutionWidth, _internalResolutionHeight, 
-            _finalResolutionWidth, _finalResolutionHeight,
-            _isFullscreen
-        );
+
+        SetResolution();
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
         _inputHandler = InputHandler.Instance;
         Prefabs.DefineContent(Content);
+
+        Instance = this;
+    }
+
+    public void SetFullscreen(bool fullscreen)
+    {
+        _isFullscreen = fullscreen;
+        SetResolution();
+    }
+
+    private void SetResolution()
+    {
+        ResolutionScaler.SetResolution(
+            _graphics,
+            _internalResolutionWidth, _internalResolutionHeight,
+            _finalResolutionWidth, _finalResolutionHeight,
+            _isFullscreen
+        );
     }
 
     protected override void Initialize()
@@ -77,6 +93,11 @@ public class AgalagGame : Game
 		
         Texture2D background = Content.Load<Texture2D>("Sprites/bg");
         Prefabs.AddTexture<Background>(background);
+
+        _squareOutlineShader = Content.Load<Effect>("Shaders/Outline");
+
+        Matrix projection = Matrix.CreateOrthographicOffCenter(0, _internalResolutionWidth, _internalResolutionHeight, 0, 0, 1);
+        _squareOutlineShader.Parameters["WorldViewProjection"].SetValue(Matrix.Identity * projection);
 
         _sceneManager.SetDefaultScene(new MainMenuScene());
         _sceneManager.SwitchToDefaultScene(Content);
@@ -234,6 +255,17 @@ public class AgalagGame : Game
         );
 
         UIHandler.Instance.Draw(_spriteBatch);
+
+        _spriteBatch.End();
+
+        _spriteBatch.Begin(
+            SpriteSortMode.Immediate,
+            transformMatrix: ResolutionScaler.ResolutionMatrix,
+            effect: _squareOutlineShader,
+            blendState: BlendState.NonPremultiplied
+        );
+
+        UIHandler.Instance.DrawWithEffect(_spriteBatch);
 
         _spriteBatch.End();
 

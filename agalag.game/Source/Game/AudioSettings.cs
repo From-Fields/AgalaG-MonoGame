@@ -37,9 +37,28 @@ namespace agalag.game
 
             return volume;
         }
-        public static void SetVolume(AudioGroup group, float value)
+
+        public static void SetMasterVolume(float volume)
         {
-            float adjusted = Math.Clamp(value, 0, 1);
+            SetVolume(AudioGroup.Master, volume);
+        }
+
+        public static void SetMusicVolume(float volume)
+        {
+            SetVolume(AudioGroup.Music, volume);
+        }
+
+        public static void SetSFXVolume(float volume)
+        {
+            SetVolume(AudioGroup.SFX, volume);
+            SetVolume(AudioGroup.Ambient, volume);
+            SetVolume(AudioGroup.Explosion, volume);
+            SetVolume(AudioGroup.UI, volume);
+        }
+
+        private static void SetVolume(AudioGroup group, float volume)
+        {
+            float adjusted = Math.Clamp(volume, 0, 1);
 
             if(!_volumes.ContainsKey(group))
                 _volumes.Add(group, adjusted);
