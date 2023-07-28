@@ -31,6 +31,14 @@ namespace agalag.engine
         }
 
         public bool RemoveEntity(MonoEntity entity) => _entities.Remove(entity);
+        public void Clear()
+        {
+            for (int i = 0; i < _entities.Count; i++)
+            {
+                MonoEntity entity = _entities[i];
+                entity.Dispose();
+            }
+        }
 
         #region Interface Implementation
 
@@ -48,18 +56,25 @@ namespace agalag.engine
         }
         public void UpdateChildren(GameTime gameTime)
         {
-            foreach(MonoEntity entity in _entities.ToList())
+            foreach(MonoEntity entity in _entities.ToList()) 
+            {
+                if(SceneManager.Instance.IsPaused && !entity.ExecuteOnPause)
+                    continue;
                 if(entity.IsActive)
-                    entity.Update(gameTime);
+                    entity.DoUpdate(gameTime);
+            }
         }
         public void FixedUpdateChildren(GameTime gameTime, FixedFrameTime fixedFrameTime)
         {
             var entities = _entities.ToList();
             foreach(MonoEntity entity in entities)
             {
+                if(SceneManager.Instance.IsPaused && !entity.ExecuteOnPause)
+                    continue;
+
                 if(entity.IsActive)
                 {
-                    entity.FixedUpdate(gameTime, fixedFrameTime);
+                    entity.DoFixedUpdate(gameTime, fixedFrameTime);
                     entity.ManageCollisions();
                     entity.ApplyVelocity();
                 }

@@ -38,6 +38,7 @@ namespace agalag.game.Source.Game.Scenes
 
         public override void Clear()
         {
+            UIHandler.Instance.Clean();
             isInitialized = false;
         }
 

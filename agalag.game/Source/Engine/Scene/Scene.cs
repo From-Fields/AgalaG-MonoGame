@@ -63,7 +63,9 @@ namespace agalag.engine
 
             SceneLayer sceneLayer = _layers[key];
 
-            return sceneLayer.AddEntity(entity);
+            bool val = sceneLayer.AddEntity(entity);
+            // System.Diagnostics.Debug.WriteLine(entity + ": " + val);
+            return val;
         }
 
         public bool RemoveElementFromLayer(MonoEntity entity)

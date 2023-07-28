@@ -47,21 +47,21 @@ namespace agalag.engine.pool
             _activeList.Add(obj);
 
             onGetFromPoolAction?.Invoke(obj);
-
             // System.Diagnostics.Debug.WriteLine("Got Unit.");
             // System.Diagnostics.Debug.WriteLine("Active/Inactive: " + CountActive.ToString() + "/" + CountInactive.ToString());
             return obj;
         }
         public void Release(T element)
         {
-            if(_objectQueue.Contains(element))
-                throw new System.ArgumentException("Tried to release an element that is already released.");
+            if(_objectQueue.Contains(element)) {
+                System.Diagnostics.Debug.WriteLine("Tried to release an element that is already released.");
+                return;
+            }
+            
 
             onReleaseToPoolAction?.Invoke(element);
             _objectQueue.Enqueue(element);
             _activeList.Remove(element);
-
-            // System.Diagnostics.Debug.WriteLine("Reserved Unit.");
             // System.Diagnostics.Debug.WriteLine("Active/Inactive: " + CountActive.ToString() + "/" + CountInactive.ToString());
         }
     

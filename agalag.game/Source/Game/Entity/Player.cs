@@ -255,6 +255,11 @@ namespace agalag.game
             this._gameTime = gameTime;
         }
         public override void OnCollision(MonoEntity other)  { }
+        protected override void SubDispose()
+        {
+            base.SubDispose();
+            _audioManager.Clear();
+        }
         #endregion
     }
-}
+}   

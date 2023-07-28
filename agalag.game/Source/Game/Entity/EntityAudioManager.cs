@@ -81,6 +81,14 @@ namespace agalag.game
 
             _soundInstances[soundType].Stop();
         }
+
+        public void Clear() 
+        {
+            foreach (var instance in _soundInstances.Values)
+            {
+                instance.Stop();
+            }    
+        }
     }
 
     public enum EntitySoundType
