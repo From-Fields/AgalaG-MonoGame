@@ -63,15 +63,15 @@ namespace agalag.engine
         public void Draw(SpriteBatch spriteBatch)
         {
 //#if !DEBUG
-            return;
+//            return;
 //#endif
 
-            Texture2D whiteRectangle = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-            whiteRectangle.SetData(new[] { Color.White });
+//            Texture2D whiteRectangle = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+//            whiteRectangle.SetData(new[] { Color.White });
             
-            Color colour = new Color(Color.Blue, 20);
+//            Color colour = new Color(Color.Blue, 20);
 
-            spriteBatch.Draw(whiteRectangle, Origin, _Rect, colour);
+//            spriteBatch.Draw(whiteRectangle, Origin, _Rect, colour);
         }
 
         public Vector2 ClosestPoint(Vector2 position) {

@@ -42,6 +42,8 @@ namespace agalag.engine
             _text = new UIText(text, textPos, Prefabs.GetFont("Button"));
             _text.SetAlign(TextAlign.Center);
 
+            _children.Add(_text);
+
             UIHandler.Instance.AddToInteractable(this);
         }
 
@@ -109,7 +111,6 @@ namespace agalag.engine
 
             _rect = new Rectangle((int)(_relativePosition.X), (int)(_relativePosition.Y), (int)(_relativeSize.X), (int)(_relativeSize.Y * multiplier));
             spriteBatch.Draw(_buttonRect, _rect, Color.White);
-
         }
     }
 }

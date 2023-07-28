@@ -28,6 +28,7 @@ namespace agalag.game.input
         private iInputHandler _inputMethod = new KeyboardHandler();
 
         private MouseState previousMouseState = Mouse.GetState();
+        private MouseState  _currentMouseState;
 
         public bool HasMovement => (GetMovement() != Vector2.Zero);
         public Vector2 GetMovement() => _inputMethod.GetMovement();
@@ -44,8 +45,8 @@ namespace agalag.game.input
 
         public Vector2 GetMousePosition()
         {
-            MouseState mouseState = Mouse.GetState();
-            return new Vector2(mouseState.Position.X, mouseState.Position.Y);
+            _currentMouseState = Mouse.GetState();
+            return new Vector2(_currentMouseState.Position.X, _currentMouseState.Position.Y);
         }
 
         public bool GetMouseLeft()

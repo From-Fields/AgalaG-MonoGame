@@ -116,12 +116,11 @@ namespace agalag.game
                 _rotationMatrix = Matrix.CreateRotationZ(MathHelper.ToRadians(90));
 
             _weapon.onShoot += PlayShotSound;
+            _droppedItem = null;
         }
         protected override void ReserveToPool() => Pool.Release(this);
 
         protected override void SubReserve() {
-            base.SubReserve();
-
             _weapon.onShoot = null;
             
             if(_wasKilled)
@@ -159,8 +158,6 @@ namespace agalag.game
                     _desiredVelocity = Vector2.Zero;
                 }
             }
-            // Debug.WriteLine("Tangent: " + _tangent);
-            // Debug.WriteLine("ToChild: " + _tangent);
         }
         #endregion    
     }

@@ -63,8 +63,10 @@ namespace agalag.engine
             position = position - positionOffset;
             Vector2 velocity = velocity_ * FixedUpdater.FixedFrameTime.frameTime;
 
-            Vector2 oldPos = position;
-            position = Vector2.Lerp(position - velocity, position, FixedUpdater.FixedFrameTime.frameProgress);
+            if(!SceneManager.Instance.IsPaused) {
+                Vector2 oldPos = position;
+                position = Vector2.Lerp(position - velocity, position, FixedUpdater.FixedFrameTime.frameProgress);
+            }
 
             opacity = (opacity != -1) ? opacity : _opacity;
             _opacity = opacity;

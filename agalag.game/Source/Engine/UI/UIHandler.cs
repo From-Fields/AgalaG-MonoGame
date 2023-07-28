@@ -112,7 +112,8 @@ namespace agalag.engine
             var elements = new List<UIElement>(_elements); // evitar bug de alteração de elementos durante iteração
             foreach (var e in elements)
             {
-                e.Update(gameTime);
+                if(e.IsActive)
+                    e.Update(gameTime);
             }
 
             var elementEffects = new List<UIElement>(_effectElements);
@@ -127,7 +128,8 @@ namespace agalag.engine
             var elements = new List<UIElement>(_elements);
             foreach (var e in elements)
             {
-                e.Draw(spriteBatch);
+                if(e.IsActive)
+                    e.Draw(spriteBatch);
             }
         }
 

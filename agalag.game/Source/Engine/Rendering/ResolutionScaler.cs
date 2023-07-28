@@ -65,6 +65,8 @@ namespace agalag.engine
         public int width;
         public int height;
 
+        public Rectangle Rectangle => new Rectangle(0, 0, width, height);
+
         public Resolution(int width, int height)
         {
             this.width = width;
