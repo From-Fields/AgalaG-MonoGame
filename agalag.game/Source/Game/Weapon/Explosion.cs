@@ -25,10 +25,11 @@ namespace agalag.game
         private Vector2 _offset = new Vector2(852, 0);
 
         public Explosion(Vector2 position) : base (_texture, position, scale: Vector2.One * .75f, 
-            new RectangleCollider(new Point(284, 284)), layer: Layer.Objects)
+            new RectangleCollider(new Point(284, 284), solid: false), layer: Layer.Objects)
         {
             _audioManager = new EntityAudioManager(deathSound: Prefabs.GetSoundOfType<Explosion>());
             _audioManager.PlaySound(EntitySoundType.Death);
+            Transform.simulate = false;
         }
 
         private void DestroySelf()
