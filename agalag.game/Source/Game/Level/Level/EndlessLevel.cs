@@ -51,5 +51,13 @@ namespace agalag.game
 
             return _currentWave;
         }
+        public void Clear()
+        {
+            foreach (WaveController wave in new List<WaveController>(_waveList))
+                wave.Clear();
+
+            _waveQueue = null;
+            _waveList = null;
+        }
     }
 }

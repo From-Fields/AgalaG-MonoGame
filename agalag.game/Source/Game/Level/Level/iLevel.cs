@@ -11,6 +11,7 @@ namespace agalag.game
         public bool HasNextWave { get; }    
         public List<WaveController> WaveList { get; }
         public WaveController GetNextWave();
+        public void Clear();
     }
 
 }
