@@ -83,7 +83,6 @@ namespace agalag.game
         //Enemy
         protected override void SubInitialize()
         {
-            _isDead = false;
             _maxHealth = _defaultHealth;
             _currentHealth = _defaultHealth;
 
@@ -100,9 +99,10 @@ namespace agalag.game
                 float yOffset = (i < 1) ? -1 * this._geminiPositionOffset : this._geminiPositionOffset;
                 Vector2 position = new Vector2(this.Position.X, this.Position.Y + yOffset);
 
-                child.Initialize(new Queue<iEnemyAction>(), null, new WaitSeconds(200), position, _levelBounds);
+                child.Initialize(new Queue<iEnemyAction>(), null, new WaitSeconds(10000), position, _levelBounds);
                 child.SetParent(this, _geminiPositionOffset, _orbitingVelocity);
                 child.SetWeapon(_weaponCooldown, _geminiMissileDamage, _missileSpeed);
+                SceneManager.AddToMainScene(child, Layer.Entities);
             }
             
             _audioManager.PlaySound(EntitySoundType.Movement, looping: true);
@@ -110,8 +110,6 @@ namespace agalag.game
         protected override void ReserveToPool() => Pool.Release(this);
 
         protected override void SubReserve() {
-            base.SubReserve();
-
             int childCount = _children.Count;
 
             for (int i = 0; i < childCount; i++)

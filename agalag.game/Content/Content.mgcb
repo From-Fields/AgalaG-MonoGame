@@ -34,6 +34,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Title.spritefont
 
+#begin Shaders/Outline.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/Outline.fx
+
 #begin Sounds/Damage/sfx_dmg_player.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor

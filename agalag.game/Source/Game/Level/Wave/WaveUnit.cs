@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using agalag.engine;
 using agalag.engine.routines;
 using Microsoft.Xna.Framework;
 
@@ -16,6 +17,7 @@ namespace agalag.game
         private iPowerUp _drop;
         private float _timeout;
         private bool _hasTimedOut;
+        private string _callback;
 
         public Action<iWaveUnit> onUnitReleased { get; set; }
 
@@ -40,12 +42,13 @@ namespace agalag.game
             _hasTimedOut = false;
         }
 
-        public void Initialize(Rectangle levelBounds)
+        public void Initialize(Rectangle levelBounds, Layer layer = Layer.Entities)
         {
             _enemy.Initialize(_actions, _startingAction, _timeoutAction, _startingPoint, levelBounds, drop: _drop);
+            SceneManager.AddToMainScene(_enemy, layer);
 
             if(_timeout > 0)
-                RoutineManager.Instance.CallbackTimer(_timeout, ExecuteTimeoutAction);
+                _callback = RoutineManager.Instance.CallbackTimer(_timeout, ExecuteTimeoutAction);
         }
         public void ExecuteTimeoutAction()
         {
@@ -59,6 +62,12 @@ namespace agalag.game
         {
             _enemy.onRelease -= OnUnitReleased;
             onUnitReleased?.Invoke(this);
+        }
+
+        public void Clear() {
+            OnUnitReleased();
+            if(!string.IsNullOrWhiteSpace(_callback))
+                RoutineManager.Instance.Interrupt(_callback);
         }
     }
 }

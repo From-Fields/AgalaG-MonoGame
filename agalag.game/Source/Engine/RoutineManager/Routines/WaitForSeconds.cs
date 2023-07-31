@@ -5,8 +5,9 @@ namespace agalag.engine.routines
 {
     public class WaitForSeconds: Routine
     {
-        public WaitForSeconds(float seconds)
+        public WaitForSeconds(float seconds, bool executeOnPause = false)
         {
+            this.ExecuteOnPause = executeOnPause;
             IsDone = false;
             Interval = TimeSpan.FromSeconds(seconds);
         }
@@ -26,6 +27,7 @@ namespace agalag.engine.routines
 
 
         private TimeSpan _elapsed;
+
         public TimeSpan Interval { get; private set; }
     }
 }

@@ -23,6 +23,7 @@ namespace agalag.game
         protected float currentAcceleration;
         protected float _defaultAcceleration;
 
+        protected bool _isReleased = false;
         protected bool _isDead;
 
         protected Queue<iEnemyAction> _actionQueue;
@@ -51,7 +52,7 @@ namespace agalag.game
         //Events
         public Action<int> onDeath;
         public Action onRelease;
-        private iPowerUp _droppedItem;
+        protected iPowerUp _droppedItem;
 
         //Methods
         public void ExecuteNextAction()
@@ -83,13 +84,20 @@ namespace agalag.game
                 throw new System.ArgumentNullException("Action queue and Timeout action may not be null");
 
             this._isDead = false;
+            this._isReleased = false;
             this._actionQueue = actionQueue;
             this._startingAction = startingAction;
             this._timeoutAction = timeoutAction;
             this._transform.position = startingPoint;
             this._levelBounds = levelBounds;
 
-            this._droppedItem = drop;
+            if(drop != null)
+                this._droppedItem = drop;
+            else{
+                this._droppedItem = PowerUpManager.GetRandomPowerup();
+                if(!(this is EnemyGeminiChild))
+                    System.Diagnostics.Debug.WriteLine(this._droppedItem);
+            }
 
             SubInitialize();
 
@@ -103,6 +111,8 @@ namespace agalag.game
         
         public void Reserve()
         {
+            if(this._isReleased) return;
+
             this._actionQueue = null;
             this._startingAction = null;
             this._timeoutAction = null;
@@ -115,6 +125,7 @@ namespace agalag.game
             this.SubReserve();
             this.ReserveToPool();
             
+            this._isReleased = true;
             this.onRelease?.Invoke();
         }
 
@@ -128,7 +139,6 @@ namespace agalag.game
 
             _currentAction?.Update(this);
             SubUpdate(gameTime);
-
         }
         public override void FixedUpdate(GameTime gameTime, FixedFrameTime fixedGameTime)
         {
@@ -139,6 +149,8 @@ namespace agalag.game
                 _currentAction.FixedUpdate(this);
             SubFixedUpdate(gameTime, fixedGameTime);
         }
+
+        protected override void SubDispose() => Reserve();
 
         // Sound
         protected void PlayShotSound() => _audioManager.PlaySound(EntitySoundType.Shot);

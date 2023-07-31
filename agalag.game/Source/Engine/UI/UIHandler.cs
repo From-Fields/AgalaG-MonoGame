@@ -13,27 +13,33 @@ namespace agalag.engine
     public class UIHandler : Singleton<UIHandler>
     {
         private List<UIElement> _elements = new();
+        private List<UIElement> _effectElements = new();
 
         private LinkedListNode<UIElement> _selected = null;
         private LinkedList<UIElement> _interactable = new();
 
         public UIElement Selected => _selected?.Value;
 
-        public void AddElement(UIElement e)
+        public void AddElement(UIElement e, bool effect = false)
         {
-            if (_elements.Contains(e)) return;
+            var elements = (!effect) ? _elements : _effectElements;
 
-            _elements.Add(e);
+            if (elements.Contains(e)) return;
+
+            elements.Add(e);
         }
 
-        public void RemoveElement(UIElement e)
+        public void RemoveElement(UIElement e, bool effect = false)
         {
-            _elements.Remove(e);
+            var elements = (!effect) ? _elements : _effectElements;
+
+            elements.Remove(e);
         }
 
         public void AddToInteractable(UIElement e)
         {
-            if (!_elements.Contains(e) || _interactable.Contains(e)) return;
+            var elements = (e.HasEffect) ? _effectElements : _elements;
+            if (!elements.Contains(e) || _interactable.Contains(e)) return;
 
             _interactable.AddLast(new LinkedListNode<UIElement>(e));
         }
@@ -76,9 +82,22 @@ namespace agalag.engine
             _selected = item;
         }
 
+        public void Desselect(UIElement e)
+        {
+            if (e == null) return;
+
+            var item = _interactable.Find(e);
+
+            if (item == _selected)
+            {
+                _selected = null;
+            }
+        }
+
         public void Clean()
         {
             _elements.Clear();
+            _effectElements.Clear();
             _interactable.Clear();
             _selected = null;
         }
@@ -93,6 +112,13 @@ namespace agalag.engine
             var elements = new List<UIElement>(_elements); // evitar bug de alteração de elementos durante iteração
             foreach (var e in elements)
             {
+                if(e.IsActive)
+                    e.Update(gameTime);
+            }
+
+            var elementEffects = new List<UIElement>(_effectElements);
+            foreach (var e in elementEffects)
+            {
                 e.Update(gameTime);
             }
         }
@@ -100,6 +126,16 @@ namespace agalag.engine
         public void Draw(SpriteBatch spriteBatch)
         {
             var elements = new List<UIElement>(_elements);
+            foreach (var e in elements)
+            {
+                if(e.IsActive)
+                    e.Draw(spriteBatch);
+            }
+        }
+
+        public void DrawWithEffect(SpriteBatch spriteBatch)
+        {
+            var elements = new List<UIElement>(_effectElements);
             foreach (var e in elements)
             {
                 e.Draw(spriteBatch);

@@ -17,5 +17,15 @@ namespace agalag.engine
 
             return rect;
         }
+
+        public static Texture2D DrawRectangle(out Rectangle rect, int x, int y, int width, int height, Color color)
+        {
+            var texture = new Texture2D(ScreenManager.GraphicsDevice, 1, 1);
+            texture.SetData(new[] { color });
+
+            rect = new Rectangle(x, y, width, height);
+
+            return texture;
+        }
     }
 }
