@@ -5,17 +5,10 @@ using Microsoft.Xna.Framework;
 namespace agalag.game.scenes
 {
     public static class GameWaves
-    {        
-        private static iLevel _level;
-
+    {
         public static iLevel GetLevel(Rectangle levelBounds, Action<int> onDeath)
         {
-            if(_level == null)
-            {
-                _level = new EndlessLevel(new Queue<WaveController>(GetWaves(levelBounds, onDeath)));
-            }
-
-            return _level;
+            return new EndlessLevel(new Queue<WaveController>(GetWaves(levelBounds, onDeath)));
         }
 
         private static List<WaveController> GetWaves(Rectangle levelBounds, Action<int> onDeath)
@@ -45,14 +38,14 @@ namespace agalag.game.scenes
                         new Queue<iEnemyAction>(new[] { new WaitSeconds(2), }),
                         onDeath
                     ),
-                    new WaveHazard(new Vector2(-width * 0.2f, height / 2), new Vector2(2, -1), maxBounces: 5),
+                    new WaveHazard(new Vector2(-width * 0.2f, height / 2), new Vector2(2, -0.75f), maxBounces: 5),
                     new WaveHazard(new Vector2(width * 1.2f, height / 2), new Vector2(-2, -1), maxBounces: 5)
                 }
             );
 
             Wave bumbleTrouble = new Wave
             (
-                6, 
+                8, 
                 new List<iWaveUnit>() 
                 {
                     new WaveUnit<EnemyBumblebee>
@@ -61,7 +54,7 @@ namespace agalag.game.scenes
                         new WaitSeconds(1),
                         new MoveTowards(new Vector2(-width*0.2f, height * 0.6f), speedModifier: 4f),
                         new Queue<iEnemyAction>(new iEnemyAction[] { 
-                            new MoveTowards(new Vector2(width * 0.5f, height * 0.2f)), 
+                            new MoveTowards(new Vector2(width * 0.5f, height * 0.3f)), 
                             new Shoot(3),
                             new MoveAndShoot(new Vector2(width * 0.5f, height * 0.6f)),
                         }),
@@ -84,12 +77,54 @@ namespace agalag.game.scenes
                 }
             );
 
+            Wave geminiSentry = new Wave
+            (
+                9, 
+                new List<iWaveUnit>() 
+                {
+                    new WaveUnit<EnemyGemini>
+                    (
+                        new Vector2(width * 0.5f, -height * 0.2f),
+                        new MoveTowards(new Vector2(width * 0.5f, height * 0.2f)),
+                        new MoveTowards(new Vector2(width * 0.5f, -height * 0.2f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new Shoot(8),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(-width * 0.1f, -height * 0.2f),
+                        new WaitSeconds(1),
+                        new MoveAndShoot(new Vector2(width * 1.2f, height * 1f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.25f, height * 0.3f)), 
+                            new Shoot(2)
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(width * 1.1f, -height * 0.2f),
+                        new WaitSeconds(1),
+                        new MoveAndShoot(new Vector2(-width * 0.2f, height * 1f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.75f, height * 0.2f)), 
+                            new Shoot(2)
+                        }),
+                        onDeath
+                    ),
+                    new WaveHazard(new Vector2(width * 0.3f, -height * 0.1f), new Vector2(0.75f, 1.5f), maxBounces: 5),
+                    new WaveHazard(new Vector2(width * 0.7f, -height * 0.1f), new Vector2(-0.75f, 3), maxBounces: 5)
+                }
+            );
+
             waves.AddRange(
                 new List<WaveController>()
                     {
                         new WaveController(doubleKami.timeout, levelBounds, doubleKami.units),
                         new WaveController(bumbleTrouble.timeout, levelBounds, bumbleTrouble.units),
-                        // new WaveController(geminiSentry.timeout, levelBounds, geminiSentry.units),
+                        new WaveController(geminiSentry.timeout, levelBounds, geminiSentry.units),
                         // new WaveController(asteroidClock.timeout, levelBounds, asteroidClock.units),
                         // new WaveController(flyByNight.timeout, levelBounds, flyByNight.units),
                         // new WaveController(simmetry.timeout, levelBounds, simmetry.units),
