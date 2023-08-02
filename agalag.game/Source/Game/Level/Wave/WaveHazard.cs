@@ -16,13 +16,12 @@ namespace agalag.game
         private Vector2 _position, _direction, _scale;
 
         public WaveHazard(
-            Hazard hazard, Vector2 position, Vector2 direction,
+            Vector2 position, Vector2 direction,
             bool rotate = true, float speed = 750, float rotationSpeed = 1, 
             uint damage = 1, uint health = 1, uint maxBounces = 0, bool waitForTimeout = false,
             Vector2? scale = null, Action<iWaveUnit> onUnitReleased = null)
         {
             this.onUnitReleased = onUnitReleased;
-            _hazard = hazard;
             _rotate = rotate;
             _speed = speed;
             _rotationSpeed = rotationSpeed;
@@ -41,6 +40,8 @@ namespace agalag.game
         }
 
         public void Initialize(Rectangle levelBounds, Layer layer = Layer.Entities) {
+            _hazard = EntityPool<Hazard>.Instance.Pool.Get();
+
             _hazard.Initialize(
                 _position, _direction, levelBounds, _speed, _damage, _health, _rotate, _rotationSpeed, _scale, _maxBounces
             );

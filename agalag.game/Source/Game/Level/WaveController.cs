@@ -12,7 +12,7 @@ namespace agalag.game
         private bool _isDone;
         private float _timeout;
         public Action onWaveDone;
-        private List<iWaveUnit> _unitList;
+        private List<iWaveUnit> _unitList, _unitCache;
         private Rectangle _levelBounds;
         private Layer _layer;
         private string _timeoutCallback;
@@ -24,12 +24,15 @@ namespace agalag.game
         {
             this._isDone = false;
             this._timeout = timeout;
-            this._unitList = unitList;
+            this._unitCache = unitList;
             this._levelBounds = levelBounds;
             this._layer = layer;
         }
         public void Initialize()
         {
+            this._isDone = false;
+            _unitList = new List<iWaveUnit>(_unitCache);
+
             foreach (iWaveUnit unit in _unitList)
             {
                 unit.onUnitReleased += RemoveUnitFromWave;
@@ -43,6 +46,7 @@ namespace agalag.game
             if(_isDone)
                 return;
 
+            unit.onUnitReleased -= RemoveUnitFromWave;
             _unitList.Remove(unit);
 
             if(_unitList.Count == 0)
