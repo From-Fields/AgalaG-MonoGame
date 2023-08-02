@@ -53,6 +53,9 @@ namespace agalag.game
             {
                 onWaveDone?.Invoke();
                 _isDone = true;
+                RoutineManager.Instance.Interrupt(_timeoutCallback);
+                if(!string.IsNullOrWhiteSpace(_eliminateCallback))
+                    RoutineManager.Instance.Interrupt(_eliminateCallback);
             }
         }
         private void TimeOutAllUnits()
@@ -72,11 +75,11 @@ namespace agalag.game
         }
         private void EliminateAllUnits()
         {
-            int unitCount = _unitList.Count;
+            int unitCount = _unitCache.Count;
 
             for (int i = 0; i < unitCount; i++)
             {
-                iWaveUnit unit = _unitList[i];
+                iWaveUnit unit = _unitCache[i];
 
                 if(_isDone)
                     return;
@@ -102,12 +105,11 @@ namespace agalag.game
         }
         private void ClearAllUnits()
         {
-            int unitCount = _unitList.Count;
-            var units = new List<iWaveUnit>(_unitList);
+            int unitCount = _unitCache.Count;
 
             for (int i = 0; i < unitCount; i++)
             {
-                iWaveUnit unit = units[i];
+                iWaveUnit unit = _unitCache[i];
 
                 unit?.Clear();
             }
