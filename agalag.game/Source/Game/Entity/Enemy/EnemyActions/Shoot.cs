@@ -17,7 +17,7 @@ namespace agalag.game
         public void FixedUpdate(iEnemy target) { return; }
         public void Update(iEnemy target) => target.Shoot();
         public void OnStart(iEnemy target) => RoutineManager.Instance.CallbackTimer(_timeout, () => _done = true);
-        public void OnFinish(iEnemy target) { return; }
+        public void OnFinish(iEnemy target) { _done = false; }
         #endregion
     }
 }
