@@ -50,7 +50,7 @@ namespace agalag.game
             _hasTimedOut = false;
 
             _enemy = EntityPool<T>.Instance.Pool.Get();
-            _enemy.Initialize(_actions, _startingAction, _timeoutAction, _startingPoint, levelBounds, drop: _drop);
+            _enemy.Initialize(new Queue<iEnemyAction>(_actions), _startingAction, _timeoutAction, _startingPoint, levelBounds, drop: _drop);
             SceneManager.AddToMainScene(_enemy, layer);
 
             _enemy.onDeath += _onDeath;
