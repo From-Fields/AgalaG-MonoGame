@@ -181,6 +181,49 @@ namespace agalag.game.scenes
                 }
             );
 
+            Wave symmetry = new Wave
+            (
+                15, 
+                new List<iWaveUnit>() 
+                {
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(-width * 0.1f, height * 0.8f),
+                        new MoveTowards(new Vector2(width * 0.1f, height * 0.15f), stopOnEnd: false),
+                        new MoveTowards(new Vector2(width * 0.15f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.25f, height * 0.6f), stopOnEnd: false, speedModifier: 4),
+                            new MoveTowards(new Vector2(width * 0.35f, height * 0.4f), stopOnEnd: false),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 1.1f, height * 0.8f),
+                        new MoveTowards(new Vector2(width * 0.9f, height * 0.15f), stopOnEnd: false),
+                        new MoveTowards(new Vector2(width * 0.85f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.75f, height * 0.6f), stopOnEnd: false, speedModifier: 4),
+                            new MoveTowards(new Vector2(width * 0.65f, height * 0.4f), stopOnEnd: false),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(width * 0.5f, -height * 0.1f),
+                        new WaitSeconds(0.5f),
+                        new MoveTowards(new Vector2(width * 0.5f, -height * 0.1f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.5f, height * 0.15f), stopOnEnd: false),
+                            new MoveAndShoot(new Vector2(width * 0.25f, height * 0.15f), stopOnEnd: false),
+                            new MoveAndShoot(new Vector2(width * 0.75f, height * 0.15f), stopOnEnd: false),
+                        }),
+                        onDeath
+                    ),
+                }
+            );
+
+
             waves.AddRange(
                 new List<WaveController>()
                     {
@@ -188,8 +231,8 @@ namespace agalag.game.scenes
                         // new WaveController(bumbleTrouble.timeout, levelBounds, bumbleTrouble.units),
                         // new WaveController(geminiSentry.timeout, levelBounds, geminiSentry.units),
                         // new WaveController(asteroidClock.timeout, levelBounds, asteroidClock.units),
-                        new WaveController(flyByNight.timeout, levelBounds, flyByNight.units),
-                        // new WaveController(simmetry.timeout, levelBounds, simmetry.units),
+                        // new WaveController(flyByNight.timeout, levelBounds, flyByNight.units),
+                        new WaveController(symmetry.timeout, levelBounds, symmetry.units),
                         // new WaveController(tsuKami.timeout, levelBounds, tsuKami.units),
                         // new WaveController(pincerBlow.timeout, levelBounds, pincerBlow.units),
                         // new WaveController(divideConquer.timeout, levelBounds, divideConquer.units),
