@@ -123,11 +123,14 @@ namespace agalag.engine
         }
         protected virtual void SubDispose() 
         {
-            RemoveCollider();
             SetActive(false);
+            SceneManager.RemoveFromScene(this);
+        }
+        protected void DisposeCompletely()
+        {
+            RemoveCollider();
             _sprite = null;
             _transform = null;
-            SceneManager.RemoveFromScene(this);
         }
 
         #region Interface Implementation

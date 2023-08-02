@@ -72,6 +72,11 @@ namespace agalag.game
                 }
             }
         }
+        protected override void SubDispose()
+        {
+            base.SubDispose();
+            this.DisposeCompletely();
+        }
         #endregion
     }
 }
