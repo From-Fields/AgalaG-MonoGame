@@ -42,7 +42,7 @@ namespace agalag.game
             SetActive(active);
         }
         public void SetWeapon(float weaponCooldown, int missileDamage, float missileSpeed) {
-            this._weapon.SetAttributes(damage: missileDamage, cooldown: weaponCooldown, speed: missileSpeed, direction: new Vector2(0, 1), bulletTexture: _bulletTexture);
+            this._weapon.SetAttributes(damage: missileDamage, cooldown: weaponCooldown, speed: missileSpeed, direction: new Vector2(0, 1), bulletTexture: _bulletTexture, spawnPoints: new[] {new Vector2(0, 15)});
         }
 
         #region InterfaceImplementation
