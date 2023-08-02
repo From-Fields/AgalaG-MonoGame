@@ -24,7 +24,7 @@ namespace agalag.game
         {
             this._isDone = false;
             this._timeout = timeout;
-            this._unitCache = unitList;
+            this._unitCache = new List<iWaveUnit>(unitList);
             this._levelBounds = levelBounds;
             this._layer = layer;
         }
@@ -49,7 +49,7 @@ namespace agalag.game
             unit.onUnitReleased -= RemoveUnitFromWave;
             _unitList.Remove(unit);
 
-            if(_unitList.Count == 0)
+            if(_unitList.Count <= 0)
             {
                 onWaveDone?.Invoke();
                 _isDone = true;
