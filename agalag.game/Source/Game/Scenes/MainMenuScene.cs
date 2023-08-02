@@ -1,6 +1,7 @@
 ﻿using agalag.engine;
 using agalag.engine.content;
 using agalag.game.input;
+using agalag.game.scenes;
 using agalag.test;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -54,7 +55,7 @@ namespace agalag.game.Source.Game.Scenes
 
             startButton = new UIButton("Start", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2), new Vector2(400, 120), 
                 action: () => {
-                    SceneManager.Instance.SwitchScene(new TestScene());
+                    SceneManager.Instance.SwitchScene(new LevelScene(GameWaves.GetLevel(new Rectangle(0,0, 1920, 1080), null)));
                 });
             settingsButton = new UIButton("Settings", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + 180), new Vector2(400, 120),
                 action: () => {

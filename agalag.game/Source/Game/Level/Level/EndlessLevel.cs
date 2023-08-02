@@ -42,6 +42,9 @@ namespace agalag.game
                 do {
                     ShuffleWaves();
                     _currentWave = _waveQueue.Dequeue();
+
+                    if(_waveList.Count == 1)
+                        break;
                 } while(_currentWave == _previousWave);
             }
             else
