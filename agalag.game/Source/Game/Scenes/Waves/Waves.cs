@@ -310,6 +310,83 @@ namespace agalag.game.scenes
                 }
             );
 
+            float pincerWait_a = 1.5f; 
+            float pincerWait_b = 1.5f;
+
+            Wave pincerBlow = new Wave
+            (
+                15, 
+                new List<iWaveUnit>() 
+                {
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.05f, -height * 0.1f),
+                        new WaitSeconds(1.0f),
+                        new MoveTowards(new Vector2(width * 0.55f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.15f, height * 0.15f)),
+                            new WaitSeconds(1.5f),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.15f, -height * 0.1f),
+                        new WaitSeconds(1.5f),
+                        new MoveTowards(new Vector2(width * 0.65f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.25f, height * 0.15f)),
+                            new WaitSeconds(1.0f),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.25f, -height * 0.1f),
+                        new WaitSeconds(2.0f),
+                        new MoveTowards(new Vector2(width * 0.75f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.35f, height * 0.15f)),
+                            new WaitSeconds(0.5f),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(width * 0.55f, -height * 0.1f),
+                        new WaitSeconds(0.3f),
+                        new MoveTowards(new Vector2(width * 0.25f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.55f, height * 0.15f)),
+                            new Shoot(3.6f),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(width * 0.75f, -height * 0.1f),
+                        new WaitSeconds(0.6f),
+                        new MoveTowards(new Vector2(width * 0.45f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.75f, height * 0.15f)),
+                            new Shoot(3.3f),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(width * 0.95f, -height * 0.1f),
+                        new WaitSeconds(0.9f),
+                        new MoveTowards(new Vector2(width * 0.65f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.95f, height * 0.15f)),
+                            new Shoot(3.0f),
+                        }),
+                        onDeath
+                    ),
+                }
+            );
+
             waves.AddRange(
                 new List<WaveController>()
                     {
@@ -319,8 +396,8 @@ namespace agalag.game.scenes
                         // new WaveController(asteroidClock.timeout, levelBounds, asteroidClock.units),
                         // new WaveController(flyByNight.timeout, levelBounds, flyByNight.units),
                         // new WaveController(symmetry.timeout, levelBounds, symmetry.units),
-                        new WaveController(tsuKami.timeout, levelBounds, tsuKami.units),
-                        // new WaveController(pincerBlow.timeout, levelBounds, pincerBlow.units),
+                        // new WaveController(tsuKami.timeout, levelBounds, tsuKami.units),
+                        new WaveController(pincerBlow.timeout, levelBounds, pincerBlow.units),
                         // new WaveController(divideConquer.timeout, levelBounds, divideConquer.units),
                     }
             );
