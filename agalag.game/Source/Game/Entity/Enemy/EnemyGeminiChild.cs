@@ -71,6 +71,9 @@ namespace agalag.game
             _desiredVelocity = Vector2.Zero;
         }
         public override void Shoot() {
+            if(_isDead)
+                return;
+
             _weapon.Shoot();
         }
         public override void TakeDamage(int damage)
