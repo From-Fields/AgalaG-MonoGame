@@ -223,6 +223,92 @@ namespace agalag.game.scenes
                 }
             );
 
+            float tsuKamiWait = 2.5f;
+
+            Wave tsuKami = new Wave
+            (
+                15, 
+                new List<iWaveUnit>() 
+                {
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.05f, -height * 0.1f),
+                        new WaitSeconds(0),
+                        new MoveTowards(new Vector2(width * 0.05f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.05f, height * 0.15f)),
+                            new WaitSeconds(tsuKamiWait),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.95f, -height * 0.1f),
+                        new WaitSeconds(0.5f),
+                        new MoveTowards(new Vector2(width * 0.95f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.95f, height * 0.15f)),
+                            new WaitSeconds(tsuKamiWait),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.2f, -height * 0.1f),
+                        new WaitSeconds(1f),
+                        new MoveTowards(new Vector2(width * 0.2f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.2f, height * 0.15f)),
+                            new WaitSeconds(tsuKamiWait),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.8f, -height * 0.1f),
+                        new WaitSeconds(1.5f),
+                        new MoveTowards(new Vector2(width * 0.8f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.8f, height * 0.15f)),
+                            new WaitSeconds(tsuKamiWait),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.35f, -height * 0.1f),
+                        new WaitSeconds(2f),
+                        new MoveTowards(new Vector2(width * 0.35f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.35f, height * 0.15f)),
+                            new WaitSeconds(tsuKamiWait),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.65f, -height * 0.1f),
+                        new WaitSeconds(2.5f),
+                        new MoveTowards(new Vector2(width * 0.65f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.65f, height * 0.15f)),
+                            new WaitSeconds(tsuKamiWait),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 0.5f, -height * 0.1f),
+                        new WaitSeconds(3f),
+                        new MoveTowards(new Vector2(width * 0.5f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.5f, height * 0.15f)),
+                            new WaitSeconds(tsuKamiWait),
+                        }),
+                        onDeath
+                    ),
+                }
+            );
 
             waves.AddRange(
                 new List<WaveController>()
@@ -232,8 +318,8 @@ namespace agalag.game.scenes
                         // new WaveController(geminiSentry.timeout, levelBounds, geminiSentry.units),
                         // new WaveController(asteroidClock.timeout, levelBounds, asteroidClock.units),
                         // new WaveController(flyByNight.timeout, levelBounds, flyByNight.units),
-                        new WaveController(symmetry.timeout, levelBounds, symmetry.units),
-                        // new WaveController(tsuKami.timeout, levelBounds, tsuKami.units),
+                        // new WaveController(symmetry.timeout, levelBounds, symmetry.units),
+                        new WaveController(tsuKami.timeout, levelBounds, tsuKami.units),
                         // new WaveController(pincerBlow.timeout, levelBounds, pincerBlow.units),
                         // new WaveController(divideConquer.timeout, levelBounds, divideConquer.units),
                     }
