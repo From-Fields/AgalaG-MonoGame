@@ -450,14 +450,14 @@ namespace agalag.game.scenes
             waves.AddRange(
                 new List<WaveController>()
                     {
-                        // new WaveController(doubleKami.timeout, levelBounds, doubleKami.units),
-                        // new WaveController(bumbleTrouble.timeout, levelBounds, bumbleTrouble.units),
-                        // new WaveController(geminiSentry.timeout, levelBounds, geminiSentry.units),
-                        // new WaveController(asteroidClock.timeout, levelBounds, asteroidClock.units),
-                        // new WaveController(flyByNight.timeout, levelBounds, flyByNight.units),
-                        // new WaveController(symmetry.timeout, levelBounds, symmetry.units),
-                        // new WaveController(tsuKami.timeout, levelBounds, tsuKami.units),
-                        // new WaveController(pincerBlow.timeout, levelBounds, pincerBlow.units),
+                        new WaveController(doubleKami.timeout, levelBounds, doubleKami.units),
+                        new WaveController(bumbleTrouble.timeout, levelBounds, bumbleTrouble.units),
+                        new WaveController(geminiSentry.timeout, levelBounds, geminiSentry.units),
+                        new WaveController(asteroidClock.timeout, levelBounds, asteroidClock.units),
+                        new WaveController(flyByNight.timeout, levelBounds, flyByNight.units),
+                        new WaveController(symmetry.timeout, levelBounds, symmetry.units),
+                        new WaveController(tsuKami.timeout, levelBounds, tsuKami.units),
+                        new WaveController(pincerBlow.timeout, levelBounds, pincerBlow.units),
                         new WaveController(divideConquer.timeout, levelBounds, divideConquer.units),
                     }
             );
