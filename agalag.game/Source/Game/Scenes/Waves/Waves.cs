@@ -310,9 +310,6 @@ namespace agalag.game.scenes
                 }
             );
 
-            float pincerWait_a = 1.5f; 
-            float pincerWait_b = 1.5f;
-
             Wave pincerBlow = new Wave
             (
                 15, 
@@ -387,6 +384,69 @@ namespace agalag.game.scenes
                 }
             );
 
+            Wave divideConquer = new Wave
+            (
+                20, 
+                new List<iWaveUnit>() 
+                {
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(-width * 0.05f, -height * 0.05f),
+                        new WaitSeconds(2.0f),
+                        new MoveTowards(new Vector2(-width * 0.05f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.35f, height * 0.2f)),
+                            new WaitSeconds(4.0f),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyKamikaze>
+                    (
+                        new Vector2(width * 1.05f, -height * 0.05f),
+                        new WaitSeconds(3.0f),
+                        new MoveTowards(new Vector2(width * 0.25f, height * 1.1f), speedModifier: 4),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.65f, height * 0.2f)),
+                            new WaitSeconds(5.0f),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyGemini>
+                    (
+                        new Vector2(-width * 0.25f, height * 0.7f),
+                        new WaitSeconds(0.0f),
+                        new MoveAndShoot(new Vector2(width * 1.05f, height * 0.35f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.15f, height * 0.35f)),
+                            new Shoot(3.0f),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyGemini>
+                    (
+                        new Vector2(-width * 0.1f, height * 0.45f),
+                        new WaitSeconds(0.5f),
+                        new MoveAndShoot(new Vector2(width * 1.05f, height * 0.60f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.35f, height * 0.60f)),
+                            new Shoot(3.0f),
+                        }),
+                        onDeath
+                    ),
+                    new WaveUnit<EnemyBumblebee>
+                    (
+                        new Vector2(width * 0.5f, -height * 0.05f),
+                        new WaitSeconds(2.5f),
+                        new MoveAndShoot(new Vector2(-width * 0.1f, height * 0.20f)),
+                        new Queue<iEnemyAction>(new iEnemyAction[] { 
+                            new MoveTowards(new Vector2(width * 0.5f, height * 0.20f)),
+                            new WaitSeconds(8.0f),
+                        }),
+                        onDeath
+                    ),
+                }
+            );
+
             waves.AddRange(
                 new List<WaveController>()
                     {
@@ -397,8 +457,8 @@ namespace agalag.game.scenes
                         // new WaveController(flyByNight.timeout, levelBounds, flyByNight.units),
                         // new WaveController(symmetry.timeout, levelBounds, symmetry.units),
                         // new WaveController(tsuKami.timeout, levelBounds, tsuKami.units),
-                        new WaveController(pincerBlow.timeout, levelBounds, pincerBlow.units),
-                        // new WaveController(divideConquer.timeout, levelBounds, divideConquer.units),
+                        // new WaveController(pincerBlow.timeout, levelBounds, pincerBlow.units),
+                        new WaveController(divideConquer.timeout, levelBounds, divideConquer.units),
                     }
             );
 
