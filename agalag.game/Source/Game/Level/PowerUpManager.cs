@@ -25,7 +25,7 @@ namespace agalag.game
             int totalChance = _dropPorportions.Values.Sum() + _nullDropChance;
 
             int chance = Random.Shared.Next() % totalChance;
-            System.Diagnostics.Debug.WriteLine(chance);
+            // System.Diagnostics.Debug.WriteLine(chance);
 
             if(chance < _nullDropChance)
                 return null;
@@ -53,7 +53,7 @@ namespace agalag.game
                 _dropRates.Add(item.Key, values);
                 accumulator += item.Value;
 
-                System.Diagnostics.Debug.WriteLine(item.Key + ": " + values.X + "-" + (values.Y - 1));
+                // System.Diagnostics.Debug.WriteLine(item.Key + ": " + values.X + "-" + (values.Y - 1));
             }
         }
     }

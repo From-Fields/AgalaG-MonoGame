@@ -13,14 +13,14 @@ namespace agalag.game
     public class DefaultWeapon : Weapon
     {
         private const float speed = 15f;
-        private static readonly Vector2[] spawnPoints = new Vector2[1];
+        private static readonly Vector2[] _defaultSpawnPoints = new Vector2[1];
 
         private Vector2 _direction = new Vector2(0, -1);
 
         public DefaultWeapon(Transform spawnerTransform, EntityTag shooter = 0)  
-            : base(spawnPoints, maxAmmunition: 999, spawnerTransform, shooter, speed) 
+            : base(_defaultSpawnPoints, maxAmmunition: 999, spawnerTransform, shooter, speed) 
         {
-            spawnPoints[0] = new Vector2(0, -15f);
+            _defaultSpawnPoints[0] = new Vector2(0, -15f);
             _bulletPrefab = Prefabs.GetTextureOfType<Bullet>();
             _cooldown = .3f;
         }
@@ -40,12 +40,13 @@ namespace agalag.game
             onShoot?.Invoke();
         }
 
-        public void SetAttributes(Vector2? direction = null, int maxAmmunition = -1, float speed = -1, float cooldown = -1, int damage = -1, Texture2D bulletTexture = null) {
+        public void SetAttributes(Vector2[] spawnPoints = null, Vector2? direction = null, int maxAmmunition = -1, float speed = -1, float cooldown = -1, int damage = -1, Texture2D bulletTexture = null) {
             this._direction = direction.HasValue ? direction.Value : new Vector2(0, -1);
             this._maxAmmunition = (maxAmmunition != -1) ? maxAmmunition : _maxAmmunition;
             this._speed = (speed != -1) ? speed : _speed;
             this._cooldown = (cooldown != -1) ? cooldown : _cooldown;
             this._damage = (damage != -1)? damage : _damage;
+            this._spawnPoints = (spawnPoints != null) ? spawnPoints : new[] { Vector2.Zero };
             this._bulletPrefab = (bulletTexture != null) ? bulletTexture : _bulletPrefab;
         }
     }

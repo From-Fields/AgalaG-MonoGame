@@ -95,8 +95,6 @@ namespace agalag.game
                 this._droppedItem = drop;
             else{
                 this._droppedItem = PowerUpManager.GetRandomPowerup();
-                if(!(this is EnemyGeminiChild))
-                    System.Diagnostics.Debug.WriteLine(this._droppedItem);
             }
 
             SubInitialize();

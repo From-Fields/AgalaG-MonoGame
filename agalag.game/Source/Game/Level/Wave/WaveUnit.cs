@@ -10,14 +10,20 @@ namespace agalag.game
     public class WaveUnit<T>: iWaveUnit where T: Enemy<T> 
     {
         private T _enemy;
+
         private Vector2 _startingPoint;
-        private iEnemyAction _startingAction;
-        private iEnemyAction _timeoutAction;
+
+        private iEnemyAction _startingAction, _timeoutAction;
         private Queue<iEnemyAction> _actions;
+        
         private iPowerUp _drop;
-        private float _timeout;
+        
         private bool _hasTimedOut;
+        private float _timeout;
         private string _callback;
+
+        private Action _onRelease;
+        private Action<int> _onDeath;
 
         public Action<iWaveUnit> onUnitReleased { get; set; }
 
@@ -25,27 +31,31 @@ namespace agalag.game
             Vector2 startingPoint, iEnemyAction startingAction, iEnemyAction timeoutAction, Queue<iEnemyAction> actions, 
             Action<int> onDeath = null, Action onRelease = null, float timeout = -1, iPowerUp drop = null
         ) {
-            _enemy = EntityPool<T>.Instance.Pool.Get();
             _startingPoint = startingPoint;
             
             _startingAction = startingAction;
             _timeoutAction = timeoutAction;
             _actions = actions;
 
+            _onDeath += onDeath;
+            _onRelease += onRelease;
+
             _drop = drop;
 
-            _enemy.onDeath += onDeath;
-            _enemy.onRelease += onRelease;
-            _enemy.onRelease += OnUnitReleased;
-
             _timeout = timeout;
-            _hasTimedOut = false;
         }
 
         public void Initialize(Rectangle levelBounds, Layer layer = Layer.Entities)
         {
-            _enemy.Initialize(_actions, _startingAction, _timeoutAction, _startingPoint, levelBounds, drop: _drop);
+            _hasTimedOut = false;
+
+            _enemy = EntityPool<T>.Instance.Pool.Get();
+            _enemy.Initialize(new Queue<iEnemyAction>(_actions), _startingAction, _timeoutAction, _startingPoint, levelBounds, drop: _drop);
             SceneManager.AddToMainScene(_enemy, layer);
+
+            _enemy.onDeath += _onDeath;
+            _enemy.onRelease += _onRelease;
+            _enemy.onRelease += OnUnitReleased;
 
             if(_timeout > 0)
                 _callback = RoutineManager.Instance.CallbackTimer(_timeout, ExecuteTimeoutAction);

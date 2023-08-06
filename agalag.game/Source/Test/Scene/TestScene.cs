@@ -146,7 +146,6 @@ namespace agalag.test
                         })
                     ),
                     new WaveHazard(
-                        EntityPool<Hazard>.Instance.Pool.Get(),
                         new Vector2(20, -20), 
                         new Vector2(0.2f, 1), 
                         maxBounces: 3

@@ -16,10 +16,18 @@ namespace agalag.game
         public Action onNoWave;
         public Action onGameOver;
 
-        public LevelController(iLevel level, Player player)
+        public Player Player => _player;
+
+        public LevelController(iLevel level, Player player = null)
         {
             this._player = player;
             this._level = level;
+        }
+
+        public void SetPlayer(Player player)
+        {
+            if(_player == null)
+                _player = player;
         }
 
         public void Initialize()
@@ -57,5 +65,7 @@ namespace agalag.game
             onGameOver = null;
             _player.onDeath -= GameOver;
         }
+
+        public void Clear() => _level.Clear();
     }
 }

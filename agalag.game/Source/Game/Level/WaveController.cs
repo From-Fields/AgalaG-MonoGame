@@ -12,7 +12,7 @@ namespace agalag.game
         private bool _isDone;
         private float _timeout;
         public Action onWaveDone;
-        private List<iWaveUnit> _unitList;
+        private List<iWaveUnit> _unitList, _unitCache;
         private Rectangle _levelBounds;
         private Layer _layer;
         private string _timeoutCallback;
@@ -24,12 +24,15 @@ namespace agalag.game
         {
             this._isDone = false;
             this._timeout = timeout;
-            this._unitList = unitList;
+            this._unitCache = new List<iWaveUnit>(unitList);
             this._levelBounds = levelBounds;
             this._layer = layer;
         }
         public void Initialize()
         {
+            this._isDone = false;
+            _unitList = new List<iWaveUnit>(_unitCache);
+
             foreach (iWaveUnit unit in _unitList)
             {
                 unit.onUnitReleased += RemoveUnitFromWave;
@@ -43,12 +46,16 @@ namespace agalag.game
             if(_isDone)
                 return;
 
+            unit.onUnitReleased -= RemoveUnitFromWave;
             _unitList.Remove(unit);
 
-            if(_unitList.Count == 0)
+            if(_unitList.Count <= 0)
             {
                 onWaveDone?.Invoke();
                 _isDone = true;
+                RoutineManager.Instance.Interrupt(_timeoutCallback);
+                if(!string.IsNullOrWhiteSpace(_eliminateCallback))
+                    RoutineManager.Instance.Interrupt(_eliminateCallback);
             }
         }
         private void TimeOutAllUnits()
@@ -68,11 +75,11 @@ namespace agalag.game
         }
         private void EliminateAllUnits()
         {
-            int unitCount = _unitList.Count;
+            int unitCount = _unitCache.Count;
 
             for (int i = 0; i < unitCount; i++)
             {
-                iWaveUnit unit = _unitList[i];
+                iWaveUnit unit = _unitCache[i];
 
                 if(_isDone)
                     return;
@@ -98,12 +105,11 @@ namespace agalag.game
         }
         private void ClearAllUnits()
         {
-            int unitCount = _unitList.Count;
-            var units = new List<iWaveUnit>(_unitList);
+            int unitCount = _unitCache.Count;
 
             for (int i = 0; i < unitCount; i++)
             {
-                iWaveUnit unit = units[i];
+                iWaveUnit unit = _unitCache[i];
 
                 unit?.Clear();
             }

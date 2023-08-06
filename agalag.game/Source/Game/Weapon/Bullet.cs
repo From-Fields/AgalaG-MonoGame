@@ -99,6 +99,12 @@ namespace agalag.game {
         {
             // Move(_direction, _speed);
         }
+
+        protected override void SubDispose()
+        {
+            base.SubDispose();
+            this.DisposeCompletely();
+        }
         #endregion
     }
 }

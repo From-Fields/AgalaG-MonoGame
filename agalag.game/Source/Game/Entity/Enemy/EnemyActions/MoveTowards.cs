@@ -27,9 +27,9 @@ namespace agalag.game
         public MoveTowards(Entity target, bool decelerate = false, float decelerationRadius = -1, bool stopOnEnd = false): 
             this(target, 1, decelerate: decelerate, decelerationRadius: decelerationRadius) { }
         public MoveTowards(Vector2 targetPosition,
-            float speedModifier, float accelerationModifier = 1, float trackingSpeed = 1f, 
+            float speedModifier, float accelerationModifier = 1, float trackingSpeed = 10f, 
             float maximumAngle = 360, float minimumDistance = 40,
-            bool decelerate = true, float decelerationRadius = 120, bool stopOnEnd = true
+            bool decelerate = true, float decelerationRadius = 200, bool stopOnEnd = true
         ) : this(speedModifier, accelerationModifier, trackingSpeed, maximumAngle, minimumDistance, decelerate, decelerationRadius, stopOnEnd)
         {
             _targetPosition = targetPosition;
