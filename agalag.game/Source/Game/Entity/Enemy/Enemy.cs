@@ -9,7 +9,15 @@ namespace agalag.game
 {
     public abstract class Enemy<T> : Entity, iEnemy, iPoolableEntity<T> where T: Enemy<T>, iEnemy, iPoolableEntity<T>
     {
-        public int score;
+        private int score;
+        public int Score
+        {
+            get { return score; }
+            protected set
+            {
+                score = value;
+            }
+        }
 
         //Damage
         protected int _defaultCollisionDamage = 1;
@@ -50,7 +58,7 @@ namespace agalag.game
         public bool IsDead => this._isDead;
 
         //Events
-        public Action<int> onDeath;
+        public Action<int> onDeath { get; set; }
         public Action onRelease;
         protected iPowerUp _droppedItem;
 
@@ -178,7 +186,8 @@ namespace agalag.game
         //iEntity
         public override void Die()
         {
-            onDeath?.Invoke(this.score);
+            onDeath?.Invoke(Score);
+            LevelController.Instance.UpdateScore(Score);
         
             if(_droppedItem != null) {
                 double randomX = Random.Shared.NextDouble() * 2 - 1;

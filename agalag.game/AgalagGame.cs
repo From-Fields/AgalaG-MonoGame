@@ -8,9 +8,9 @@ using agalag.engine.content;
 using Microsoft.Xna.Framework.Content;
 using agalag.game.Source.Game.Scenes;
 using Microsoft.Xna.Framework.Audio;
+using agalag.game.scenes;
 
 namespace agalag.game;
-
 public class AgalagGame : Game
 {
     private GraphicsDeviceManager _graphics;
@@ -27,6 +27,8 @@ public class AgalagGame : Game
 
     private Effect _squareOutlineShader;
     public static AgalagGame Instance { get; private set; }
+
+    public enum SceneID { MainMenu, EndlessLevel };
 
     public AgalagGame()
     {
@@ -48,6 +50,15 @@ public class AgalagGame : Game
         SetResolution();
     }
 
+    public static Scene GetNewScene(SceneID id)
+    {
+        return (id) switch {
+            SceneID.MainMenu => new MainMenuScene(),
+            SceneID.EndlessLevel => new LevelScene(GameWaves.GetLevel(new Rectangle(0, 0, 1920, 1080), null)),
+            _ => throw new System.Exception("No Scene found")
+        };;
+    }
+    
     private void SetResolution()
     {
         ResolutionScaler.SetResolution(
@@ -72,7 +83,6 @@ public class AgalagGame : Game
         TagUtils.SetMask(EntityTag.Enemy, EntityTag.PickUp, false);
         TagUtils.SetMask(EntityTag.Enemy, EntityTag.Hazard, false);
         TagUtils.SetMask(EntityTag.Wall, EntityTag.Wall, false);
-
         // System.Diagnostics.Debug.WriteLine(TagUtils.GetInteraction(EntityTag.Player, EntityTag.Enemy));
 
         base.Initialize();
@@ -99,7 +109,7 @@ public class AgalagGame : Game
         Matrix projection = Matrix.CreateOrthographicOffCenter(0, _internalResolutionWidth, _internalResolutionHeight, 0, 0, 1);
         _squareOutlineShader.Parameters["WorldViewProjection"].SetValue(Matrix.Identity * projection);
 
-        _sceneManager.SetDefaultScene(new MainMenuScene());
+        _sceneManager.SetDefaultScene(GetNewScene(SceneID.MainMenu));
         _sceneManager.SwitchToDefaultScene(Content);
     }
     private void LoadPlayer() 
@@ -121,7 +131,9 @@ public class AgalagGame : Game
         SoundEffect playerShotSound = Content.Load<SoundEffect>("Sounds/Shot/sfx_shot_player"); 
         SoundEffect powerUpSound = Content.Load<SoundEffect>("Sounds/PickUp/sfx_powerup");
         Texture2D playerSprite = Content.Load<Texture2D>("Sprites/player");
-        Prefabs.AddPrefab<Player>(
+        Prefabs.AddSprite("playerShip", playerSprite);
+
+        Prefabs.AddPrefab(
             new Player(
                 playerSprite, Vector2.Zero,
                 audioManager: new EntityAudioManager(

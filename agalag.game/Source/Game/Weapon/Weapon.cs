@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using agalag.engine;
+using agalag.engine.content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -23,6 +24,9 @@ namespace agalag.game {
         protected Texture2D _bulletPrefab;
 
         public Action onShoot;
+
+        public virtual Sprite WeaponIcon => Prefabs.GetSprite<Bullet>();
+        public virtual string AmmoToString => _currentAmmunition.ToString();
 
         protected Weapon(Vector2[] spawnPoints, int maxAmmunition, Transform spawnerTransform, EntityTag shooter = 0, float speed = 2f) 
             : base() 

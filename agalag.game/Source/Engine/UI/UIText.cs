@@ -33,6 +33,7 @@ namespace agalag.engine
             _color = color;
         }
 
+        public void SetText(string text) => _text = text;
         public void SetFont(SpriteFont font) => _font = font;
         public void SetColor(Color color) => _color = color;
         public void SetPos(Vector2 pos) => Transform.position = pos;

@@ -55,6 +55,8 @@ namespace agalag.game
             _controller.SetPlayer(player);
 
             PauseMenu.Instance.Initialize();
+            GameOverUI.Instance.Initialize();
+            GameplayUI.Instance.Initialize();
             _controller.Initialize();
 
             this.isInitialized = true;

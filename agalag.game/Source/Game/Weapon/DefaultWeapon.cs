@@ -17,6 +17,8 @@ namespace agalag.game
 
         private Vector2 _direction = new Vector2(0, -1);
 
+        public override string AmmoToString => "-";
+
         public DefaultWeapon(Transform spawnerTransform, EntityTag shooter = 0)  
             : base(_defaultSpawnPoints, maxAmmunition: 999, spawnerTransform, shooter, speed) 
         {

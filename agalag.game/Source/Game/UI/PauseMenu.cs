@@ -19,14 +19,19 @@ namespace agalag.game
             _title.SetColor(Color.OrangeRed);
             _title.SetAlign(TextAlign.Center);
 
-            this._resume = new UIButton("Resume", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2), new Vector2(400, 120), action: () => {
-                SceneManager.Instance.SwitchPause(false);
-            });
-            this._retry = new UIButton("Retry", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + 180), new Vector2(400, 120));
-            this._quit = new UIButton("Quit", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + (180*2)), new Vector2(400, 120), hoverColor: Color.DarkRed, action: () => {
-                SceneManager.Instance.SwitchToDefaultScene();
-                SceneManager.Instance.SwitchPause(false);
-            });
+            this._resume = new UIButton("Resume", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2), new Vector2(400, 120), 
+                action: () => {
+                    SceneManager.Instance.SwitchPause(false);
+                });
+            this._retry = new UIButton("Retry", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + 180), new Vector2(400, 120), 
+                action: () => {
+                    SceneManager.Instance.SwitchScene(AgalagGame.GetNewScene(AgalagGame.SceneID.EndlessLevel));
+                });
+            this._quit = new UIButton("Quit", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + (180*2)), new Vector2(400, 120), hoverColor: Color.DarkRed, 
+                action: () => {
+                    SceneManager.Instance.SwitchToDefaultScene();
+                    SceneManager.Instance.SwitchPause(false);
+                });
 
             SwitchPauseMenu(false);
             SceneManager.Instance.onPause += SwitchPauseMenu;
