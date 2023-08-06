@@ -70,7 +70,8 @@ namespace agalag.game
         public void Reserve() => _enemy.Reserve();
         private void OnUnitReleased()
         {
-            _enemy.onRelease -= OnUnitReleased;
+            if(_enemy != null)
+                _enemy.onRelease -= OnUnitReleased;
             onUnitReleased?.Invoke(this);
         }
 

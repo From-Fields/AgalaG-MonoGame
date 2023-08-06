@@ -37,6 +37,8 @@ namespace agalag.engine.routines
         }
         public bool Interrupt(string id)
         {
+            if(string.IsNullOrWhiteSpace(id))
+                return false;
             if(!_routines.ContainsKey(id))
                 return false;
 

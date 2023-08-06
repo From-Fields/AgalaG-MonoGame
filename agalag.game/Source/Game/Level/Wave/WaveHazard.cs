@@ -52,6 +52,6 @@ namespace agalag.game
         } 
 
         public void Reserve() => _hazard.ReserveToPool();
-        public void Clear() => _hazard.ReserveToPool();
+        public void Clear() => _hazard?.ReserveToPool();
     }
 }
