@@ -27,6 +27,8 @@ namespace agalag.game
             this._retry = new UIButton("Retry", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + 180), new Vector2(400, 120),
                 action: () => {
                     SceneManager.Instance.SwitchScene(AgalagGame.GetNewScene(AgalagGame.SceneID.EndlessLevel));
+                    SceneManager.Instance.SwitchPause(false);
+                    Show(false);
                 });
             this._quit = new UIButton("Quit", new Vector2(Utils.ScreenWidth / 2, Utils.ScreenHeight / 2 + (180 * 2)), new Vector2(400, 120), hoverColor: Color.DarkRed, 
                 action: () => {
