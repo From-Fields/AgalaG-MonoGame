@@ -12,7 +12,7 @@ namespace agalag.engine
         private float _opacity;
         private Rectangle? _area;
 
-        public UISprite(Sprite sprite, Vector2 position, Color color, float opacity = 1, Rectangle? area = null) : base(position)
+        public UISprite(Sprite sprite, Vector2 position, Color color, float opacity = 1, Rectangle? area = null, Vector2? scale = null) : base(position)
         {
             if(sprite != null)
                 this._sprite = sprite;
@@ -20,7 +20,14 @@ namespace agalag.engine
             this._opacity = opacity;
             this._area = area;
 
+            _transform.scale = (scale != null) ? (Vector2)scale : _transform.scale;
+
             UIHandler.Instance.AddElement(this);
+        }
+
+        public void SetSprite(Sprite sprite)
+        {
+            _sprite = sprite;
         }
 
         private void DrawRectangle(SpriteBatch spriteBatch)

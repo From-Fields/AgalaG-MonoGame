@@ -35,6 +35,7 @@ namespace agalag.game
         { 
             _weapon = new DefaultWeapon(_transform, EntityTag.Enemy);
             _bulletTexture = bulletTexture;
+            Score = 150;
         }
         public EnemyBumblebee(EnemyBumblebee prefab, bool active = false) : 
         this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._bulletTexture, prefab._audioManager) 

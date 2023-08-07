@@ -29,7 +29,10 @@ namespace agalag.game
 
         //Constructors
         public EnemyGemini(Texture2D sprite, Vector2 position, Vector2 scale, float rotation = 0, iCollider collider = null, EntityAudioManager audioManager = null) : 
-        base(sprite, position, scale, rotation, collider, audioManager) { }
+        base(sprite, position, scale, rotation, collider, audioManager) 
+        {
+            Score = 200;
+        }
         public EnemyGemini(EnemyGemini prefab, bool active = false) : 
         this(prefab._sprite.Texture, prefab.Transform.position, prefab.Transform.scale, prefab.Transform.rotation, prefab.Collider, prefab._audioManager) 
         {

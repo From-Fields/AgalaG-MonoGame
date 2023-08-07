@@ -18,6 +18,13 @@ namespace agalag.game
         private int _currentHealth;
         private bool _isInvulnerable = false;
         private float _frameAccumulator;
+        private int _shieldCount = 0;
+
+        public int Shield
+        {
+            get { return _shieldCount; }
+            set { _shieldCount = value; }
+        }
         
         public Weapon _currentWeapon;
         private Weapon _defaultWeapon = null;
@@ -30,6 +37,10 @@ namespace agalag.game
 
         public List<iPowerUp> powerUps = new List<iPowerUp>();
 
+        public Action<int> onLifeChange;
+        public Action<int> onShieldChange;
+        public Action<string> onWeaponShoot;
+        public Action<Sprite> onNewWeapon;
         public Action onDeath;
 
         //References
@@ -85,6 +96,8 @@ namespace agalag.game
         {
             this._currentWeapon = newWeapon;
             this._currentWeapon.onShoot += PlayShotSound;
+            onNewWeapon?.Invoke(_currentWeapon.WeaponIcon);
+            onWeaponShoot?.Invoke(_currentWeapon.AmmoToString);
         }
 
         public void SwitchToDefaultWeapon()
@@ -106,15 +119,20 @@ namespace agalag.game
                 this.powerUps.Add(newPowerUp);
                 PlaySound(EntitySoundType.PowerUp);
             }
+
+            onShieldChange?.Invoke(Shield);
         }
         public void RemovePowerUp(iPowerUp powerUp) 
         {
             this.powerUps.Remove(powerUp);
         }
+
         public void Heal(int amount) 
         {
             this._currentHealth = Math.Clamp(_currentHealth + amount, 0, _maxHealth);
+            onLifeChange?.Invoke(_currentHealth);
         }
+
         private void SetInvulnerability(bool invulnerable)
         {
             _isInvulnerable = invulnerable;
@@ -155,6 +173,7 @@ namespace agalag.game
                 throw new Exception("Current Weapon cannot be null");
 
             _currentWeapon.Shoot();
+            onWeaponShoot?.Invoke(_currentWeapon.AmmoToString);
             if (_currentWeapon.isEmpty())
             {
                 SwitchToDefaultWeapon();
@@ -171,6 +190,7 @@ namespace agalag.game
             for (int i = 0; i < powerUps.Count; i++) {
                 _damage = powerUps[i].OnTakeDamage(_damage, _currentHealth); 
             }
+            onShieldChange?.Invoke(Shield);
 
             if(_damage == 0)
                 return;
@@ -178,6 +198,7 @@ namespace agalag.game
             PlaySound(EntitySoundType.Damage);
 
             this._currentHealth = Math.Clamp(_currentHealth - _damage, 0, _maxHealth);
+            onLifeChange?.Invoke(_currentHealth);
 
             //Debug.WriteLine((_currentHealth + damage) + "-" + damage + "=" + _currentHealth);
             if(_currentHealth == 0)

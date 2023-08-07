@@ -61,6 +61,16 @@ namespace agalag.engine.content {
         }
         public static Texture2D GetSprite(string key) => _sprites[key];
 
+        public static Sprite GetSprite(string spriteKey, bool visibility = true) => new Sprite(_sprites[spriteKey], visibility);
+
+        public static Sprite GetSprite<T>(bool visibility = true)
+        {
+            if (!_prefabTextures.ContainsKey(typeof(T)))
+                return null;
+
+            return new Sprite(_prefabTextures[typeof(T)], visibility);
+        }
+
         // Textures
         public static void AddTexture<T>(Texture2D texture)
         {

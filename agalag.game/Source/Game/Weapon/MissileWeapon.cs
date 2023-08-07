@@ -14,6 +14,8 @@ namespace agalag.game
         private const float speed = 6f;
         private static readonly Vector2[] spawnPoints = new Vector2[1];
 
+        public override Sprite WeaponIcon => Prefabs.GetSprite(spriteKey: "missile");
+
         public MissileWeapon(Transform spawnerTransform, EntityTag shooter = EntityTag.None) 
             : base(spawnPoints, maxAmmunition: 15, spawnerTransform, shooter, speed)
         {

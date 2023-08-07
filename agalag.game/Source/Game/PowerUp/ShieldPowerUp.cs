@@ -10,6 +10,7 @@ namespace agalag.game
 
         public override void OnPickup(Player player) {
             this._player = player;
+            _player.Shield++;
         }
         public override int OnTakeDamage(int damage, int playerHealth) {
             if(damage <= 0)
@@ -21,6 +22,7 @@ namespace agalag.game
         public override void OnEnd() {
             _player.PlaySoundOneShot(Prefabs.GetSoundOfType<ShieldPowerUp>().CreateInstance(), AudioGroup.SFX);
             _player.RemovePowerUp(this);
+            _player.Shield--;
         }
     }
 }
