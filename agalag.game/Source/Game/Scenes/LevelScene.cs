@@ -70,6 +70,7 @@ namespace agalag.game
 
         public override bool UnloadContent(ContentManager content)
         {
+            GameplayUI.Instance.Show(false);
             this.isLoaded = false;
             return true;
         }

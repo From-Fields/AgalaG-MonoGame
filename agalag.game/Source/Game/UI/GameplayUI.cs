@@ -18,10 +18,14 @@ namespace agalag.game
         private UISprite weaponIcon;
         private UIText ammoText;
 
+        private UIText scoreText;
         private UIText scoreCounter;
 
         public void Initialize()
         {
+            lifes = new();
+            shields = new();
+
             for (int i = 0; i < 3; i++)
             {
                 var pos = new Vector2(60 + 60 * i, Utils.ScreenHeight - 120);
@@ -42,7 +46,7 @@ namespace agalag.game
             ammoText = new UIText("-", new Vector2(Utils.ScreenWidth - 120, Utils.ScreenHeight - 150), Prefabs.GetFont("Button"));
             ammoText.SetAlign(TextAlign.Center);
 
-            _ = new UIText("Score:", new Vector2(Utils.ScreenWidth - 360, Utils.ScreenHeight - 60));
+            scoreText = new UIText("Score:", new Vector2(Utils.ScreenWidth - 360, Utils.ScreenHeight - 60));
             scoreCounter = new UIText("99999999", new Vector2(Utils.ScreenWidth - 240, Utils.ScreenHeight - 80), Color.Orange, Prefabs.GetFont("Button"));
         }
 
@@ -75,6 +79,21 @@ namespace agalag.game
         public void UpdateScore(int score)
         {
             scoreCounter.SetText(score.ToString());
+        }
+
+        public void Show(bool active) 
+        {
+            System.Diagnostics.Debug.WriteLine(active);
+
+
+            foreach (var life in lifes)
+                life.SetActive(active);
+            foreach (var shield in shields)
+                shield.SetActive(active);
+            ammoText.SetActive(active);
+            weaponIcon.SetActive(active);
+            scoreText.SetActive(active);
+            scoreCounter.SetActive(active);
         }
     }
 }

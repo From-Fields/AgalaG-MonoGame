@@ -66,6 +66,7 @@ namespace agalag.engine
                 return;
 
             _currentScene.Clear();
+            _currentScene.UnloadContent(content);
 
             if(_currentScene.isInitialized)
                 throw new System.Exception("Scene failed to Clear");
