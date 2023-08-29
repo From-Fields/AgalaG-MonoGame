@@ -50,7 +50,9 @@ namespace agalag.engine
                 if(entity.IsActive)
                 {
                     entity.Draw(spriteBatch);
+#if DEBUG
                     entity.DrawCollider(spriteBatch);
+#endif
                 }
             }
         }
